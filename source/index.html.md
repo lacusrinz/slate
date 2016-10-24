@@ -9,6 +9,8 @@ language_tabs:
   - ruby: Ruby
   - python: Python
   - javascript: Node.Js
+  - xml: Android
+  - objective-c: Objective-C
 
 
 <!-- toc_footers:
@@ -87,6 +89,14 @@ BeeCloud.BeeCloud.setTestMode(true);
 #
 ```
 
+```xml
+wo shi android
+```
+
+```objective-c
+wo shi iOS
+```
+
 # 2. 网页上收款
 
 ## 2.1 流程概述
@@ -118,11 +128,15 @@ BeeCloud.BeeCloud.setTestMode(true);
 5. 支付宝返回一个url或者html
 6. 通过跳转到url或者将html输出到页面进而打开支付宝收银台页面，用户登录支付宝付款
 7. 支付完成，用户跳转到设置的return url地址
+8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`ALI_WEB`
+</aside>
 
 > 支付宝收银台收款代码示例：
 
 ``` java
-BCOrder bcOrder = new BCOrder(PAY_CHANNEL.ALI_WEB, 1, billNo, title);//设定订单信息
+BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
 bcOrder.setBillTimeout(360);//设置订单超时时间
 bcOrder.setReturnUrl(aliReturnUrl);//设置return url
 try {
@@ -136,7 +150,7 @@ try {
 ```
 
 ```csharp
-BCBill bill = new BCBill(BCPay.PayChannel.ALI_WEB.ToString(), 1, BCUtil.GetUUID(), "dotNet自来水");
+BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
 bill.returnUrl = "http://localhost:50003/return_ali_url.aspx";
 try
 {
@@ -180,11 +194,15 @@ catch (Exception excption)
 5. 支付宝返回一个url或者html
 6. 通过跳转到url或者将html输出到页面进而打开支付宝二维码的页面，用户扫码付款
 7. 支付完成，用户跳转到设置的return url地址
+8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`ALI_QRCODE`
+</aside>
 
 > 支付宝网页二维码收款代码示例：
 
 ``` csharp
-BCBill bill = new BCBill(BCPay.PayChannel.ALI_QRCODE.ToString(), 1, BCUtil.GetUUID(), "dotNet自来水");
+BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
 bill.qrPayMode = "0";
 bill.returnUrl = "http://localhost:50003/return_ali_url.aspx";
 try
@@ -234,14 +252,18 @@ catch (Exception excption)
 5. 支付宝返回一个url或者html
 6. 通过跳转到url或者将html输出到页面进而打开支付宝手机收银台页面，实现收款
 7. 支付完成，用户跳转到设置的return url地址
+8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
 移动网页有特殊参数 use_app，默认掉起支付宝APP实现原生支付，可以关闭
+</aside>
+<aside class="success">
+支持的渠道包括：`ALI_WAP`
 </aside>
 
 > 支付宝移动网页收款代码示例：
 
 ``` csharp
-BCBill bill = new BCBill(BCPay.PayChannel.ALI_WAP.ToString(), 1, BCUtil.GetUUID(), "dotNet自来水");
+BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
 bill.returnUrl = "http://localhost:50003/return_ali_url.aspx";
 //bill.useApp = false;
 try
@@ -285,25 +307,30 @@ catch (Exception excption)
 
 ### 2.3.1 微信公众号内网页收款
 
+0. 微信公众号配置参数：[文档](http://beecloud.cn/doc/payapply/?index=3)
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
-<aside class="notice">
+<aside class="warning">
 公众号支付需要用到微信特殊参数openid，如何获取openid可以通过百度，有大量的教程
 </aside>
 3. 将订单存入自己系统数据库中，标记订单为未支付
 4. 调用BeeCloud SDK中的支付接口，请求微信
 5. 返回必要的参数，然后将这些参数传入到微信的js方法中
-<aside class="notice">
+<aside class="warning">
 这些js方法只有在微信内的浏览器才会被识别，所以只能在微信内使用
 </aside>
 6. 跳转到微信APP付款
 7. 支付完成返回微信公众号页面
+8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`WX_JSAPI` `BC_WX_JSAPI`
+</aside>
 
 > 微信公众号内网页收款代码示例：
 
 ```csharp
-//服务端部分
-BCBill bill = new BCBill(BCPay.PayChannel.WX_JSAPI.ToString(), 1, BCUtil.GetUUID(), "dotNet自来水");
+//服务端部分，服务端将从beecloud获取的参数传递给js，去调用微信的方法实现支付
+BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
 bill.openId = jsApiPay.openid;
 try
 {
@@ -401,6 +428,10 @@ catch (Exception excption)
 5. 微信返回一个url或者html 
 6. 通过跳转到url或者将html输出到页面进而打开微信的跳转中转页页面，打开微信APP实现收款
 7. 支付完成，用户跳转到设置的return url地址
+8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`BC_WX_WAP`
+</aside>
 
 > 微信移动网页（非微信浏览器）收款代码示例：
 
@@ -450,19 +481,23 @@ catch (Exception excption)
 3. 将订单存入自己系统数据库中，标记订单为未支付
 4. 调用BeeCloud SDK中的支付接口，请求微信
 5. 微信返回收款二维码的值
-<aside class="notice">
+<aside class="warning">
 微信没有自己的网页，所以直接返回了二维码的内容，需要用户自己生存二维码
 </aside>
 6. 通过代码生成二维码展示到商家自己的页面上，用户扫码付款
 7. 支付完成，没有return_url可以使用
-<aside class="notice">
-微信没有自己的网页，所以没有return url的概念，需要商家通过轮询自己后台的方式去查看订单是否已经支付，如果支付了则主动跳转告知用户
+<aside class="warning">
+微信没有自己的网页，所以没有return url的概念，需要商家通过轮询自己后台的方式去查看订单是否已经支付，如果查询结果为支付成功则主动跳转告知用户
+</aside>
+8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`WX_NATIVE` `BC_WX_NATIVE`
 </aside>
 
 > 微信在PC网页通过二维码收款代码示例：
 
 ```csharp
-BCBill bill = new BCBill(BCPay.PayChannel.WX_NATIVE.ToString(), 1, BCUtil.GetUUID(), "dotNet自来水");
+BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
 try
 {
     BCBill resultBill = BCPay.BCPayByChannel(bill);
@@ -526,11 +561,15 @@ catch (Exception excption)
 5. 银联返回一个html
 6. 通过将html输出到页面进而打开银联收银台页面，用户输入银行卡号完成付款
 7. 支付完成，用户跳转到设置的return url地址
+8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`UN_WEB` `BC_EXPRESS`
+</aside>
 
 > 银联PC网页收款代码示例：
 
 ```csharp
-BCBill bill = new BCBill(BCPay.PayChannel.UN_WEB.ToString(), 1, BCUtil.GetUUID(), "dotNet自来水");
+BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
 bill.returnUrl = "http://localhost:50003/return_un_url.aspx";
 try
 {
@@ -576,11 +615,15 @@ catch (Exception excption)
 5. 银联返回一个html
 6. 通过将html输出到页面进而打开银联收银台页面，用户输入银行卡号完成付款
 7. 支付完成，用户跳转到设置的return url地址
+8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`UN_WAP` `BC_EXPRESS`
+</aside>
 
 > 银联移动网页收款代码示例：
 
 ```csharp
-BCBill bill = new BCBill(BCPay.PayChannel.UN_WAP.ToString(), 1, BCUtil.GetUUID(), "dotNet自来水");
+BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
 bill.returnUrl = "http://localhost:50003/return_un_url.aspx";
 try
 {
@@ -631,11 +674,15 @@ catch (Exception excption)
 5. 银行返回一个html
 6. 通过将html输出到页面进而打开收银台页面，用户输入银行卡号完成付款
 7. 支付完成，用户跳转到设置的return url地址
+8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`BC_GETEWAY` 
+</aside>
 
 > 网关收款代码示例：
 
 ```csharp
-BCBill bill = new BCBill(BCPay.PayChannel.BC_GATEWAY.ToString(), 1, BCUtil.GetUUID(), "dotNet白开水");
+BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
 bill.bank = BCPay.Banks.BOC.ToString();//设置所选银行
 bill.returnUrl = "http://www.baidu.com";
 try
@@ -679,22 +726,305 @@ catch (Exception excption)
 ## 3.1 流程概述
 
 支付宝微信支持面对面通过二维码的方式进行收付款
-商户扫用户的二维码称为刷卡收款
-用户扫商户的二维码称为扫码支付
+
+### 3.1.1 用户扫商户的二维码称为扫码支付
+
+步骤①：**商家根据用户购买商品确定金额，向BeeCloud请求**  
+
+步骤②：**收到BeeCloud返回的二维码信息**  
+
+步骤③：**将二维码展示给用户进行支付**  
+
+步骤④：**用户支付完成后通过查询订单状态完成收款**
+
+### 3.1.2 商户扫用户的二维码称为刷卡收款
+
+步骤①：**商家根据用户购买商品确定金额，并且通过扫码枪等工具获取用户付款二维码的内容，向BeeCloud请求**  
+
+步骤②：**用户支付完成后通过查询订单状态完成收款**  
+
 
 ## 3.2 支付宝扫码支付
 
+1. 商户发起收款请求
+2. 系统生成付款订单，包括订单号，订单标题，金额等信息
+3. 将订单存入自己系统数据库中，标记订单为未支付
+4. 调用BeeCloud SDK中的支付接口，请求支付宝
+5. 支付宝返回一个二维码的值
+6. 将二维码的值生成二维码图片展示给用户完成扫码支付
+7. 调用status查询接口查看支付是否成功
+8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`ALI_OFFLINE_QRCODE` `BC_ALI_QRCODE` 
+</aside>
+
+> 支付宝扫码支付代码示例：
+
+```csharp
+BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+try
+{
+    BCBill resultBill = BCPay.BCOfflinePayByChannel(bill);
+    string str = resultBill.codeURL;
+
+    //初始化二维码生成工具
+    QRCodeEncoder qrCodeEncoder = new QRCodeEncoder();
+    qrCodeEncoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;
+    qrCodeEncoder.QRCodeErrorCorrect = QRCodeEncoder.ERROR_CORRECTION.M;
+    qrCodeEncoder.QRCodeVersion = 0;
+    qrCodeEncoder.QRCodeScale = 4;
+
+    //将字符串生成二维码图片
+    Bitmap image = qrCodeEncoder.Encode(str, Encoding.Default);
+    //保存为PNG到内存流  
+    MemoryStream ms = new MemoryStream();
+    image.Save(ms, ImageFormat.Png);
+
+    //输出二维码图片
+    Response.BinaryWrite(ms.GetBuffer());
+    Response.ContentType = "image/Png";
+}
+catch (Exception excption)
+{
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
+}
+```
+
+```java
+#
+```
+
+```php
+#
+```
+
+```ruby
+#
+```
+
+```python
+#
+```
+
+```shell
+
+```
+
+```javascript
+#
+```
+
 ## 3.3 微信扫码支付
+
+1. 商户发起收款请求
+2. 系统生成付款订单，包括订单号，订单标题，金额等信息
+3. 将订单存入自己系统数据库中，标记订单为未支付
+4. 调用BeeCloud SDK中的支付接口，请求微信
+5. 微信返回一个二维码的值
+6. 将二维码的值生成二维码图片展示给用户完成扫码支付
+7. 调用status查询接口查看支付是否成功
+8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`ALI_OFFLINE_QRCODE` `BC_ALI_QRCODE` 
+</aside>
+
+> 微信扫码支付代码示例：
+
+```csharp
+BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+try
+{
+    BCBill resultBill = BCPay.BCPayByChannel(bill);
+    string str = resultBill.codeURL;
+
+    //初始化二维码生成工具
+    QRCodeEncoder qrCodeEncoder = new QRCodeEncoder();
+    qrCodeEncoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;
+    qrCodeEncoder.QRCodeErrorCorrect = QRCodeEncoder.ERROR_CORRECTION.M;
+    qrCodeEncoder.QRCodeVersion = 0;
+    qrCodeEncoder.QRCodeScale = 4;
+
+    //将字符串生成二维码图片
+    Bitmap image = qrCodeEncoder.Encode(str, Encoding.Default);
+    //保存为PNG到内存流  
+    MemoryStream ms = new MemoryStream();
+    image.Save(ms, ImageFormat.Png);
+
+    //输出二维码图片
+    Response.BinaryWrite(ms.GetBuffer());
+    Response.ContentType = "image/Png";
+}
+catch (Exception excption)
+{
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
+}
+```
+
+
+```java
+#
+```
+
+```php
+#
+```
+
+```ruby
+#
+```
+
+```python
+#
+```
+
+```shell
+
+```
+
+```javascript
+#
+```
 
 ## 3.4 支付宝刷卡收款
 
+1. 商户发起收款请求
+2. 系统生成付款订单，包括订单号，订单标题，金额等信息
+3. 将订单存入自己系统数据库中，标记订单为未支付
+4. 通过外部设备如扫码枪等获取用户的支付二维码内容，调用BeeCloud SDK中的支付接口，请求支付宝
+5. 如果是免密支付，直接返回收款结果
+6. 如果用户需要输入密码，调用status查询接口查看支付是否成功
+7. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`ALI_SCAN` `BC_ALI_SCAN` 
+</aside>
+
+> 支付宝刷卡支付代码示例：
+
+```csharp
+BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+bill.authCode = "283024351597694002";
+try
+{
+    BCBill resultBill = BCPay.BCOfflinePayByChannel(bill);
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + resultBill.result + "</span><br/>");
+}
+catch (Exception excption)
+{
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
+}
+```
+
+```java
+#
+```
+
+```php
+#
+```
+
+```ruby
+#
+```
+
+```python
+#
+```
+
+```shell
+
+```
+
+```javascript
+#
+```
+
 ## 3.5 微信刷卡收款
 
-# 4. 企业向个人打款
+1. 商户发起收款请求
+2. 系统生成付款订单，包括订单号，订单标题，金额等信息
+3. 将订单存入自己系统数据库中，标记订单为未支付
+4. 通过外部设备如扫码枪等获取用户的支付二维码内容，调用BeeCloud SDK中的支付接口，请求微信
+5. 如果是免密支付，直接返回收款结果
+6. 如果用户需要输入密码，调用status查询接口查看支付是否成功
+7. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`WX_SCAN` `BC_WX_SCAN` 
+</aside>
 
-## 4.1 支付宝打款到支付宝
+> 微信刷卡支付代码示例：
 
-## 4.2 微信打款到微信
+```csharp
+BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+bill.authCode = "130166424204787197";
+try
+{
+    BCBill resultBill = BCPay.BCOfflinePayByChannel(bill);
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + resultBill.result + "</span><br/>");
+}
+catch (Exception excption)
+{
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
+}
+```
 
-## 4.3 BeeCloud打款到银行卡
+```java
+#
+```
+
+```php
+#
+```
+
+```ruby
+#
+```
+
+```python
+#
+```
+
+```shell
+
+```
+
+```javascript
+#
+```
+
+# 4. 移动APP收款
+
+## 4.1 流程概述
+
+下图为整个支付的流程:
+![pic](http://7xavqo.com1.z0.glb.clouddn.com/UML01.png)
+
+其中需要开发者开发的只有：
+
+步骤①**（在App端）发送订单信息**
+
+做完这一步之后就会跳到相应的支付页面（如微信app中），让用户继续后续的支付步骤
+
+步骤②：**（在App端）处理同步回调结果**
+
+付款完成或取消之后，会回到客户app中，在页面中展示支付结果（比如弹出框告诉用户"支付成功"或"支付失败")。同步回调结果只作为界面展示的依据，不能作为订单的最终支付结果，最终支付结果应以异步回调为准。
+
+步骤③：**（在客户服务端）处理异步回调结果（[Webhook](https://beecloud.cn/doc/?index=webhook)）**
+ 
+付款完成之后，根据客户在BeeCloud后台的设置，BeeCloud会向客户服务端发送一个Webhook请求，里面包括了数字签名，订单号，订单金额等一系列信息。客户需要在服务端依据规则要验证**数字签名是否正确，购买的产品与订单金额是否匹配，这两个验证缺一不可**。验证结束后即可开始走支付完成后的逻辑。
+
+## 4.2 在APP中使用支付宝收款
+
+## 4.3 在APP中使用微信收款
+
+## 4.4 在APP中使用银联收款
+
+# 5. 企业向个人打款
+
+## 5.1 BeeCloud打款到银行卡
+
+## 5.2 支付宝打款到支付宝
+
+## 5.3 微信打款到微信
+
+# 6. 实名身份认证
 
