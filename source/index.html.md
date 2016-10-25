@@ -27,8 +27,29 @@ language_tabs:
 
 BeeCloud支持线上线下各种场景的支付解决方案，本文档以场景的形式展示如何使用BeeCloud开发，完成支付技术的接入。
 
-## 1.1 SDK安装
+## 1.1 渠道的开通和参数配置
 
+### 1.1.1 开通渠道
+
+**官方渠道**申请指导：  
+微信APP的申请： [这里](http://beecloud.cn/doc/payapply/?index=0)  
+微信公众号的申请： [这里](http://beecloud.cn/doc/payapply/?index=2)  
+支付宝APP/PC网页/移动网页的申请： [这里](http://beecloud.cn/doc/payapply/?index=4)
+<aside class="notice">
+BeeCloud提供自有的支付宝/微信/银联渠道，请联系我们商务了解更多详情
+</aside>
+
+### 1.1.2 渠道参数配置
+
+微信APP参数配置： [这里](http://beecloud.cn/doc/payapply/?index=1)  
+微信公众号参数配置： [这里](http://beecloud.cn/doc/payapply/?index=3)   
+支付宝APP/PC网页/移动网页参数配置： [这里](http://beecloud.cn/doc/payapply/?index=5)   
+支付宝RSA秘钥配置： [这里](http://beecloud.cn/doc/payapply/?index=14)   
+
+
+## 1.2 SDK安装
+
+SDK下载地址 [这里](http://beecloud.cn/download/)
 <aside class="notice">
 各个SDK的安装请参考SDK的readme文件
 </aside>
@@ -1014,9 +1035,69 @@ catch (Exception excption)
 
 ## 4.2 在APP中使用支付宝收款
 
+1. 用户发起付款请求
+2. 系统生成付款订单，包括订单号，订单标题，金额等信息
+3. 将订单存入自己系统数据库中，标记订单为未支付
+4. 调用BeeCloud SDK中的支付接口，请求支付宝
+5. 调起支付宝APP，用户进行支付，支付完成后跳回商户APP
+6. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`ALI_APP` 
+</aside>
+
+> 支付宝APP支付代码示例：
+
+```objective-c
+#
+```
+
+```xml
+#
+```
+
 ## 4.3 在APP中使用微信收款
 
+1. 用户发起付款请求
+2. 系统生成付款订单，包括订单号，订单标题，金额等信息
+3. 将订单存入自己系统数据库中，标记订单为未支付
+4. 调用BeeCloud SDK中的支付接口，请求微信
+5. 调起微信APP，用户进行支付，支付完成后跳回商户APP
+6. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`WX_APP` `BC_WX_APP` 
+</aside>
+
+> 微信APP支付代码示例：
+
+```objective-c
+#
+```
+
+```xml
+#
+```
+
 ## 4.4 在APP中使用银联收款
+
+1. 用户发起付款请求
+2. 系统生成付款订单，包括订单号，订单标题，金额等信息
+3. 将订单存入自己系统数据库中，标记订单为未支付
+4. 调用BeeCloud SDK中的支付接口，请求银联
+5. 调起银联插件，用户进行支付，支付完成后跳回商户APP
+6. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="success">
+支持的渠道包括：`UN_APP` `BC_APP` 
+</aside>
+
+> 银联APP支付代码示例：
+
+```objective-c
+#
+```
+
+```xml
+#
+```
 
 # 5. 企业向个人打款
 
