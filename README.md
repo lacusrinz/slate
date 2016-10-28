@@ -1,5 +1,7 @@
 Doc for BeeCloud
 
+edit /source/index.html.md
+
 install
 
 ```

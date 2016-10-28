@@ -10,7 +10,7 @@ language_tabs:
   - python: Python
   - javascript: Node.Js
   - xml: Android
-  - objective-c: Objective-C
+  - swift: Objective-C
 
 
 <!-- toc_footers:
@@ -138,6 +138,7 @@ wo shi iOS
  
 付款完成之后，根据客户在BeeCloud后台的设置，BeeCloud会向客户服务端发送一个Webhook请求，里面包括了数字签名，订单号，订单金额等一系列信息。客户需要在服务端依据规则要验证**数字签名是否正确，购买的产品与订单金额是否匹配，这两个验证缺一不可**。验证结束后即可开始走支付完成后的逻辑。
 
+
 ## 2.2 网页上实现支付宝收款
 
 ### 2.2.1 支付宝收银台收款
@@ -172,7 +173,10 @@ try {
 
 ```csharp
 BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+
+//支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，中间请勿有#,?等字符,必填参数
 bill.returnUrl = "http://localhost:50003/return_ali_url.aspx";
+
 try
 {
     BCBill resultBill = BCPay.BCPayByChannel(bill);
@@ -225,7 +229,10 @@ catch (Exception excption)
 ``` csharp
 BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
 bill.qrPayMode = "0";
+
+//支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，中间请勿有#,?等字符,必填参数
 bill.returnUrl = "http://localhost:50003/return_ali_url.aspx";
+
 try
 {
     BCBill resultBill = BCPay.BCPayByChannel(bill);
@@ -285,7 +292,10 @@ catch (Exception excption)
 
 ``` csharp
 BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+
+//支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，中间请勿有#,?等字符,必填参数
 bill.returnUrl = "http://localhost:50003/return_ali_url.aspx";
+
 //bill.useApp = false;
 try
 {
@@ -323,6 +333,14 @@ catch (Exception excption)
 ```javascript
 #
 ```
+
+### 2.2.4 附： 支付宝支付其他可选参数：
+
+参数名 | 类型 | 含义 | 描述 | 示例 
+----  | ---- | ---- | ---- | ---- 
+optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
 
 ## 2.3 网页上实现微信收款
 
@@ -571,6 +589,14 @@ catch (Exception excption)
 #
 ```
 
+### 2.3.4 附： 微信支付其他可选参数：
+
+参数名 | 类型 | 含义 | 描述 | 示例 
+----  | ---- | ---- | ---- | ---- 
+optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
+
 ## 2.4 网页上实现银联收款
 
 ### 2.4.1 银联PC网页收款
@@ -681,6 +707,14 @@ catch (Exception excption)
 #
 ```
 
+### 2.4.3 附： 银联支付其他可选参数：
+
+参数名 | 类型 | 含义 | 描述 | 示例 
+----  | ---- | ---- | ---- | ---- 
+optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
+
 
 ## 2.5 网页上实现银行网关收款
 
@@ -740,6 +774,14 @@ catch (Exception excption)
 ```javascript
 #
 ```
+
+附： 网关收款其他可选参数：
+
+参数名 | 类型 | 含义 | 描述 | 示例 
+----  | ---- | ---- | ---- | ---- 
+optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360
 
 
 # 3. 线下通过二维码收款
@@ -1012,6 +1054,14 @@ catch (Exception excption)
 #
 ```
 
+## 3.6 附： 刷卡/扫码支付其他可选参数：
+
+参数名 | 类型 | 含义 | 描述 | 示例 
+----  | ---- | ---- | ---- | ---- 
+optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
+
 # 4. 移动APP收款
 
 ## 4.1 流程概述
@@ -1047,7 +1097,7 @@ catch (Exception excption)
 
 > 支付宝APP支付代码示例：
 
-```objective-c
+```swift
 #
 ```
 
@@ -1069,7 +1119,7 @@ catch (Exception excption)
 
 > 微信APP支付代码示例：
 
-```objective-c
+```swift
 #
 ```
 
@@ -1091,7 +1141,7 @@ catch (Exception excption)
 
 > 银联APP支付代码示例：
 
-```objective-c
+```Objective-C
 #
 ```
 
@@ -1099,13 +1149,551 @@ catch (Exception excption)
 #
 ```
 
-# 5. 企业向个人打款
+# 5. 企业打款
 
-## 5.1 BeeCloud打款到银行卡
+## 5.1 概述
 
-## 5.2 支付宝打款到支付宝
+企业打款是指企业将钱从企业账户转到个人账号的操作
+<aside class="warning">
+打款只能从服务器端发起，会用到`Master Secret`进行加密，切勿泄露`Master Secret`
+</aside>
 
-## 5.3 微信打款到微信
+## 5.2 BeeCloud打款到银行卡
+
+<aside class="notice">
+打款到银行卡需要首先在BeeCloud打款账户充值，企业打款余额可以用于打款 
+</aside>
+1. 商户发起打款请求
+2. 系统生成打款订单，包括打款单号，金额等信息
+3. 将订单存入自己系统数据库中，标记订单为未成功
+4. 调用BeeCloud SDK中的支付接口，请求BeeCloud
+5. BeeCloud返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
+6. 打款成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为打款成功
+<aside class="success">
+支持的渠道包括：`BC_TRANSFER`  
+</aside>
+
+> BeeCloud打款到银行卡代码示例：
+
+```csharp
+//getBankFullNames方法可以获取所有支持的银行全称，将全称填写到BCTransferWithBackCard里的bank_fullname字段
+BankList banks = BCPay.getBankFullNames("P_CR");
+
+BCTransferWithBackCard transfer = new BCTransferWithBackCard(金额, 
+打款单号, 
+打款标题, 
+交易源, 
+银行全名, 
+银行卡类型, 
+收款帐户类型, 
+收款帐户号, 
+收款帐户名称);
+transfer.mobile = "xxxxxxxxxxxxxx";
+try 
+{
+    transfer = BCPay.BCBankCardTransfer(transfer);
+    Response.Write("<span style='color:#00CD00;font-size:20px'>已代付</span><br/>");
+}
+catch (Exception excption)
+{
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
+}
+```
+
+```java
+#
+```
+
+```php
+#
+```
+
+```ruby
+#
+```
+
+```python
+#
+```
+
+```shell
+
+```
+
+```javascript
+#
+```
+
+附： BeeCloud打款到银行卡参数列表
+
+参数名 | 类型 | 含义 | 描述 | 例子 
+----  | ---- | ---- | ---- | ---- 
+total_fee | Integer | 打款订单总金额 | 必须是正整数，单位为分 | 1 
+bill_no | String | 商户订单号 | 8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 
+title| String | 打款订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 
+trade_source | String | 交易源| UTF8编码格式，目前只能填写OUT_PC | OUT_PC 
+bank\_fullname | String | 银行全名 | 银行全称 | 中国银行，而不能写成"中行",因为“中行”也是中信银行和中兴银行的缩写 
+card_type|String | 银行卡类型 | 区分借记卡和信用卡 | DE代表借记卡，CR代表信用卡，其他值为非法 
+account_type|String | 收款帐户类型 | 区分对公和对私 | 帐户类型，P代表私户，C代表公户，其他值为非法 
+account_no|String | 收款帐户号 | 收款方的银行卡号 | 6222691921993848888 
+account_name|String | 收款帐户名称 | 收款方的姓名或者单位名 | 黄晓明 
+mobile | String | 银行绑定的手机号 | 银行绑定的手机号，当需要手机收到银行入账信息时，该值必填，前提是该手机在银行有短信通知业务，否则收不到银行信息 | 13888888888 
+optional | Map | 附加数据 | 用户自定义的参数，将会在Webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
+
+## 5.3 支付宝打款到支付宝
+
+1. 商户发起打款请求
+2. 系统生成打款订单，包括打款单号，金额等信息
+3. 将订单存入自己系统数据库中，标记订单为未成功
+4. 调用BeeCloud SDK中的支付接口，请求支付宝
+5.返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
+6. 打款成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为打款成功
+<aside class="success">
+支持的渠道包括：`ALI_TRANSFER`  
+</aside>
+
+> 支付宝打款到支付宝代码示例：
+
+```csharp
+BCTransferParameter para = new BCTransferParameter();
+para.channel = BCPay.TransferChannel.ALI_TRANSFER.ToString();
+para.transferNo = BCUtil.GetUUID();
+para.totalFee = 100;
+para.desc = "C# 单笔打款";
+para.channelUserId = "XXX@163.com";
+para.channelUserName = "毛毛";
+para.accountName = "XXX有限公司";
+string aliURL = BCPay.BCTransfer(para);
+Response.Write("<a href=" + aliURL + ">付款地址</a><br/>");
+```
+
+```java
+#
+```
+
+```php
+#
+```
+
+```ruby
+#
+```
+
+```python
+#
+```
+
+```shell
+
+```
+
+```javascript
+#
+```
+
+附： 支付宝打款到支付宝参数列表
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 必填
+----  | ---- | ---- | ---- | ---- | ----
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | ALI\_TRANSFER| 是
+transfer_no | String | 打款单号 | 支付宝为11-32位数字字母组合| udjfiienx2334/8372839123 | 是
+total_fee | Int | 打款金额 | 此次打款的金额,单位分,正整数 | 100 | 是
+desc | String | 打款说明 | 此次打款的说明 | 赔偿 | 是
+channel_user\_id | String | 用户id | 支付渠道方内收款人的标示, 支付宝为支付宝账户 | someone@126.com |是
+channel_user\_name | String | 用户名| 支付渠道内收款人账户名 | 支付宝某人 | 是
+account_name|String|打款方账号名称|打款方账号名全称 | 苏州比可网络科技有限公司 | 是
+
+## 5.4 微信打款到微信
+
+1. 商户发起打款请求
+2. 系统生成打款订单，包括打款单号，金额等信息
+3. 将订单存入自己系统数据库中，标记订单为未成功
+4. 调用BeeCloud SDK中的支付接口，请求支付宝
+5.返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
+6. 打款成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为打款成功
+<aside class="success">
+支持的渠道包括：`ALI_TRANSFER`  
+</aside>
+
+> 微信打款到微信代码示例：
+
+```csharp
+BCTransferParameter para = new BCTransferParameter();
+para.channel = BCPay.TransferChannel.WX_TRANSFER.ToString();
+para.transferNo = "1000000000";
+para.totalFee = 100;
+para.desc = "C# 单笔打款";
+para.channelUserId = "XXXXXXXXXXXXXXXXXX";
+BCPay.BCTransfer(para);
+Response.Write("完成");
+```
+
+```java
+#
+```
+
+```php
+#
+```
+
+```ruby
+#
+```
+
+```python
+#
+```
+
+```shell
+
+```
+
+```javascript
+#
+```
+
+附： 微信打款到微信参数列表
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 必填
+----  | ---- | ---- | ---- | ---- | ----
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX\_TRANSFER | 是
+transfer_no | String | 打款单号 | 微信企业打款为8-32位数字字母组合 | udjfiienx2334/8372839123 | 是
+total_fee | Int | 打款金额 | 此次打款的金额,单位分,正整数(微信打款>=1元) | 100 | 是
+desc | String | 打款说明 | 此次打款的说明 | 赔偿 | 是
+channel_user\_id | String | 用户id | 支付渠道方内收款人的标示, 微信为openid | xx_sjiwajeirhwefhsahfwhru |是
 
 # 6. 实名身份认证
 
+## 6.1 概述
+
+商户在APP认证用户实名信息或者在打款钱验证用户卡号信息都需要用到身份实名验证接口，BeeCloud支持的验证方式分为二要素，三要素，四要素三种，商户可以根据自己需求选择，比如APP实名验证不需要验证银行卡信息，则只需要使用二要素验证，企业打款前需要验证银行卡和姓名，可以使用三要素或者四要素验证。
+
+用户进行实名验证时，只需输入商家需要的参数，即可实时完成身份验证。 
+
+二要素验证：姓名、身份证号  
+
+三要素验证：姓名、身份证号、银行账户  
+
+四要素验证：姓名、身份证号、银行账户、手机号码  
+
+
+## 6.2 实名身份认证
+
+> 实名身份认证代码示例：
+
+```csharp
+try
+{
+    bool result = BCPay.BCAuthentication(身份证姓名, 
+    身份证号, 
+    用户银行卡号(选填), 
+    用户银行卡预留手机号（选填）);
+
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + result + "</span><br/>");
+}
+catch (Exception excption)
+{
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
+}
+```
+
+```java
+#
+```
+
+```php
+#
+```
+
+```ruby
+#
+```
+
+```python
+#
+```
+
+```shell
+#
+```
+
+```javascript
+#
+```
+
+```swift
+#222
+```
+
+```xml
+#
+```
+
+# 7. 查询
+
+## 7.1 订单查询
+
+### 7.1.1 通过条件查询
+
+<aside class="success">
+条件包括渠道，订单号，时间段等可选参数
+</aside>
+
+> 通过条件查询代码示例：
+
+```csharp
+try
+{
+    //举例： 查询WX渠道的前50条订单
+    BCQueryBillParameter para = new BCQueryBillParameter();
+    para.channel = "WX";
+    para.limit = 50;
+    bills = BCPay.BCPayQueryByCondition(para);
+}
+catch (Exception excption)
+{
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
+}
+```
+
+```java
+#
+```
+
+```php
+#
+```
+
+```ruby
+#
+```
+
+```python
+#
+```
+
+```shell
+#
+```
+
+```javascript
+#
+```
+
+```swift
+#222
+```
+
+```xml
+#
+```
+
+### 7.1.2 通过支付订单ID查询
+
+<aside class="success">
+订单ID可以通过发起支付时的返回值获取，或者通过条件查询订单详情时获取
+</aside>
+
+> 通过条件查询代码示例：
+
+```csharp
+try
+{
+    //举例： 查询订单xxxxxxxxx的详情
+    bills = BCPay.BCPayQueryById("xxxxxxxxxxxx");
+}
+catch (Exception excption)
+{
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
+}
+```
+
+```java
+#
+```
+
+```php
+#
+```
+
+```ruby
+#
+```
+
+```python
+#
+```
+
+```shell
+#
+```
+
+```javascript
+#
+```
+
+```swift
+#222
+```
+
+```xml
+#
+```
+
+## 7.2 退款查询
+
+### 7.2.1 通过条件查询
+
+<aside class="success">
+条件包括渠道，订单号，时间段等可选参数
+</aside>
+
+> 通过条件查询代码示例：
+
+```csharp
+BCQueryRefundParameter para = new BCQueryRefundParameter();
+para.channel = "ALI";
+para.limit = 50;
+try
+{
+    refunds = BCPay.BCRefundQueryByCondition(para);
+}
+catch (Exception excption)
+{
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
+}
+```
+
+```java
+#
+```
+
+```php
+#
+```
+
+```ruby
+#
+```
+
+```python
+#
+```
+
+```shell
+#
+```
+
+```javascript
+#
+```
+
+```swift
+#222
+```
+
+```xml
+#
+```
+
+### 7.2.2 通过退款订单ID查询
+
+> 通过退款订单ID查询代码示例：
+
+```csharp
+try
+{
+    refunds = BCPay.BCRefundQueryById("xxxxxxxxxx");
+}
+catch (Exception excption)
+{
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
+}
+```
+
+```java
+#
+```
+
+```php
+#
+```
+
+```ruby
+#
+```
+
+```python
+#
+```
+
+```shell
+#
+```
+
+```javascript
+#
+```
+
+```swift
+#222
+```
+
+```xml
+#
+```
+
+# 7. 退款
+
+<aside class="warning">
+退款只能从服务器端发起，会用到`Master Secret`进行加密，切勿泄露`Master Secret`  
+</aside>
+
+<aside class="warning">
+目前BC_渠道的订单暂时不支持退款 
+</aside>
+
+<aside class="notice">
+退款单号格式为:退款日期(8位) + 流水号(3~24 位)。请自行确保在商户系统中唯一，且退款日期必须是发起退款的当天日期,同一退款单号不可重复提交，否则会造成退款单重复。流水号可以接受数字或英文字符，建议使用数字，但不可接受“000”
+</aside>
+
+> 退款代码示例：
+
+```csharp
+BCRefund refund = new BCRefund(订单号, 退款单号, 退款金额);
+//可以指定退款渠道，也可以不指定，根据订单号会关联上相应的渠道
+refund.channel = BCPay.RefundChannel.ALI.ToString(); 
+try
+{
+    refund = BCPay.BCRefundByChannel(refund);
+    Response.Redirect(refund.url);
+}
+catch (Exception excption)
+{
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
+}
+```
+
+```java
+#
+```
+
+```php
+#
+```
+
+```ruby
+#
+```
+
+```python
+#
+```
+
+```shell
+#
+```
+
+```javascript
+#
+```
