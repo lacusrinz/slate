@@ -80,8 +80,20 @@ BeeCloud.setSandbox(true);
 //设置sandbox属性为true，开启测试模式   
 ```
 
-```php
-#
+```php 
+\beecloud\rest\api::registerApp('app id', 'app secret', 'master secret', 'test secret');
+//不使用namespace的用户
+BCRESTApi::registerApp('app id', 'app secret', 'master secret', 'test secret') 
+
+//LIVE模式使用方法（也可不设置，默认为为LIVE模式）
+\beecloud\rest\api::setSandbox(false);
+//不使用namespace的用户
+BCRESTApi::setSandbox(false);
+
+//测试模式使用方法  
+\beecloud\rest\api::setSandbox(true);
+//不使用namespace的用户
+BCRESTApi::setSandbox(true);
 ```
 
 ```csharp
@@ -191,7 +203,27 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'ALI_WEB', //渠道类型
+        'title' => '支付宝及时到账支付测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1, //订单金额(int 类型) ,单位分
+        'return_url' => 'https://beecloud.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
+        'bill_timeout' => 360, //京东(JD*)不支持该参数
+    );
+    $result = \beecloud\rest\api::bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bill($data);
+    if(isset($result->url)){
+        header("Location:$result->url");
+    }else if(isset($result->html)) {
+        echo $result->html;
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -252,7 +284,32 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'ALI_QRCODE', //渠道类型
+        'title' => '支付宝网页二维码支付测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1, //订单金额(int 类型) ,单位分
+        //qr_pay_mode必填 二维码类型含义
+        //0： 订单码-简约前置模式, 对应 iframe 宽度不能小于 600px, 高度不能小于 300px
+        //1： 订单码-前置模式, 对应 iframe 宽度不能小于 300px, 高度不能小于 600px
+        //3： 订单码-迷你前置模式, 对应 iframe 宽度不能小于 75px, 高度不能小于 75px
+        'qr_pay_mode' => "0",
+        'return_url' => 'https://beecloud.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
+        'bill_timeout' => 360, //京东(JD*)不支持该参数
+    );
+    $result = \beecloud\rest\api::bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bill($data);
+    if(isset($result->url)){
+        header("Location:$result->url");
+    }else if(isset($result->html)) {
+        echo $result->html;
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -315,7 +372,29 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'ALI_WAP', //渠道类型
+        'title' => '支付宝移动网页支付测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1, //订单金额(int 类型) ,单位分
+        //use_app非必填参数,boolean型,是否使用APP支付,true使用,否则不使用
+        //'use_app' => true;
+        'return_url' => 'https://beecloud.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
+        'bill_timeout' => 360, //京东(JD*)不支持该参数
+    );
+    $result = \beecloud\rest\api::bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bill($data);
+    if(isset($result->url)){
+        header("Location:$result->url");
+    }else if(isset($result->html)) {
+        echo $result->html;
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -439,7 +518,107 @@ catch (Exception excption)
 ```
 
 ```php
-#
+/**
+ * 微信用户的openid获取请参考官方demo sdk和文档
+ * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=11_1
+ * 微信获取openid php代码, 运行环境是微信内置浏览器访问时
+ *
+ * 注意:
+ *      请修改lib/WxPayPubHelper/WxPay.pub.config.php配置文件中的参数:
+ *      1.APPID, APPSECRET请修改为商户自己的微信参数(MCHID, KEY在beecloud平台创建的应用中配置);
+ *      2.JS_API_CALL_URL针对当前的demo,应该是http(s)://<your domain>/<your path>/pay.bill.php?type=WX_JSAPI,可根据具体情况进行配置调整;
+ *      3.请检查方法createOauthUrlForCode是否对回调链接地址(redirect_uri)进行urlencode处理,如果没有请自行添加
+ *      3.特别要强调的是JS_API_CALL_URL的访问域名必须与微信公众平台配置的授权回调页面域名一致.
+ */
+ //获取openid
+header("Content-type: text/html; charset=utf-8");
+include_once('lib/WxPayPubHelper/WxPayPubHelper.php');
+$jsApi = new JsApi_pub();
+//网页授权获取用户openid
+//通过code获得openid
+if (!isset($_GET['code'])){
+    //触发微信返回code码
+    $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL);
+    header("Location: $url");
+} else {
+    //获取code码，以获取openid
+    $code = $_GET['code'];
+    $jsApi->setCode($code);
+    $openid = $jsApi->getOpenId();
+}
+
+//获取微信支付相关参数
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'WX_JSAPI', //渠道类型,
+        'openid' => $openid,
+        'title' => '微信移动网页支付测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1 //订单金额(int 类型) ,单位分
+    );
+     $result = \beecloud\rest\api::bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bill($data);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    $jsApiParam = array(
+        "appId" => $result->app_id,
+        "timeStamp" => $result->timestamp,
+        "nonceStr" => $result->nonce_str,
+        "package" => $result->package,
+        "signType" => $result->sign_type,
+        "paySign" => $result->pay_sign
+    );
+} catch (Exception $e) {
+    die($e->getMessage());
+}
+
+//页面js部分
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>BeeCloud微信安全支付</title>
+</head>
+<script type="text/javascript">
+    //调用微信JS api 支付
+    function jsApiCall() {
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest',
+            <?php echo json_encode($jsApiParam);?>,
+            function(res){
+                /* 参考:https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=7_7&index=6
+                 * res.err_msg的返回值
+                 * 1.支付成功, get_brand_wcpay_request：ok
+                 * 2.支付过程中用户取消, get_brand_wcpay_request：cancel
+                 * 3.支付失败, get_brand_wcpay_request：fail
+                 */
+                alert(JSON.stringify(res)) //供调试使用
+                if(res.err_msg == "get_brand_wcpay_request：ok" ) {
+                    //用户自己的操作, eg: window.location.href = '用户自己的URL';
+                }else{
+                    //用户自己的操作, eg: window.location.href = '用户自己的URL';
+                }
+            }
+        );
+    }
+    function callpay() {
+        if (typeof WeixinJSBridge == "undefined"){
+            if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+            }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+            }
+        }else{
+            jsApiCall();
+        }
+    }
+</script>
+<body onload="callpay();"> </body>
+</html>
 ```
 
 ```ruby
@@ -494,7 +673,25 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'BC_WX_WAP', //渠道类型
+        'title' => '微信移动网页（非微信浏览器）测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1 //订单金额(int 类型) ,单位分
+    );
+    $result = \beecloud\rest\api::bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bill($data);
+    if(isset($result->url)){
+        header("Location:$result->url");
+    }else if(isset($result->html)) {
+        echo $result->html;
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -570,7 +767,52 @@ catch (Exception excption)
 ```
 
 ```php
-#
+//获取二维码地址
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'WX_NATIVE', //渠道类型
+        'title' => '微信扫码测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1 //订单金额(int 类型) ,单位分
+    );
+    $result = \beecloud\rest\api::bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bill($data);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    $code_url = $result->code_url;
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
+
+//页面js部分
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>BeeCloud微信扫码示例</title>
+</head>
+<body>
+<div align="center" id="qrcode" ></div>
+</body>
+<script src="statics/jquery-1.11.1.min.js"></script>
+<script src="statics/qrcode.js"></script>
+<script>
+    if(<?php echo $code_url != NULL; ?>) {
+        var options = {text: "<?php echo $code_url;?>"};
+        //参数1表示图像大小，取值范围1-10；参数2表示质量，取值范围'L','M','Q','H'
+        var canvas = BCUtil.createQrCode(options);
+        var wording=document.createElement('p');
+        wording.innerHTML = "扫我 扫我";
+        var element=document.getElementById("qrcode");
+        element.appendChild(wording);
+        element.appendChild(canvas);
+    }
+</script>
+</body>
+</html>
 ```
 
 ```ruby
@@ -634,7 +876,27 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'UN_WEB', //渠道类型
+        'title' => '银联PC网页支付测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1, //订单金额(int 类型) ,单位分
+        'return_url' => 'https://beecloud.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
+        'bill_timeout' => 360, //京东(JD*)不支持该参数
+    );
+    $result = \beecloud\rest\api::bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bill($data);
+    if(isset($result->url)){
+        header("Location:$result->url");
+    }else if(isset($result->html)) {
+        echo $result->html;
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -688,7 +950,27 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'UN_WAP', //渠道类型
+        'title' => '银联移动网页支付测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1, //订单金额(int 类型) ,单位分
+        'return_url' => 'https://beecloud.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
+        'bill_timeout' => 360, //京东(JD*)不支持该参数
+    );
+    $result = \beecloud\rest\api::bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bill($data);
+    if(isset($result->url)){
+        header("Location:$result->url");
+    }else if(isset($result->html)) {
+        echo $result->html;
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -756,7 +1038,35 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'BC_GETEWAY', //渠道类型
+        'title' => '网关支付测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1, //订单金额(int 类型) ,单位分
+        /*
+         * bank(string 类型) for channel BC_GATEWAY
+         * CMB	  招商银行    ICBC	工商银行   CCB   建设银行(暂不支持)
+         * BOC	  中国银行    ABC    农业银行   BOCM	交通银行
+         * SPDB   浦发银行    GDB	广发银行   CITIC	中信银行
+         * CEB	  光大银行    CIB	兴业银行   SDB	平安银行
+         * CMBC   民生银行    NBCB   宁波银行   BEA   东亚银行
+         * NJCB   南京银行    SRCB   上海农商行 BOB   北京银行
+        */
+        'bank' => 'BOC'
+    );
+    $result = \beecloud\rest\api::bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bill($data);
+    if(isset($result->url)){
+        header("Location:$result->url");
+    }else if(isset($result->html)) {
+        echo $result->html;
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -858,7 +1168,52 @@ catch (Exception excption)
 ```
 
 ```php
-#
+//获取二维码地址
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'ALI_OFFLINE_QRCODE', //渠道类型
+        'title' => '支付宝扫码支付测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1 //订单金额(int 类型) ,单位分
+    );
+    $result = \beecloud\rest\api::offline_bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::offline_bill($data);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    $code_url = $result->code_url;
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
+
+//页面js部分
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>示例</title>
+</head>
+<body>
+<div style="width:100%; height:100%;overflow: auto; text-align:center;">
+    <div id="qrcode"></div>
+</div>
+<script type="text/javascript" src="statics/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="statics/qrcode.js"></script>
+<script>
+    if("<?php echo $code != NULL; ?>") {
+        var options = {text: "<?php echo $code;?>"};
+        var canvas = BCUtil.createQrCode(options);
+        var wording=document.createElement('p');
+        wording.innerHTML = "线下扫码支付";
+        var element=document.getElementById("qrcode");
+        element.appendChild(wording);
+        element.appendChild(canvas);
+    }
+</script>
+</body>
+</html>
 ```
 
 ```ruby
@@ -929,7 +1284,52 @@ catch (Exception excption)
 ```
 
 ```php
-#
+//获取二维码地址
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'BC_NATIVE', //渠道类型
+        'title' => '微信扫码测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1 //订单金额(int 类型) ,单位分
+    );
+    $result = \beecloud\rest\api::bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bill($data);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    $code_url = $result->code_url;
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
+
+//页面js部分
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>BeeCloud微信扫码示例</title>
+</head>
+<body>
+<div align="center" id="qrcode" ></div>
+</body>
+<script src="statics/jquery-1.11.1.min.js"></script>
+<script src="statics/qrcode.js"></script>
+<script>
+    if(<?php echo $code_url != NULL; ?>) {
+        var options = {text: "<?php echo $code_url;?>"};
+        //参数1表示图像大小，取值范围1-10；参数2表示质量，取值范围'L','M','Q','H'
+        var canvas = BCUtil.createQrCode(options);
+        var wording=document.createElement('p');
+        wording.innerHTML = "扫我 扫我";
+        var element=document.getElementById("qrcode");
+        element.appendChild(wording);
+        element.appendChild(canvas);
+    }
+</script>
+</body>
+</html>
 ```
 
 ```ruby
@@ -982,7 +1382,26 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'ALI_SCAN', //渠道类型
+        'title' => '支付宝刷卡支付测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1, //订单金额(int 类型) ,单位分
+        'auth_code' => '28886955594xxxxxxxx' //用户授权码, 当商户用扫码枪扫用户的条形码时得到的字符串
+    );
+    $result = \beecloud\rest\api::offline_bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::offline_bill($data);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    echo '支付成功: '.$result->id;
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -1035,7 +1454,26 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'WX_SCAN', //渠道类型
+        'title' => '微信刷卡支付测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1, //订单金额(int 类型) ,单位分
+        'auth_code' => '28886955594xxxxxxxx' //用户授权码, 当商户用扫码枪扫用户的条形码时得到的字符串
+    );
+    $result = \beecloud\rest\api::offline_bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::offline_bill($data);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    echo '支付成功: '.$result->id;
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -1205,7 +1643,42 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'title' => '企业打款测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1, //订单金额(int 类型) ,单位分
+        'trade_source' => 'OUT_PC' //交易源, UTF8编码格式，目前只能填写OUT_PC
+        /*
+         *  如果未能确认银行的全称信息,可通过下面的接口获取并进行确认
+         *  //P_DE:对私借记卡,P_CR:对私信用卡,C:对公账户
+         *  $banks = \beecloud\rest\api::bc_transfer_banks(array('type' => 'P_DE'));
+         *  if ($result->result_code != 0) {
+         *      print_r($result);
+         *      exit();
+         *  }
+         *  print_r($banks->bank_list);die;
+         */
+        'bank_fullname' => "中国银行"; //银行全称
+        'card_type' => "DE"; //银行卡类型,区分借记卡和信用卡，DE代表借记卡，CR代表信用卡，其他值为非法
+        'account_type' => "P"; //帐户类型，P代表私户，C代表公户，其他值为非法
+        'account_no' => "6222691921993848888";   //收款方的银行卡号
+        'account_name' => "test"; //收款方的姓名或者单位名
+        //选填mobile
+        'mobile' => ""; //银行绑定的手机号
+    );
+    $result = \beecloud\rest\api::bc_transfer($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bc_transfer($data);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    echo ' 打款成功';
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -1272,7 +1745,31 @@ Response.Write("<a href=" + aliURL + ">付款地址</a><br/>");
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'ALI_TRANSFER',
+        'title' => '支付宝企业打款',   //订单标题
+        'transfer_no' => "bcdemo" . time(),    //打款单号
+        'total_fee' => 1, //订单金额(int 类型) ,单位分
+         //收款方的id 账号和 名字也需要对应
+         'channel_user_id' => '',   //收款人账户
+         'channel_user_name' => '', //收款人账户姓名
+         'account_name' => '苏州比可网络科技有限公司' //注意此处需要和企业账号对应的全称
+    );
+    $result = \beecloud\rest\api::transfers($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::transfers($data);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    if(isset($result->url)){
+        header("Location:$result->url");
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -1333,7 +1830,26 @@ Response.Write("完成");
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'WX_TRANSFER',
+        'title' => '微信企业打款',   //订单标题
+        'transfer_no' => "bcdemo" . time(),    //打款单号
+        'total_fee' => 1, //订单金额(int 类型) ,单位分
+        'channel_user_id' => 'o3kKrjlROJ1qlDmFdlBQA95zxxx'   //微信openid
+    );
+    $result = \beecloud\rest\api::transfer($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::transfer($data);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    echo ' 打款成功';
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -1402,7 +1918,26 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+	$data = array(
+        'timestamp' => time() * 1000,
+        'name' => 'jason',
+        'card_no' => '6227856101009660xxx',
+        'id_no' => '23082619860124xxxx',
+        'mobile' => '1555551xxxx'
+    );
+    $result = \beecloud\rest\Auths::auth($data);
+    //不使用namespace的用户
+    //$result = Auths::auth($data);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    print_r($result);
+}catch(Exception $e){
+	echo $e->getMessage();
+}
+
 ```
 
 ```ruby
@@ -1461,7 +1996,23 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'WX', //渠道类型
+        'spay_result' => true,    //只列出了支付成功的订单
+    );
+    $result = \beecloud\rest\api::bills($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bills($data);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    print_r($result);
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -1513,7 +2064,22 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'id' => '430e1584-8c52-4b09-a4f0-950423ea007e', //订单唯一表识
+    );
+    $result = \beecloud\rest\api::bill($data, get);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bill($data, get);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    print_r($result);
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -1569,7 +2135,22 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'ALI' //渠道类型
+    );
+    $result = \beecloud\rest\api::refunds($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::refunds($data);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    print_r($result);
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -1616,7 +2197,22 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'ALI' //退款订单唯一表识
+    );
+    $result = \beecloud\rest\api::refund($data, 'get');
+    //不使用namespace的用户
+    //$result = BCRESTApi::refund($data, 'get');
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    print_r($result);
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ```ruby
@@ -1679,7 +2275,39 @@ catch (Exception excption)
 ```
 
 ```php
-#
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'ALI', //渠道类型
+        'bill_no' => '', //订单号
+        'refund_no' => '', //退款单号
+        'refund_fee' => 1, //退款金额,单位分
+        //need_approval选填,是否为预退款,预退款need_approval为true,直接退款不加此参数或者为false
+        'need_approval' => true
+    );
+    $result = \beecloud\rest\api::refund($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::refund($data);
+    /*
+     * 当渠道类型为ALI_OFFLINE_QRCODE, ALI_SCAN, WX_SCAN, WX_NATIVE,调用方法:
+     * \beecloud\rest\api::offline_refund($data);
+     * 不使用namespace的用户
+     * BCRESTApi::offline_refund($data);
+     */
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    //当channel为ALI_APP、ALI_WEB、ALI_QRCODE，并且不是预退款
+    if(!isset($data["need_approval"]) && $data['channel'] == 'ALI'){
+        header("Location:$result->url");
+        exit();
+    }
+    echo '(预)退款成功, 退款表记录唯一标识ID: ".$result->id;
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
+
 ```
 
 ```ruby
