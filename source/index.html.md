@@ -126,7 +126,7 @@ BeeCloud.BeeCloud.setTestMode(true);
 wo shi android
 ```
 
-```objective-c
+```swift
 wo shi iOS
 ```
 
@@ -1243,7 +1243,7 @@ try {
 7. 调用status查询接口查看支付是否成功
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="success">
-支持的渠道包括：`ALI_OFFLINE_QRCODE` `BC_ALI_QRCODE` 
+支持的渠道包括：`WX_NATIVE` `BC_NATIVE` 
 </aside>
 
 > 微信扫码支付代码示例：
@@ -1579,7 +1579,7 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 
 > 银联APP支付代码示例：
 
-```Objective-C
+```swift
 #
 ```
 
