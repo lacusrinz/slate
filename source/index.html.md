@@ -1181,7 +1181,7 @@ try {
     //不使用namespace的用户
     //$result = BCRESTApi::offline_bill($data);
     if ($result->result_code != 0) {
-        print_r($result);
+        echo json_encode($result);
         exit();
     }
     $code_url = $result->code_url;
@@ -1189,15 +1189,34 @@ try {
     echo $e->getMessage();
 }
 
-//页面js部分
+
+//status查询接口查看支付是否成功
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => $_GET["channel"], //渠道类型
+        'bill_no' => $_GET["billNo"]    //订单编号
+    );
+    $result = $api->offline_bill_status($data);
+    if ($result->result_code != 0) {
+        echo json_encode($result);
+        exit();
+    }
+    echo json_encode($result);
+} catch (Exception $e) {
+    die($e->getMessage());
+}
+
+//页面部分
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>示例</title>
+    <title>支付宝扫码示例</title>
 </head>
 <body>
 <div style="width:100%; height:100%;overflow: auto; text-align:center;">
     <div id="qrcode"></div>
+    <div id="msg"></div>
 </div>
 <script type="text/javascript" src="statics/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="statics/qrcode.js"></script>
@@ -1211,6 +1230,23 @@ try {
         element.appendChild(wording);
         element.appendChild(canvas);
     }
+    
+     $(function(){
+        var billNo = "<?php echo $data["bill_no"];?>";
+        var queryTimer = setInterval(function() {
+            $("#msg").text("开始查询支付状态...");
+            $.getJSON("bill.status.php", {"billNo":billNo, 'channel' : '<?php echo $data['channel']; ?>'}, function(res) {
+                if(res.resultCode == 0){
+                    if(res.pay_result){
+                        clearInterval(queryTimer);
+                        queryTimer = null;
+                        $("#cancel").hide();
+                    }
+                    $("#msg").text(res.pay_result ? "已经支付" : '未支付');
+                }
+            });
+        }, 3000);
+     )       
 </script>
 </body>
 </html>
@@ -1297,7 +1333,7 @@ try {
     //不使用namespace的用户
     //$result = BCRESTApi::bill($data);
     if ($result->result_code != 0) {
-        print_r($result);
+        echo json_encode($result);
         exit();
     }
     $code_url = $result->code_url;
@@ -1305,7 +1341,24 @@ try {
     echo $e->getMessage();
 }
 
-//页面js部分
+//status查询接口查看支付是否成功
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => $_GET["channel"], //渠道类型
+        'bill_no' => $_GET["billNo"]    //订单编号
+    );
+    $result = $api->offline_bill_status($data);
+    if ($result->result_code != 0) {
+        echo json_encode($result);
+        exit();
+    }
+    echo json_encode($result);
+} catch (Exception $e) {
+    die($e->getMessage());
+}
+
+//页面部分
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -1313,6 +1366,10 @@ try {
 </head>
 <body>
 <div align="center" id="qrcode" ></div>
+<div align="center">
+    <button id="query">查询订单状态</button>
+    <p id="query-result"></p>
+</div>
 </body>
 <script src="statics/jquery-1.11.1.min.js"></script>
 <script src="statics/qrcode.js"></script>
@@ -1327,6 +1384,20 @@ try {
         element.appendChild(wording);
         element.appendChild(canvas);
     }
+    
+    $('#query').click(function(){
+        $.getJSON('bill.status.php', {'billNo' : '<?php echo $data["bill_no"]; ?>', 'channel' : '<?php echo $data["channel"]; ?>'}, function(res){
+            var str = '';
+            if (res.result_code == 0 ) {
+                str = res.pay_result ? "支付成功" : "未支付";
+            }else if (res && res.result_code != 0) {
+                str = 'Error: ' + res.err_detail;
+            }else {
+                str = 'Notice: 该记录不存在';
+            }
+            $('#query-result').text(str);
+        })
+    });
 </script>
 </body>
 </html>
@@ -1395,13 +1466,74 @@ try {
     //不使用namespace的用户
     //$result = BCRESTApi::offline_bill($data);
     if ($result->result_code != 0) {
-        print_r($result);
+        echo json_encode($result);
         exit();
     }
     echo '支付成功: '.$result->id;
 } catch (Exception $e) {
     echo $e->getMessage();
 }
+
+//status查询接口查看支付是否成功
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => $_GET["channel"], //渠道类型
+        'bill_no' => $_GET["billNo"]    //订单编号
+    );
+    $result = $api->offline_bill_status($data);
+    if ($result->result_code != 0) {
+        echo json_encode($result);
+        exit();
+    }
+    echo json_encode($result);
+} catch (Exception $e) {
+    die($e->getMessage());
+}
+
+//页面部分
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>支付宝刷卡示例</title>
+</head>
+<body>
+<div align="center" id="qrcode" ></div>
+<div align="center">
+    <button id="query">查询订单状态</button>
+    <p id="query-result"></p>
+</div>
+</body>
+<script src="statics/jquery-1.11.1.min.js"></script>
+<script src="statics/qrcode.js"></script>
+<script>
+    if(<?php echo $code_url != NULL; ?>) {
+        var options = {text: "<?php echo $code_url;?>"};
+        //参数1表示图像大小，取值范围1-10；参数2表示质量，取值范围'L','M','Q','H'
+        var canvas = BCUtil.createQrCode(options);
+        var wording=document.createElement('p');
+        wording.innerHTML = "扫我 扫我";
+        var element=document.getElementById("qrcode");
+        element.appendChild(wording);
+        element.appendChild(canvas);
+    }
+    
+    $('#query').click(function(){
+        $.getJSON('bill.status.php', {'billNo' : '<?php echo $data["bill_no"]; ?>', 'channel' : '<?php echo $data["channel"]; ?>'}, function(res){
+            var str = '';
+            if (res.result_code == 0 ) {
+                str = res.pay_result ? "支付成功" : "未支付";
+            }else if (res && res.result_code != 0) {
+                str = 'Error: ' + res.err_detail;
+            }else {
+                str = 'Notice: 该记录不存在';
+            }
+            $('#query-result').text(str);
+        })
+    });
+</script>
+</body>
+</html>
 ```
 
 ```ruby
@@ -1474,6 +1606,67 @@ try {
 } catch (Exception $e) {
     echo $e->getMessage();
 }
+
+//status查询接口查看支付是否成功
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => $_GET["channel"], //渠道类型
+        'bill_no' => $_GET["billNo"]    //订单编号
+    );
+    $result = $api->offline_bill_status($data);
+    if ($result->result_code != 0) {
+        print_r($result);
+        exit();
+    }
+    echo json_encode($result);
+} catch (Exception $e) {
+    die($e->getMessage());
+}
+
+//页面部分
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>微信刷卡示例</title>
+</head>
+<body>
+<div align="center" id="qrcode" ></div>
+<div align="center">
+    <button id="query">查询订单状态</button>
+    <p id="query-result"></p>
+</div>
+</body>
+<script src="statics/jquery-1.11.1.min.js"></script>
+<script src="statics/qrcode.js"></script>
+<script>
+    if(<?php echo $code_url != NULL; ?>) {
+        var options = {text: "<?php echo $code_url;?>"};
+        //参数1表示图像大小，取值范围1-10；参数2表示质量，取值范围'L','M','Q','H'
+        var canvas = BCUtil.createQrCode(options);
+        var wording=document.createElement('p');
+        wording.innerHTML = "扫我 扫我";
+        var element=document.getElementById("qrcode");
+        element.appendChild(wording);
+        element.appendChild(canvas);
+    }
+    
+    $('#query').click(function(){
+        $.getJSON('bill.status.php', {'billNo' : '<?php echo $data["bill_no"]; ?>', 'channel' : '<?php echo $data["channel"]; ?>'}, function(res){
+            var str = '';
+            if (res.result_code == 0 ) {
+                str = res.pay_result ? "支付成功" : "未支付";
+            }else if (res && res.result_code != 0) {
+                str = 'Error: ' + res.err_detail;
+            }else {
+                str = 'Notice: 该记录不存在';
+            }
+            $('#query-result').text(str);
+        })
+    });
+</script>
+</body>
+</html>
 ```
 
 ```ruby
