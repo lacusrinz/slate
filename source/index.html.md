@@ -1130,10 +1130,14 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 <aside class="success">
 支持的渠道包括：`ALI_OFFLINE_QRCODE` `BC_ALI_QRCODE` 
 </aside>
+<aside class="warning">
+`BC_ALI_QRCODE` 没有第七步
+</aside>
 
 > 支付宝扫码支付代码示例：
 
 ```csharp
+//收款部分
 BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
 try
 {
@@ -1161,6 +1165,9 @@ catch (Exception excption)
 {
     Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
 }
+
+//查询收款状态(可以循环查询直到取消或者查询到成功)
+Bool isSuccess = BCOfflineBillStatus(订单号, null);
 ```
 
 ```java
@@ -1245,10 +1252,14 @@ try {
 <aside class="success">
 支持的渠道包括：`WX_NATIVE` `BC_NATIVE` 
 </aside>
+<aside class="warning">
+`BC_NATIVE`没有第七步
+</aside>
 
 > 微信扫码支付代码示例：
 
 ```csharp
+//收款部分
 BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
 try
 {
@@ -1276,6 +1287,9 @@ catch (Exception excption)
 {
     Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
 }
+
+//查询收款状态(可以循环查询直到取消或者查询到成功)
+Bool isSuccess = BCOfflineBillStatus(订单号, null);
 ```
 
 
@@ -1364,6 +1378,7 @@ try {
 > 支付宝刷卡支付代码示例：
 
 ```csharp
+//收款部分
 BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
 bill.authCode = "283024351597694002";
 try
@@ -1375,6 +1390,9 @@ catch (Exception excption)
 {
     Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
 }
+
+//查询收款状态(可以循环查询直到取消或者查询到成功)
+Bool isSuccess = BCOfflineBillStatus(订单号, null);
 ```
 
 ```java
@@ -1436,6 +1454,7 @@ try {
 > 微信刷卡支付代码示例：
 
 ```csharp
+//收款部分
 BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
 bill.authCode = "130166424204787197";
 try
@@ -1447,6 +1466,9 @@ catch (Exception excption)
 {
     Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
 }
+
+//查询收款状态(可以循环查询直到取消或者查询到成功)
+Bool isSuccess = BCOfflineBillStatus(订单号, null);
 ```
 
 ```java
@@ -2325,3 +2347,10 @@ try {
 ```javascript
 #
 ```
+
+附： 退款可选参数
+
+参数名 | 类型 | 含义   | 描述 | 例子 
+---- | ---- | ---- | ---- | ---- | ----
+optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
+refund_account | Integer | 微信退款资金来源 | 1:可用余额退款 0:未结算资金退款（默认使用未结算资金退款） | 1 
