@@ -99,7 +99,21 @@ BeeCloud.BeeCloud.setTestMode(true);
 ```
 
 ```python
-#
+bc_app = BCApp()
+bc_app.app_id = 'app_id'
+bc_app.app_secret = 'app_secret'
+bc_app.master_secret = 'master_secret'
+# 如果需要开启测试模式
+# bc_app.is_test_mode = True
+# bc_app.test_secret = 'test_secret'
+
+# 如果用到支付退款和打款
+bc_pay = BCPay()
+bc_pay.register_app(bc_app)
+
+# 如果需要查询功能
+bc_query = BCQuery()
+bc_query.register_app(bc_app)
 ```
 
 ```shell
@@ -111,7 +125,11 @@ BeeCloud.BeeCloud.setTestMode(true);
 ```
 
 ```xml
-wo shi android
+BeeCloud.setAppIdAndSecret("appId", "appSecret");
+
+// 如果需要开启测试模式
+// BeeCloud.setSandbox(true);
+// BeeCloud.setAppIdAndSecret("appId", "testSecret");
 ```
 
 ```objective-c
@@ -199,7 +217,17 @@ catch (Exception excption)
 ```
 
 ```python
-#
+req_params = BCPayReqParams()
+req_params.channel = 'ALI_WEB'
+req_params.title = u'支付测试'
+# 分为单位
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+# 支付完成后的跳转页面
+req_params.return_url = 'http://your.return.url.cn/'
+result = bc_pay.pay(req_params)
+# 如果result.result_code为0表示请求成功
+# 然后对返回参数url重定向
 ```
 
 ```shell
@@ -260,7 +288,17 @@ catch (Exception excption)
 ```
 
 ```python
-#
+req_params = BCPayReqParams()
+req_params.channel = 'ALI_QRCODE'
+req_params.title = u'支付测试'
+# 分为单位
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+# 支付完成后的跳转页面
+req_params.return_url = 'http://your.return.url.cn/'
+result = bc_pay.pay(req_params)
+# 如果result.result_code为0表示请求成功
+# 然后对返回参数url重定向
 ```
 
 ```shell
@@ -323,7 +361,17 @@ catch (Exception excption)
 ```
 
 ```python
-#
+req_params = BCPayReqParams()
+req_params.channel = 'ALI_WAP'
+req_params.title = u'支付测试'
+# 分为单位
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+# 支付完成后的跳转页面
+req_params.return_url = 'http://your.return.url.cn/'
+result = bc_pay.pay(req_params)
+# 如果result.result_code为0表示请求成功
+# 然后对返回参数url重定向
 ```
 
 ```shell
@@ -447,7 +495,17 @@ catch (Exception excption)
 ```
 
 ```python
-#
+# 先获取open id
+req_params = BCPayReqParams()
+req_params.channel = 'WX_JSAPI'	   # 或者BC_WX_JSAPI
+req_params.title = u'支付测试'
+# 分为单位
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+req_params.openid = open_id
+result = bc_pay.pay(req_params)
+# 如果result.result_code为0表示请求成功
+# 然后对返回参数(包含app_id, package, nonce_str, timestamp, pay_sign, sign_type)做下一步处理
 ```
 
 ```shell
@@ -502,7 +560,17 @@ catch (Exception excption)
 ```
 
 ```python
-#
+req_params = BCPayReqParams()
+req_params.channel = 'BC_WX_WAP'
+req_params.title = u'支付测试'
+# 分为单位
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+# 支付完成后的跳转页面
+req_params.return_url = 'http://your.return.url.cn/'
+result = bc_pay.pay(req_params)
+# 如果result.result_code为0表示请求成功
+# 然后对返回参数url重定向
 ```
 
 ```shell
@@ -578,7 +646,15 @@ catch (Exception excption)
 ```
 
 ```python
-#
+req_params = BCPayReqParams()
+req_params.channel = 'WX_NATIVE'	# 或者BC_NATIVE
+req_params.title = u'支付测试'
+# 分为单位
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+result = bc_pay.pay(req_params)
+# 如果result.result_code为0表示请求成功
+# 然后根据返回参数code_url生成二维码
 ```
 
 ```shell
@@ -642,7 +718,17 @@ catch (Exception excption)
 ```
 
 ```python
-#
+req_params = BCPayReqParams()
+req_params.channel = 'UN_WEB'	# 或者BC_EXPRESS
+req_params.title = u'支付测试'
+# 分为单位
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+# 支付完成后的跳转页面
+req_params.return_url = 'http://your.return.url.cn/'
+result = bc_pay.pay(req_params)
+# 如果result.result_code为0表示请求成功
+# 然后加载返回的表单html
 ```
 
 ```shell
@@ -696,7 +782,17 @@ catch (Exception excption)
 ```
 
 ```python
-#
+req_params = BCPayReqParams()
+req_params.channel = 'UN_WAP'	# 或者BC_EXPRESS
+req_params.title = u'支付测试'
+# 分为单位
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+# 支付完成后的跳转页面
+req_params.return_url = 'http://your.return.url.cn/'
+result = bc_pay.pay(req_params)
+# 如果result.result_code为0表示请求成功
+# 然后加载返回的表单html
 ```
 
 ```shell
@@ -764,7 +860,17 @@ catch (Exception excption)
 ```
 
 ```python
-#
+req_params = BCPayReqParams()
+req_params.channel = 'BC_GETEWAY'
+req_params.title = u'支付测试'
+# 分为单位
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+# 支付完成后的跳转页面
+req_params.return_url = 'http://your.return.url.cn/'
+result = bc_pay.pay(req_params)
+# 如果result.result_code为0表示请求成功
+# 然后对返回参数url重定向
 ```
 
 ```shell
@@ -866,7 +972,15 @@ catch (Exception excption)
 ```
 
 ```python
-#
+req_params = BCPayReqParams()
+req_params.channel = 'ALI_OFFLINE_QRCODE'	# 或者BC_ALI_QRCODE
+req_params.title = u'支付测试'
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+
+resp = bc_pay.offline_pay(req_params)
+# 如果result.result_code为0表示请求成功
+# 然后根据返回参数code_url生成二维码
 ```
 
 ```shell
@@ -937,7 +1051,15 @@ catch (Exception excption)
 ```
 
 ```python
-#
+req_params = BCPayReqParams()
+req_params.channel = 'WX_NATIVE'	# 或者BC_NATIVE
+req_params.title = u'支付测试'
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+
+resp = bc_pay.offline_pay(req_params)
+# 如果result.result_code为0表示请求成功
+# 然后根据返回参数code_url生成二维码
 ```
 
 ```shell
@@ -990,7 +1112,15 @@ catch (Exception excption)
 ```
 
 ```python
-#
+req_params = BCPayReqParams()
+req_params.channel = 'ALI_SCAN'	# 或者BC_ALI_SCAN
+req_params.title = u'支付测试'
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+req_params.auth_code = 'auth code'
+
+resp = bc_pay.offline_pay(req_params)
+# 如果result.result_code为0表示请求成功
 ```
 
 ```shell
@@ -1043,7 +1173,15 @@ catch (Exception excption)
 ```
 
 ```python
-#
+req_params = BCPayReqParams()
+req_params.channel = 'WX_SCAN'	# 或者BC_WX_SCAN
+req_params.title = u'支付测试'
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+req_params.auth_code = 'auth code'
+
+resp = bc_pay.offline_pay(req_params)
+# 如果result.result_code为0表示请求成功
 ```
 
 ```shell
@@ -1102,7 +1240,20 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 ```
 
 ```xml
-#
+BCPay.PayParams payParam = new BCPay.PayParams();
+payParam.channelType = BCReqParams.BCChannelTypes.ALI_APP;
+
+//商品描述
+payParam.billTitle = "支付测试";
+
+//支付金额，以分为单位，必须是正整数
+payParam.billTotalFee = 10;
+
+//商户自定义订单号
+payParam.billNum = BillUtils.genBillNum();
+
+// 第二个参数实现BCCallback接口，在done方法中查看支付结果
+BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 ```
 
 ## 4.3 在APP中使用微信收款
@@ -1124,7 +1275,21 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 ```
 
 ```xml
-#
+// 在发起微信请求之前必须先initWechatPay
+BCPay.PayParams payParam = new BCPay.PayParams();
+payParam.channelType = BCReqParams.BCChannelTypes.WX_APP;
+
+//商品描述
+payParam.billTitle = "支付测试";
+
+//支付金额，以分为单位，必须是正整数
+payParam.billTotalFee = 10;
+
+//商户自定义订单号
+payParam.billNum = BillUtils.genBillNum();
+
+// 第二个参数实现BCCallback接口，在done方法中查看支付结果
+BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 ```
 
 ## 4.4 在APP中使用银联收款
@@ -1146,7 +1311,20 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 ```
 
 ```xml
-#
+BCPay.PayParams payParam = new BCPay.PayParams();
+payParam.channelType = BCReqParams.BCChannelTypes.UN_APP;
+
+//商品描述
+payParam.billTitle = "支付测试";
+
+//支付金额，以分为单位，必须是正整数
+payParam.billTotalFee = 10;
+
+//商户自定义订单号
+payParam.billNum = BillUtils.genBillNum();
+
+// 第二个参数实现BCCallback接口，在done方法中查看支付结果
+BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 ```
 
 # 5. 企业打款
@@ -1213,7 +1391,27 @@ catch (Exception excption)
 ```
 
 ```python
-#
+transfer_params = BCCardTransferParams()
+# 单位为分
+transfer_params.total_fee = 100
+transfer_params.bill_no = 'bill number'
+# 最长支持16个汉字
+transfer_params.title = u'比可企业打款测试'
+# 银行全名
+transfer_params.bank_fullname = u'中国银行'
+# DE代表借记卡，CR代表信用卡
+transfer_params.card_type = 'DE'
+# 帐户类型，P代表私户，C代表公户
+transfer_params.account_type = 'C'
+# 收款方的银行卡号
+transfer_params.account_no = 'bank account number'
+# 收款方的姓名或者单位名
+transfer_params.account_name = u'xxx有限公司'
+# 银行绑定的手机号，当需要手机收到银行入账信息时，该值必填，前提是该手机在银行有短信通知业务，否则收不到银行信息
+transfer_params.mobile = 'mobile number'
+
+result = bc_pay.bc_transfer(transfer_params)
+# 如果result.result_code为0表示请求成功
 ```
 
 ```shell
@@ -1280,7 +1478,19 @@ Response.Write("<a href=" + aliURL + ">付款地址</a><br/>");
 ```
 
 ```python
-#
+transfer_params = BCTransferReqParams()
+transfer_params.channel = 'ALI_TRANSFER'
+transfer_params.transfer_no = '打款单号'
+# 分为单位
+transfer_params.total_fee = 100
+transfer_params.channel_user_id = '收款人支付宝账户'
+transfer_params.channel_user_name = '收款人账户名'
+transfer_params.account_name = '打款方账号名称'
+transfer_params.desc = '打款说明'
+
+result = bc_pay.transfer(transfer_params)
+# 如果result.result_code为0表示请求成功
+# 重定向返回的url，到支付宝页面输入密码确认
 ```
 
 ```shell
@@ -1341,7 +1551,16 @@ Response.Write("完成");
 ```
 
 ```python
-#
+transfer_params = BCTransferReqParams()
+transfer_params.channel = 'WX_TRANSFER'
+transfer_params.transfer_no = '打款单号'
+# 分为单位
+transfer_params.total_fee = 100
+transfer_params.desc = '打款说明'
+transfer_params.channel_user_id = '收款人微信openid'
+
+result = bc_pay.transfer(transfer_params)
+# 如果result.result_code为0表示请求成功
 ```
 
 ```shell
@@ -1410,7 +1629,14 @@ catch (Exception excption)
 ```
 
 ```python
-#
+# 方法在beecloud.utils包中
+result = verify_card_factors(bc_app,	# BCApp实例
+                             '身份证姓名',
+                             '身份证号',
+                             '用户银行卡号',	# 选填
+                             '用户银行卡预留手机号'	# 选填
+                             )
+# result.result_code为0表示鉴权成功
 ```
 
 ```shell
@@ -1426,7 +1652,11 @@ catch (Exception excption)
 ```
 
 ```xml
-#
+// 二要素鉴权示例
+BCValidationUtil.verifyCardFactors(
+    "姓名",
+    "身份证号码",
+    new BCCallback() { ... });
 ```
 
 # 7. 查询
@@ -1469,7 +1699,13 @@ catch (Exception excption)
 ```
 
 ```python
-#
+query_params = BCQueryReqParams()
+# 如果查询全部订单channel不设置即可
+query_params.channel = 'WX'
+# 限制只返回前50条订单
+query_params.limit = 50
+result = bc_query.query_bills(query_params)
+# 如果查询成功result.bills为beecloud.entity.BCBill的实例列表
 ```
 
 ```shell
@@ -1485,7 +1721,11 @@ catch (Exception excption)
 ```
 
 ```xml
-#
+params = new BCQuery.QueryParams();
+params.channel = BCReqParams.BCChannelTypes.WX;
+params.limit = 50;
+BCQuery.getInstance().queryBillsAsync(params, new BCCallback() { ... });
+# callback中将BCResult转成BCQueryBillsResult做后续处理
 ```
 
 ### 7.1.2 通过支付订单ID查询
@@ -1521,7 +1761,8 @@ catch (Exception excption)
 ```
 
 ```python
-#
+result = bc_query.query_bill_by_id('bill id')
+# 如果查询成功result.pay为beecloud.entity.BCBill的实例
 ```
 
 ```shell
@@ -1537,7 +1778,9 @@ catch (Exception excption)
 ```
 
 ```xml
-#
+BCQuery.getInstance().queryBillByIDAsync(
+                "bill id",
+                new BCCallback(){...});
 ```
 
 ## 7.2 退款查询
@@ -1577,7 +1820,11 @@ catch (Exception excption)
 ```
 
 ```python
-#
+query_params = BCQueryReqParams()
+# 如果查询全部订单channel不设置即可
+query_params.channel = 'WX'
+result = bc_query.query_refunds(query_params)
+# 如果查询成功result.refunds为beecloud.entity.BCRefund的实例列表
 ```
 
 ```shell
@@ -1593,7 +1840,10 @@ catch (Exception excption)
 ```
 
 ```xml
-#
+params = new BCQuery.QueryParams();
+params.channel = BCReqParams.BCChannelTypes.WX;
+BCQuery.getInstance().queryRefundsAsync(params, new BCCallback() { ... });
+# callback中将BCResult转成BCQueryRefundsResult做后续处理
 ```
 
 ### 7.2.2 通过退款订单ID查询
@@ -1624,7 +1874,8 @@ catch (Exception excption)
 ```
 
 ```python
-#
+result = bc_query.query_refund_by_id(refund_id)
+# 如果查询成功result.refund为beecloud.entity.BCRefund的实例
 ```
 
 ```shell
@@ -1640,7 +1891,9 @@ catch (Exception excption)
 ```
 
 ```xml
-#
+BCQuery.getInstance().queryRefundByIDAsync(
+					"refund id",
+                    new BCCallback() {...});
 ```
 
 # 7. 退款
@@ -1687,7 +1940,16 @@ catch (Exception excption)
 ```
 
 ```python
-#
+refund_params = BCRefundReqParams()
+# 退款channel为选填参数
+refund_params.channel = 'WX'
+refund_params.refund_no = '退款流水号'
+refund_params.bill_no = '需要退款的订单流水号'
+# 退款金额，分为单位
+refund_params.refund_fee = 1
+result = bc_pay.refund(refund_params)
+# 如果result.result_code为0表示请求成功
+# 对于支付宝退款，需要重定向至result.url
 ```
 
 ```shell
