@@ -254,7 +254,7 @@ let data = {}, _this = this;
     data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => {
@@ -364,7 +364,7 @@ let data = {}, _this = this;
     data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { 
@@ -474,7 +474,7 @@ let data = {}, _this = this;
     data.use_app = true;//是否尝试掉起支付宝APP原生支付
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => {
@@ -728,7 +728,7 @@ let data = {}, _this = this;
     data.openid = '0950c062-5e41-xxxxxxxxxxx';//openid
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -826,7 +826,7 @@ let data = {}, _this = this;
     data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { 
@@ -972,7 +972,7 @@ let data = {}, _this = this;
     data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => {  
@@ -1087,7 +1087,7 @@ let data = {}, _this = this;
                 
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -1192,7 +1192,7 @@ let data = {}, _this = this;
                 
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -1313,7 +1313,7 @@ let data = {}, _this = this;
                 
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -1484,7 +1484,7 @@ let data = {}, _this = this;
                 
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -1625,7 +1625,7 @@ let data = {}, _this = this;
                 
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -1722,7 +1722,7 @@ let data = {}, _this = this;
                 
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -1819,7 +1819,7 @@ let data = {}, _this = this;
                 
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -2052,7 +2052,7 @@ try {
     data.mobile = '13888888888';//银行绑定的手机号，当需要手机收到银行入账信息时，该值必填，前提是该手机在银行有短信通知业务，否则收不到银行信息	
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bcTransfer', (req, res, next) => { 
@@ -2168,7 +2168,7 @@ try {
     data.account_name = '苏州比可网络科技有限公司';//打款方账号名称,支付宝必填
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/transfer', (req, res, next) => { 
@@ -2276,7 +2276,7 @@ try {
                         };
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/transfer', (req, res, next) => { 
@@ -2387,7 +2387,7 @@ let data = {},_this = this;
 
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/auth', (req, res, next) => { 
@@ -2487,7 +2487,7 @@ let data = {}, _this = this;
 
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bills', (req, res, next) => { 
@@ -2574,7 +2574,7 @@ let data = {},_this = this;
         data.type = this.props.params.type;
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/queryById', (req, res, next) => { 
@@ -2670,7 +2670,7 @@ let data = {}, _this = this;
     data.skip = skip;
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/refunds', (req, res, next) => { 
@@ -2752,7 +2752,7 @@ let data = {},_this = this;
         data.type = 'refund';
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/queryById', (req, res, next) => { 
@@ -2873,7 +2873,7 @@ let data = refundData,_this = this;
             data.optional = {"key1":"value1","key2":"value2"};
 
 //后端
-const BCRESTAPI = require('./bcapi');
+const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/refund', (req, res, next) => { 
