@@ -36,7 +36,7 @@ BeeCloud支持线上线下各种场景的支付解决方案，本文档以场景
 微信公众号的申请： [这里](http://beecloud.cn/doc/payapply/?index=2)  
 支付宝APP/PC网页/移动网页的申请： [这里](http://beecloud.cn/doc/payapply/?index=4)
 <aside class="notice">
-BeeCloud提供自有的支付宝/微信/银联渠道，请联系我们商务了解更多详情
+BeeCloud提供自有的支付宝/微信/银联渠道，请联系我们商务(15011103441 刘经理)了解更多详情
 </aside>
 
 ### 1.1.2 渠道参数配置
@@ -145,7 +145,43 @@ BeeCloud.setAppIdAndSecret("appId", "appSecret");
 ```
 
 ```swift
-wo shi iOS
+//初始化分为生产模式(LiveMode)、沙箱环境(SandboxMode)；沙箱测试模式下不产生真实交易
+//开启生产环境
+[BeeCloud initWithAppID:@"BeeCloud AppId" andAppSecret:@"BeeCloud App Secret"];
+  
+
+//开启沙箱测试环境
+[BeeCloud initWithAppID:@"BeeCloud AppId" andAppSecret:@"BeeCloud Test Secret"];
+[BeeCloud setSandboxMode:YES];
+或者
+[BeeCloud initWithAppID:@"BeeCloud AppId" andAppSecret:@"BeeCloud Test Secret" sandbox:YES];
+
+
+//查看当前模式
+// 返回YES代表沙箱测试模式；NO代表生产模式
+[BeeCloud getCurrentMode];
+
+
+//初始化官方微信支付  
+//如果您使用了微信支付，需要用微信开放平台Appid初始化。  
+[BeeCloud initWeChatPay:@"微信开放平台appid"];
+
+
+//handleOpenUrl
+//为保证从支付宝，微信返回本应用，须绑定openUrl. 用于iOS9之前版本
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    if (![BeeCloud handleOpenUrl:url]) {
+        //handle其他类型的url
+    }
+    return YES;
+}
+//iOS9之后apple官方建议使用此方法
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
+    if (![BeeCloud handleOpenUrl:url]) {
+        //handle其他类型的url
+    }
+    return YES;
+}
 ```
 
 # 2. 网页上收款
@@ -181,6 +217,9 @@ wo shi iOS
 6. 通过跳转到url或者将html输出到页面进而打开支付宝收银台页面，用户登录支付宝付款
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`ALI_WEB`
 </aside>
@@ -280,6 +319,9 @@ result = bc_pay.pay(req_params)
 6. 通过跳转到url或者将html输出到页面进而打开支付宝二维码的页面，用户扫码付款
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`ALI_QRCODE`
 </aside>
@@ -376,6 +418,9 @@ result = bc_pay.pay(req_params)
 6. 通过跳转到url或者将html输出到页面进而打开支付宝手机收银台页面，实现收款
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="notice">
 移动网页有特殊参数 use_app，默认掉起支付宝APP实现原生支付，可以关闭
 </aside>
@@ -488,6 +533,9 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 6. 跳转到微信APP付款
 7. 支付完成返回微信公众号页面
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`WX_JSAPI` `BC_WX_JSAPI`
 </aside>
@@ -705,6 +753,9 @@ result = bc_pay.pay(req_params)
 6. 通过跳转到url或者将html输出到页面进而打开微信的跳转中转页页面，打开微信APP实现收款
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`BC_WX_WAP`
 </aside>
@@ -794,6 +845,9 @@ result = bc_pay.pay(req_params)
 微信没有自己的网页，所以没有return url的概念，需要商家通过轮询自己后台的方式去查看订单是否已经支付，如果查询结果为支付成功则主动跳转告知用户
 </aside>
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`WX_NATIVE` `BC_WX_NATIVE`
 </aside>
@@ -927,6 +981,9 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 6. 通过将html输出到页面进而打开银联收银台页面，用户输入银行卡号完成付款
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`UN_WEB` `BC_EXPRESS`
 </aside>
@@ -1011,6 +1068,9 @@ result = bc_pay.pay(req_params)
 6. 通过将html输出到页面进而打开银联收银台页面，用户输入银行卡号完成付款
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`UN_WAP` `BC_EXPRESS`
 </aside>
@@ -1108,9 +1168,21 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 6. 通过将html输出到页面进而打开收银台页面，用户输入银行卡号完成付款
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
+<aside class="notice">
+网关支付特有参数bank：CMB    招商银行，    ICBC  工商银行，
+                   BOC    中国银行，    ABC    农业银行，   BOCM    交通银行，
+                   SPDB   浦发银行，   GDB   广发银行，   CITIC    中信银行，
+                   CEB    光大银行，    CIB   兴业银行，   SDB  平安银行，
+                   CMBC   民生银行，    NBCB   宁波银行，   BEA   东亚银行，
+                   NJCB   南京银行，    SRCB   上海农商行， BOB   北京银行
+</aside>
 <aside class="success">
 支持的渠道包括：`BC_GETEWAY` 
 </aside>
+
 
 > 网关收款代码示例：
 
@@ -1141,15 +1213,6 @@ try {
         'title' => '网关支付测试',   //订单标题
         'bill_no' => "bcdemo" . time(),    //订单编号
         'total_fee' => 1, //订单金额(int 类型) ,单位分
-        /*
-         * bank(string 类型) for channel BC_GATEWAY
-         * CMB	  招商银行    ICBC	工商银行   CCB   建设银行(暂不支持)
-         * BOC	  中国银行    ABC    农业银行   BOCM	交通银行
-         * SPDB   浦发银行    GDB	广发银行   CITIC	中信银行
-         * CEB	  光大银行    CIB	兴业银行   SDB	平安银行
-         * CMBC   民生银行    NBCB   宁波银行   BEA   东亚银行
-         * NJCB   南京银行    SRCB   上海农商行 BOB   北京银行
-        */
         'bank' => 'BOC'
     );
     $result = \beecloud\rest\api::bill($data);
@@ -1233,6 +1296,9 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 6. 将二维码的值生成二维码图片展示给用户完成扫码支付
 7. 调用status查询接口查看支付是否成功
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`ALI_OFFLINE_QRCODE` `BC_ALI_QRCODE` 
 </aside>
@@ -1294,7 +1360,7 @@ try {
     //不使用namespace的用户
     //$result = BCRESTApi::offline_bill($data);
     if ($result->result_code != 0) {
-        echo json_encode($result);
+        print_r($result);
         exit();
     }
     $code_url = $result->code_url;
@@ -1312,7 +1378,7 @@ try {
     );
     $result = $api->offline_bill_status($data);
     if ($result->result_code != 0) {
-        echo json_encode($result);
+        print_r($result);
         exit();
     }
     echo json_encode($result);
@@ -1399,6 +1465,9 @@ resp = bc_pay.offline_pay(req_params)
 6. 将二维码的值生成二维码图片展示给用户完成扫码支付
 7. 调用status查询接口查看支付是否成功
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`WX_NATIVE` `BC_NATIVE` 
 </aside>
@@ -1564,6 +1633,9 @@ resp = bc_pay.offline_pay(req_params)
 5. 如果是免密支付，直接返回收款结果
 6. 如果用户需要输入密码，调用status查询接口查看支付是否成功
 7. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`ALI_SCAN` `BC_ALI_SCAN` 
 </aside>
@@ -1709,6 +1781,9 @@ resp = bc_pay.offline_pay(req_params)
 5. 如果是免密支付，直接返回收款结果
 6. 如果用户需要输入密码，调用status查询接口查看支付是否成功
 7. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`WX_SCAN` `BC_WX_SCAN` 
 </aside>
@@ -1882,6 +1957,9 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 4. 调用BeeCloud SDK中的支付接口，请求支付宝
 5. 调起支付宝APP，用户进行支付，支付完成后跳回商户APP
 6. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`ALI_APP` 
 </aside>
@@ -1889,7 +1967,20 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 > 支付宝APP支付代码示例：
 
 ```swift
-#
+- (void)doPay:(PayChannel)channel {
+    NSString *billno = [self genBillNo];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"value",@"key", nil];
+
+    BCPayReq *payReq = [[BCPayReq alloc] init];
+    payReq.channel = channel; //支付渠道
+    payReq.title = billTitle; //订单标题
+    payReq.totalFee = @"10"; //订单价格
+    payReq.billNo = billno; //商户自定义订单号
+    payReq.scheme = @"payDemo"; //URL Scheme,在Info.plist中配置;
+    payReq.billTimeOut = 300; //订单超时时间
+    payReq.optional = dict;//商户业务扩展参数，会在webhook回调时返回
+    [BeeCloud sendBCReq:payReq];
+}
 ```
 
 ```xml
@@ -1917,6 +2008,9 @@ BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 4. 调用BeeCloud SDK中的支付接口，请求微信
 5. 调起微信APP，用户进行支付，支付完成后跳回商户APP
 6. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`WX_APP` `BC_WX_APP` 
 </aside>
@@ -1924,7 +2018,19 @@ BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 > 微信APP支付代码示例：
 
 ```swift
-#
+- (void)doPay:(PayChannel)channel {
+    NSString *billno = [self genBillNo];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"value",@"key", nil];
+
+    BCPayReq *payReq = [[BCPayReq alloc] init];
+    payReq.channel = channel; //支付渠道
+    payReq.title = billTitle; //订单标题
+    payReq.totalFee = @"10"; //订单价格
+    payReq.billNo = billno; //商户自定义订单号
+    payReq.billTimeOut = 300; //订单超时时间
+    payReq.optional = dict;//商户业务扩展参数，会在webhook回调时返回
+    [BeeCloud sendBCReq:payReq];
+}
 ```
 
 ```xml
@@ -1952,7 +2058,9 @@ BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 3. 将订单存入自己系统数据库中，标记订单为未支付
 4. 调用BeeCloud SDK中的支付接口，请求银联
 5. 调起银联插件，用户进行支付，支付完成后跳回商户APP
-6. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
 <aside class="success">
 支持的渠道包括：`UN_APP` `BC_APP` 
 </aside>
@@ -1960,7 +2068,22 @@ BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 > 银联APP支付代码示例：
 
 ```swift
-#
+- (void)doPay:(PayChannel)channel {
+    NSString *billno = [self  genBillNo];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"value",@"key", nil];
+    /**
+        按住键盘上的option键，点击参数名称，可以查看参数说明
+     **/
+    BCPayReq *payReq = [[BCPayReq alloc] init];
+    payReq.channel = channel; //支付渠道
+    payReq.title = billTitle; //订单标题
+    payReq.totalFee = @"10"; //订单价格
+    payReq.billNo = billno; //商户自定义订单号
+    payReq.billTimeOut = 300; //订单超时时间
+    payReq.viewController = self; //银联支付和Sandbox环境必填
+    payReq.optional = dict;//商户业务扩展参数，会在webhook回调时返回
+    [BeeCloud sendBCReq:payReq];
+}
 ```
 
 ```xml
@@ -2398,7 +2521,7 @@ result = verify_card_factors(bc_app,	# BCApp实例
 ```
 
 ```swift
-#222
+[BCAuthReq authReqWithName:@"姓名" idNo:@"身份证号码"];
 ```
 
 ```xml
@@ -2483,7 +2606,19 @@ result = bc_query.query_bills(query_params)
 ```
 
 ```swift
-#222
+//通过构造`BCQueryBillsReq`的实例，使用[BeeCloud sendBCReq:req]方法发起支付查询。  
+//响应事件类型对象：BCQueryBillsResp
+//支付订单对象: BCQueryBillResult
+BCQueryBillsReq *req = [[BCQueryBillsReq alloc] init];
+req.channel = channel;
+req.billStatus = BillStatusOnlySuccess; //支付成功的订单
+req.needMsgDetail = YES; //是否需要返回支付成功订单的渠道反馈的具体信息
+//req.billno = @"20150901104138656";   //订单号
+//req.startTime = @"2015-10-22 00:00"; //订单时间
+//req.endTime = @"2015-10-23 00:00";   //订单时间
+req.skip = 0;
+req.limit = 10;
+[BeeCloud sendBCReq:req];
 ```
 
 ```xml
@@ -2500,7 +2635,7 @@ BCQuery.getInstance().queryBillsAsync(params, new BCCallback() { ... });
 订单ID可以通过发起支付时的返回值获取，或者通过条件查询订单详情时获取
 </aside>
 
-> 通过条件查询代码示例：
+> 通过订单ID查询代码示例：
 
 ```csharp
 try
@@ -2555,7 +2690,10 @@ result = bc_query.query_bill_by_id('bill id')
 ```
 
 ```swift
-#222
+//通过构造`BCQueryBillByIdReq`的实例，使用`[BeeCloud sendBCReq:req]`方法发起查询支付订单。  
+//响应事件类型: `BCQueryBillByIdResp`
+BCQueryBillByIdReq *req = [[BCQueryBillByIdReq alloc] initWithObjectId:bcId];
+[BeeCloud sendBCReq:req];
 ```
 
 ```xml
@@ -2632,7 +2770,19 @@ result = bc_query.query_refunds(query_params)
 ```
 
 ```swift
-#222
+//通过构造`BCQueryRefundsReq`的实例，使用`[BeeCloud sendBCReq:req]`方法发起退款查询。  
+//响应事件类型对象：`BCQueryRefundsResp` 
+//退款订单对象: `BCQueryRefundResult`
+BCQueryRefundsReq *req = [[BCQueryRefundsReq alloc] init];
+req.channel = channel;
+req.needApproved = NeedApprovalAll; 
+//  req.billno = @"20150722164700237";
+//  req.starttime = @"2015-07-21 00:00";
+// req.endtime = @"2015-07-23 12:00";
+//req.refundno = @"20150709173629127";
+req.skip = 0;
+req.limit = 10;
+[BeeCloud sendBCReq:req];
 ```
 
 ```xml
@@ -2698,7 +2848,11 @@ result = bc_query.query_refund_by_id(refund_id)
 ```
 
 ```swift
-#222
+//通过构造`BCQueryRefundByIdReq`的实例，使用`[BeeCloud sendBCReq:req]`方法发起查询支付订单。  
+//响应事件类型: `BCQueryRefundByIdResp`**
+//bcId会在退款的回调中返回
+BCQueryRefundByIdReq *req = [[BCQueryRefundByIdReq alloc] initWithObjectId:bcId];
+[BeeCloud sendBCReq:req];
 ```
 
 ```xml
