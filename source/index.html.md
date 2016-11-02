@@ -2,13 +2,13 @@
 title: API Reference
 
 language_tabs:
-  - shell: cURL
   - java: Java
   - php: PHP
   - csharp: C#
   - ruby: Ruby
   - python: Python
   - javascript: Node.Js
+  - go: GO
   - xml: Android
   - swift: Objective-C
 
@@ -2451,6 +2451,10 @@ channel_user\_id | String | 用户id | 支付渠道方内收款人的标示, 微
 
 
 ## 6.2 实名身份认证
+
+<aside class="notice">
+移动端暂时只支持二要素的认证
+</aside>
 
 > 实名身份认证代码示例：
 
