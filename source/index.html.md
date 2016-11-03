@@ -2868,7 +2868,7 @@ let data = refundData,_this = this;
             //且退款日期必须是发起退款的当天日期,同一退款单号不可重复提交，否则会造成退款单重复。
             //流水号可以接受数字或英文字符，建议使用数字，但不可接受“000”	
             data.refund_no ='201506101035040000001';
-            data.refund_fee = this.refs.fee.value;
+            data.refund_fee = parseInt(this.refs.fee.value);
             //用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据	
             data.optional = {"key1":"value1","key2":"value2"};
 
