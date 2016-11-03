@@ -306,7 +306,32 @@ result = bc_pay.pay(req_params)
 ```
 
 ```javascript
-#
+# JavaScript
+//前端传参
+let data = {}, _this = this;
+    data.channel = 'ALI_WEB';//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
+    data.app_secret = 'appSecret';
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => {
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ### 2.2.2 支付宝网页二维码收款
@@ -403,9 +428,33 @@ result = bc_pay.pay(req_params)
 ```shell
 
 ```
-
 ```javascript
-#
+# javascript
+//前端传参
+let data = {}, _this = this;
+    data.channel = 'ALI_QRCODE';//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
+    data.app_secret = 'appSecret';
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => { 
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ### 2.2.3 支付宝移动网页收款
@@ -501,9 +550,34 @@ result = bc_pay.pay(req_params)
 ```shell
 
 ```
-
 ```javascript
-#
+# javascript
+/前端传参
+let data = {}, _this = this;
+    data.channel = 'ALI_WAP';//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
+    data.app_secret = 'appSecret';
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
+    data.use_app = true;//是否尝试掉起支付宝APP原生支付
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => {
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ### 2.2.4 附： 支付宝支付其他可选参数：
@@ -738,9 +812,39 @@ result = bc_pay.pay(req_params)
 ```shell
 
 ```
-
 ```javascript
-#
+# JavaScript
+
+/**
+ * 微信用户的openid获取请参考官方demo sdk和文档
+ * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=11_1
+ * 微信获取openid php代码, 运行环境是微信内置浏览器访问时
+ */
+/前端传参
+let data = {}, _this = this;
+    data.channel = 'WX_JSAPI';//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
+    data.app_secret = 'appSecret';
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.openid = '0950c062-5e41-xxxxxxxxxxx';//openid
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => { //支付
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ### 2.3.2 微信移动网页（非微信浏览器）收款
@@ -826,7 +930,32 @@ result = bc_pay.pay(req_params)
 ```
 
 ```javascript
-#
+# JavaScript
+
+/前端传参
+let data = {}, _this = this;
+    data.channel = 'BC_WX_WAP';//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
+    data.app_secret = 'appSecret';
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => { 
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ### 2.3.3 微信在PC网页通过二维码收款
@@ -958,7 +1087,32 @@ result = bc_pay.pay(req_params)
 ```
 
 ```javascript
-#
+# JavaScript
+
+/前端传参
+let data = {}, _this = this;
+    data.channel = 'WX_NATIVE';//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
+    data.app_secret = 'appSecret';
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => {  
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ### 2.3.4 附： 微信支付其他可选参数：
@@ -1055,7 +1209,38 @@ result = bc_pay.pay(req_params)
 ```
 
 ```javascript
-#
+# JavaScript
+/**
+ * 微信用户的openid获取请参考官方demo sdk和文档
+ * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=11_1
+ * 微信获取openid php代码, 运行环境是微信内置浏览器访问时
+ */
+//前端传参
+let data = {}, _this = this;
+    data.channel = 'UN_WEB';//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
+    data.app_secret = 'appSecret';
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
+                
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => { //支付
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ### 2.4.2 银联移动网页收款
@@ -1142,7 +1327,38 @@ result = bc_pay.pay(req_params)
 ```
 
 ```javascript
-#
+# JavaScript
+/**
+ * 微信用户的openid获取请参考官方demo sdk和文档
+ * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=11_1
+ * 微信获取openid php代码, 运行环境是微信内置浏览器访问时
+ */
+//前端传参
+let data = {}, _this = this;
+    data.channel = 'UN_WAP';//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
+    data.app_secret = 'appSecret';
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
+                
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => { //支付
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ### 2.4.3 附： 银联支付其他可选参数：
@@ -1251,7 +1467,32 @@ result = bc_pay.pay(req_params)
 ```
 
 ```javascript
-#
+# JavaScript
+//前端传参
+let data = {}, _this = this;
+    data.channel = 'BC_GETEWAY';//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
+    data.app_secret = 'appSecret';
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+                
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => { //支付
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 附： 网关收款其他可选参数：
@@ -1452,7 +1693,31 @@ resp = bc_pay.offline_pay(req_params)
 ```
 
 ```javascript
-#
+//前端传参
+let data = {}, _this = this;
+    data.channel = 'ALI_OFFLINE_QRCODE';//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
+    data.app_secret = 'appSecret';
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+                
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => { //支付
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ## 3.3 微信扫码支付
@@ -1621,7 +1886,32 @@ resp = bc_pay.offline_pay(req_params)
 ```
 
 ```javascript
-#
+# JavaScript
+//前端传参
+let data = {}, _this = this;
+    data.channel = 'BC_NATIVE';//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
+    data.app_secret = 'appSecret';
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+                
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => { //支付
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ## 3.4 支付宝刷卡收款
@@ -1769,7 +2059,32 @@ resp = bc_pay.offline_pay(req_params)
 ```
 
 ```javascript
-#
+# JavaScript
+//前端传参
+let data = {}, _this = this;
+    data.channel = 'ALI_SCAN';//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
+    data.app_secret = 'appSecret';
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+                
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => { //支付
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ## 3.5 微信刷卡收款
@@ -1917,7 +2232,32 @@ resp = bc_pay.offline_pay(req_params)
 ```
 
 ```javascript
-#
+# JavaScript
+//前端传参
+let data = {}, _this = this;
+    data.channel = 'WX_SCAN';//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
+    data.app_secret = 'appSecret';
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+                
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => { //支付
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ## 3.6 附： 刷卡/扫码支付其他可选参数：
@@ -2230,7 +2570,35 @@ result = bc_pay.bc_transfer(transfer_params)
 ```
 
 ```javascript
-#
+# JavaScript
+//前端传参
+  let data = {}, _this = this;
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
+    data.app_secret = config.APP_SECRET;
+    data.total_fee = 1;
+    data.bill_no = `bc企业打款`;
+    data.title = '白开水';
+    data.trade_source = 'OUT_PC';//UTF8编码格式，目前只能填写OUT_PC	
+    data.bank_fullname = '中国银行';//中国银行，而不能写成"中行",因为“中行”也是中信银行和中兴银行的缩写	
+    data.card_type = 'DE';//DE代表借记卡，CR代表信用卡，其他值为非法	
+    data.account_type = 'P';//帐户类型，P代表私户，C代表公户，其他值为非法	
+    data.account_no = '6222691921993848888';//收款方银行卡号
+    data.account_name = '周杰伦';//收款方账户名称
+    data.mobile = '13888888888';//银行绑定的手机号，当需要手机收到银行入账信息时，该值必填，前提是该手机在银行有短信通知业务，否则收不到银行信息	
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bcTransfer', (req, res, next) => { 
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 附： BeeCloud打款到银行卡参数列表
@@ -2255,7 +2623,7 @@ optional | Map | 附加数据 | 用户自定义的参数，将会在Webhook通�
 2. 系统生成打款订单，包括打款单号，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未成功
 4. 调用BeeCloud SDK中的支付接口，请求支付宝
-5.返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
+5. 返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
 6. 打款成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为打款成功
 <aside class="success">
 支持的渠道包括：`ALI_TRANSFER`  
@@ -2333,7 +2701,32 @@ result = bc_pay.transfer(transfer_params)
 ```
 
 ```javascript
-#
+# JavaScript
+//前端传参
+  let data = {}, _this = this;
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
+    data.app_secret = config.APP_SECRET;
+    data.channel = 'ALI_TRANSFER';
+    data.transfer_no = 'udjfiienx2334';//支付宝为11-32位数字字母组合， 微信企业打款为8-32位数字字母组合，微信红包为10位数字	
+    data.total_fee = 100;//此次打款的金额,单位分,正整数(微信红包1.00-200元，微信打款>=1元)	
+    data.desc = '赔偿';//此次打款的说明	
+    data.channel_user_id = 'someone@126.com';//支付渠道方内收款人的标示, 微信为openid, 支付宝为支付宝账户
+    data.channel_user_name = '支付宝某人';//支付渠道内收款人账户名， 支付宝必填	
+    data.account_name = '苏州比可网络科技有限公司';//打款方账号名称,支付宝必填
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/transfer', (req, res, next) => { 
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 附： 支付宝打款到支付宝参数列表
@@ -2422,7 +2815,35 @@ result = bc_pay.transfer(transfer_params)
 ```
 
 ```javascript
-#
+# JavaScript
+//前端传参
+  let data = {}, _this = this;
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
+    data.app_secret = config.APP_SECRET;
+    data.channel = 'WX_TRANSFER';
+    data.transfer_no = 'udjfiienx2334';//支付宝为11-32位数字字母组合， 微信企业打款为8-32位数字字母组合，微信红包为10位数字	
+    data.total_fee = 100;//此次打款的金额,单位分,正整数(微信红包1.00-200元，微信打款>=1元)	
+    data.desc = '赔偿';//此次打款的说明	
+    data.channel_user_id = 'someone@126.com';//支付渠道方内收款人的标示, 微信为openid, 支付宝为支付宝账户
+    data.redpack_info = {
+                            send_name: 'beecloud',//红包发送者名称 32位	
+                            wishing: 'BeeCloud祝福开发者工作顺利!',//红包祝福语 128 位	
+                            act_name: 'BeeCloud开发者红包轰动'//红包活动名称 32位	
+                        };
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/transfer', (req, res, next) => { 
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 附： 微信打款到微信参数列表
@@ -2521,7 +2942,30 @@ result = verify_card_factors(bc_app,	# BCApp实例
 ```
 
 ```javascript
-#
+# JavaScript
+//前端
+let data = {},_this = this;
+        data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+        data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
+        data.app_secret = config.APP_SECRET;
+        data.name = 'xuqi';
+        data.id_no = '23082619860124xxxx';
+        data.card_no = '6227856101009660xxx';
+        data.mobile = '1555551xxxx';
+
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/auth', (req, res, next) => { 
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ```swift
@@ -2606,7 +3050,32 @@ result = bc_query.query_bills(query_params)
 ```
 
 ```javascript
-#
+# JavaScript
+//前端
+let data = {}, _this = this;
+        data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式	
+        data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+        data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
+        data.app_secret = config.APP_SECRET;
+        //data.limit = 20;//默认为10，最大为50. 设置为10表示只返回满足条件的10条数据
+        //start_time - 毫秒时间戳, 13位
+        //end_time - 毫秒时间戳, 13位
+        data.spay_result = true;//支付成功订单
+        
+
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bills', (req, res, next) => { 
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ```swift
@@ -2690,7 +3159,27 @@ result = bc_query.query_bill_by_id('bill id')
 ```
 
 ```javascript
-#
+# JavaScript
+//前端
+let data = {},_this = this;
+        data.id = this.props.params.id;
+        data.app_id = config.APP_ID;
+        data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+        data.app_secret = config.APP_SECRET;
+        data.type = this.props.params.type;
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/queryById', (req, res, next) => { 
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ```swift
@@ -2770,7 +3259,32 @@ result = bc_query.query_refunds(query_params)
 ```
 
 ```javascript
-#
+# JavaScript
+//前端
+let data = {}, _this = this;
+    data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
+    data.app_sign = md5(config.APP_ID + data.timestamp + config.APP_SECRET);
+    data.app_secret = config.APP_SECRET;
+    //start_time - 毫秒时间戳, 13位
+    //end_time - 毫秒时间戳, 13位
+    data.need_approval = this.props.params.type==='refunds'?false:true;
+    data.limit = limit;//默认为10，最大为50. 设置为10表示只返回满足条件的10条数据
+    data.skip = skip;
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/refunds', (req, res, next) => { 
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ```swift
@@ -2848,7 +3362,27 @@ result = bc_query.query_refund_by_id(refund_id)
 ```
 
 ```javascript
-#
+# JavaScript
+//前端
+let data = {},_this = this;
+        data.id = this.props.params.id;
+        data.app_id = config.APP_ID;
+        data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+        data.app_secret = config.APP_SECRET;
+        data.type = 'refund';
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/queryById', (req, res, next) => { 
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
 ```
 
 ```swift
@@ -2958,6 +3492,34 @@ result = bc_pay.refund(refund_params)
 ```
 
 ```javascript
+# JavaScript
+//前端
+let data = refundData,_this = this;
+            data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式	
+            data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+            data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
+            data.app_sign = md5(config.APP_ID + data.timestamp + config.APP_SECRET);
+            //格式为:退款日期(8位) + 流水号(3~24 位)。请自行确保在商户系统中唯一，
+            //且退款日期必须是发起退款的当天日期,同一退款单号不可重复提交，否则会造成退款单重复。
+            //流水号可以接受数字或英文字符，建议使用数字，但不可接受“000”	
+            data.refund_no ='201506101035040000001';
+            data.refund_fee = parseInt(this.refs.fee.value);
+            //用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据	
+            data.optional = {"key1":"value1","key2":"value2"};
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/refund', (req, res, next) => { 
+    let data = req.body;
+    //MD5加密在后端进行
+    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
+    API.bill(data).then((response) => {
+        res.send(response);
+    })
+})
+```
 #
 ```
 
