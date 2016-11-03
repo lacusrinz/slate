@@ -36,7 +36,7 @@ BeeCloud支持线上线下各种场景的支付解决方案，本文档以场景
 微信公众号的申请： [这里](http://beecloud.cn/doc/payapply/?index=2)  
 支付宝APP/PC网页/移动网页的申请： [这里](http://beecloud.cn/doc/payapply/?index=4)
 <aside class="notice">
-BeeCloud提供自有的支付宝/微信/银联渠道，请联系我们商务(15011103441 刘经理)了解更多详情
+BeeCloud提供低费率的特惠通道（包括：支付宝/微信/银联），请联系我们商务(15011103441 刘经理)了解更多详情
 </aside>
 
 ### 1.1.2 渠道参数配置
