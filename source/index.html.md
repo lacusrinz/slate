@@ -5,10 +5,8 @@ language_tabs:
   - java: Java
   - php: PHP
   - csharp: C#
-  - ruby: Ruby
   - python: Python
   - javascript: Node.Js
-  - go: GO
   - xml: Android
   - swift: Objective-C
 
@@ -73,11 +71,11 @@ BeeCloud.registerApp(appId, testSecret, appSecret, masterSecret);
 //默认开启LIVE模式
 
 //测试模式使用方法
-BeeCloud.registerApp(appId, testSecret, **appSecret**, **masterSecret**);    
-BeeCloud.setSandbox(true);
-
+BeeCloud.registerApp(appId, testSecret, **appSecret**, **masterSecret**);   
 //测试模式中的appSecret、masterSecret可为null  
-//设置sandbox属性为true，开启测试模式   
+//设置sandbox属性为true，开启测试模式  
+BeeCloud.setSandbox(true);
+  
 ```
 
 ```php 
@@ -107,7 +105,7 @@ BeeCloud.BeeCloud.setTestMode(true);
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -133,10 +131,9 @@ bc_query.register_app(bc_app)
 ```
 
 ```javascript
-# JavaScript
 const API = new BCRESTAPI();
 API.registerApp(APP_ID,APP_SECRET,MASTER_SECRET,TEST_SECRET);
-API.setSandbox(true);//是否是测试模式 默认不开启
+API.setSandbox(true);//开启测试模式 不设置就是不开启
 ```
 
 ```xml
@@ -287,7 +284,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -309,7 +306,6 @@ result = bc_pay.pay(req_params)
 ```
 
 ```javascript
-# JavaScript
 //前端传参
 let data = {}, _this = this;
     data.channel = 'ALI_WEB';//根据不同场景选择不同的支付方式	
@@ -416,7 +412,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -437,7 +433,6 @@ result = bc_pay.pay(req_params)
 
 ```
 ```javascript
-# javascript
 //前端传参
 let data = {}, _this = this;
     data.channel = 'ALI_QRCODE';//根据不同场景选择不同的支付方式	
@@ -543,7 +538,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -564,8 +559,7 @@ result = bc_pay.pay(req_params)
 
 ```
 ```javascript
-# javascript
-/前端传参
+//前端传参
 let data = {}, _this = this;
     data.channel = 'ALI_WAP';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
@@ -875,7 +869,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -896,8 +890,6 @@ result = bc_pay.pay(req_params)
 
 ```
 ```javascript
-# JavaScript
-
 /**
  * 微信用户的openid获取请参考官方demo sdk和文档
  * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=11_1
@@ -993,7 +985,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -1015,9 +1007,7 @@ result = bc_pay.pay(req_params)
 ```
 
 ```javascript
-# JavaScript
-
-/前端传参
+//前端传参
 let data = {}, _this = this;
     data.channel = 'BC_WX_WAP';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
@@ -1154,7 +1144,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -1174,9 +1164,7 @@ result = bc_pay.pay(req_params)
 ```
 
 ```javascript
-# JavaScript
-
-/前端传参
+//前端传参
 let data = {}, _this = this;
     data.channel = 'WX_NATIVE';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
@@ -1276,7 +1264,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -1298,7 +1286,6 @@ result = bc_pay.pay(req_params)
 ```
 
 ```javascript
-# JavaScript
 /**
  * 微信用户的openid获取请参考官方demo sdk和文档
  * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=11_1
@@ -1396,7 +1383,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -1418,7 +1405,6 @@ result = bc_pay.pay(req_params)
 ```
 
 ```javascript
-# JavaScript
 /**
  * 微信用户的openid获取请参考官方demo sdk和文档
  * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=11_1
@@ -1539,7 +1525,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -1561,7 +1547,6 @@ result = bc_pay.pay(req_params)
 ```
 
 ```javascript
-# JavaScript
 //前端传参
 let data = {}, _this = this;
     data.channel = 'BC_GETEWAY';//根据不同场景选择不同的支付方式	
@@ -1773,7 +1758,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -1972,7 +1957,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -1992,7 +1977,6 @@ resp = bc_pay.offline_pay(req_params)
 ```
 
 ```javascript
-# JavaScript
 //前端传参
 let data = {}, _this = this;
     data.channel = 'BC_NATIVE';//根据不同场景选择不同的支付方式	
@@ -2150,7 +2134,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -2170,7 +2154,6 @@ resp = bc_pay.offline_pay(req_params)
 ```
 
 ```javascript
-# JavaScript
 //前端传参
 let data = {}, _this = this;
     data.channel = 'ALI_SCAN';//根据不同场景选择不同的支付方式	
@@ -2328,7 +2311,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -2348,7 +2331,6 @@ resp = bc_pay.offline_pay(req_params)
 ```
 
 ```javascript
-# JavaScript
 //前端传参
 let data = {}, _this = this;
     data.channel = 'WX_SCAN';//根据不同场景选择不同的支付方式	
@@ -2666,7 +2648,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -2698,7 +2680,6 @@ result = bc_pay.bc_transfer(transfer_params)
 ```
 
 ```javascript
-# JavaScript
 //前端传参
   let data = {}, _this = this;
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
@@ -2814,7 +2795,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -2838,7 +2819,6 @@ result = bc_pay.transfer(transfer_params)
 ```
 
 ```javascript
-# JavaScript
 //前端传参
   let data = {}, _this = this;
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
@@ -2938,7 +2918,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -2959,7 +2939,6 @@ result = bc_pay.transfer(transfer_params)
 ```
 
 ```javascript
-# JavaScript
 //前端传参
   let data = {}, _this = this;
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
@@ -3035,7 +3014,18 @@ catch (Exception excption)
 ```
 
 ```java
-#
+String name = "冯晓波";
+String idNo = "320504192306171022";
+String cardNo = "6114335124826228";
+String mobile = "13761231321";
+BCAuth auth = new BCAuth(name, idNo, cardNo);
+auth.setMobile(mobile);
+try {
+    auth = BCPay.startBCAuth(auth);
+    out.println(auth.isAuthResult());//认证结果
+} catch (BCException e) {
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -3062,7 +3052,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -3077,11 +3067,10 @@ result = verify_card_factors(bc_app,	# BCApp实例
 ```
 
 ```shell
-#
+
 ```
 
 ```javascript
-# JavaScript
 //前端
 let data = {},_this = this;
         data.timestamp = new Date().valueOf();//时间戳，毫秒数	
@@ -3142,7 +3131,29 @@ catch (Exception excption)
 ```
 
 ```java
-#
+BCQueryParameter param = new BCQueryParameter();
+if (querytype != null && querytype != "") {
+    try {
+        PAY_CHANNEL channel = PAY_CHANNEL.valueOf(querytype);
+        param.setChannel(channel);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+param.setNeedDetail(true);
+try {
+    int count = BCPay.startQueryBillCount(param);
+    pageContext.setAttribute("count", count);
+} catch (BCException e) {
+    out.println(e.getMessage());
+}
+try {
+    List<BCOrder> bcOrders = BCPay.startQueryBill(param);
+    pageContext.setAttribute("bills", bcOrders);
+    pageContext.setAttribute("billSize", bcOrders.size());
+} catch (BCException e) {
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -3166,7 +3177,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -3180,11 +3191,10 @@ result = bc_query.query_bills(query_params)
 ```
 
 ```shell
-#
+
 ```
 
 ```javascript
-# JavaScript
 //前端
 let data = {}, _this = this;
         data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式	
@@ -3252,7 +3262,12 @@ catch (Exception excption)
 ```
 
 ```java
-#
+try {
+    BCOrder result = BCPay.startQueryBillById(id);
+    pageContext.setAttribute("bill", result);
+} catch (BCException e) {
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -3275,7 +3290,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -3284,11 +3299,10 @@ result = bc_query.query_bill_by_id('bill id')
 ```
 
 ```shell
-#
+
 ```
 
 ```javascript
-# JavaScript
 //前端
 let data = {},_this = this;
         data.id = this.props.params.id;
@@ -3344,7 +3358,31 @@ catch (Exception excption)
 ```
 
 ```java
-#
+BCQueryParameter param = new BCQueryParameter();
+if (querytype != null && querytype != "") {
+    try {
+        PAY_CHANNEL channel = PAY_CHANNEL.valueOf(querytype);
+        param.setChannel(channel);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+param.setNeedDetail(true);
+try {
+    int count = BCPay.startQueryRefundCount(param);
+    pageContext.setAttribute("count", count);
+} catch (BCException e) {
+    e.printStackTrace();
+    out.println(e.getMessage());
+}
+try {
+    List<BCRefund> bcRefunds = BCPay.startQueryRefund(param);
+    pageContext.setAttribute("refundList", bcRefunds);
+    pageContext.setAttribute("refundSize", bcRefunds.size());
+} catch (BCException e) {
+    e.printStackTrace();
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -3367,7 +3405,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -3379,11 +3417,10 @@ result = bc_query.query_refunds(query_params)
 ```
 
 ```shell
-#
+
 ```
 
 ```javascript
-# JavaScript
 //前端
 let data = {}, _this = this;
     data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式	
@@ -3445,7 +3482,12 @@ catch (Exception excption)
 ```
 
 ```java
-#
+try {
+    BCRefund result = BCPay.startQueryRefundById(id);
+    pageContext.setAttribute("refund", result);
+} catch (BCException e) {
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -3468,7 +3510,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -3477,11 +3519,10 @@ result = bc_query.query_refund_by_id(refund_id)
 ```
 
 ```shell
-#
+
 ```
 
 ```javascript
-# JavaScript
 //前端
 let data = {},_this = this;
         data.id = this.props.params.id;
@@ -3545,7 +3586,26 @@ catch (Exception excption)
 ```
 
 ```java
-#
+BCRefund param = new BCRefund(billNo, refundNo, 1);
+param.setOptional(optional);
+param.setNeedApproval(prefund.equals("true")?true:false);
+try {
+    BCRefund refund = BCPay.startBCRefund(param);
+    if (refund.getAliRefundUrl() != null) {
+        response.sendRedirect(refund.getAliRefundUrl());
+    } else {
+        if (refund.isNeedApproval() != null && refund.isNeedApproval()) {
+            out.println("预退款成功！");
+            out.println(refund.getObjectId());
+        } else {
+            out.println("退款成功！易宝、百度、快钱渠道还需要定期查询退款结果！");
+            out.println(refund.getObjectId());
+        }
+    }
+} catch (BCException e) {
+    out.println(e.getMessage());
+    e.printStackTrace();
+}
 ```
 
 ```php
@@ -3585,7 +3645,7 @@ try {
 ```
 
 ```ruby
-#
+
 ```
 
 ```python
@@ -3602,11 +3662,10 @@ result = bc_pay.refund(refund_params)
 ```
 
 ```shell
-#
+
 ```
 
 ```javascript
-# JavaScript
 //前端
 let data = refundData,_this = this;
             data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式	
@@ -3629,8 +3688,7 @@ app.post('/api/refund', (req, res, next) => {
     })
 })
 ```
-#
-```
+
 
 附： 退款可选参数
 
