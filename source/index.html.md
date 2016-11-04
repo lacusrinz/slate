@@ -133,7 +133,10 @@ bc_query.register_app(bc_app)
 ```
 
 ```javascript
-#
+# JavaScript
+const API = new BCRESTAPI();
+API.registerApp(APP_ID,APP_SECRET,MASTER_SECRET,TEST_SECRET);
+API.setSandbox(true);//是否是测试模式 默认不开启
 ```
 
 ```xml
@@ -311,8 +314,6 @@ result = bc_pay.pay(req_params)
 let data = {}, _this = this;
     data.channel = 'ALI_WEB';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
-    data.app_secret = 'appSecret';
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
@@ -325,10 +326,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => {
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -444,8 +442,6 @@ result = bc_pay.pay(req_params)
 let data = {}, _this = this;
     data.channel = 'ALI_QRCODE';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
-    data.app_secret = 'appSecret';
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
@@ -458,10 +454,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { 
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -576,8 +569,6 @@ result = bc_pay.pay(req_params)
 let data = {}, _this = this;
     data.channel = 'ALI_WAP';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
-    data.app_secret = 'appSecret';
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
@@ -591,10 +582,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => {
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -919,8 +907,6 @@ result = bc_pay.pay(req_params)
 let data = {}, _this = this;
     data.channel = 'WX_JSAPI';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
-    data.app_secret = 'appSecret';
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
@@ -933,10 +919,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -1038,8 +1021,6 @@ result = bc_pay.pay(req_params)
 let data = {}, _this = this;
     data.channel = 'BC_WX_WAP';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
-    data.app_secret = 'appSecret';
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
@@ -1051,10 +1032,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { 
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -1202,8 +1180,6 @@ result = bc_pay.pay(req_params)
 let data = {}, _this = this;
     data.channel = 'WX_NATIVE';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
-    data.app_secret = 'appSecret';
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
@@ -1215,10 +1191,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => {  
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -1335,8 +1308,6 @@ result = bc_pay.pay(req_params)
 let data = {}, _this = this;
     data.channel = 'UN_WEB';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
-    data.app_secret = 'appSecret';
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
@@ -1350,10 +1321,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -1460,8 +1428,6 @@ result = bc_pay.pay(req_params)
 let data = {}, _this = this;
     data.channel = 'UN_WAP';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
-    data.app_secret = 'appSecret';
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
@@ -1475,10 +1441,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -1603,8 +1566,6 @@ result = bc_pay.pay(req_params)
 let data = {}, _this = this;
     data.channel = 'BC_GETEWAY';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
-    data.app_secret = 'appSecret';
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
@@ -1617,10 +1578,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -1839,8 +1797,6 @@ resp = bc_pay.offline_pay(req_params)
 let data = {}, _this = this;
     data.channel = 'ALI_OFFLINE_QRCODE';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
-    data.app_secret = 'appSecret';
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
@@ -1853,10 +1809,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -2044,8 +1997,6 @@ resp = bc_pay.offline_pay(req_params)
 let data = {}, _this = this;
     data.channel = 'BC_NATIVE';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
-    data.app_secret = 'appSecret';
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
@@ -2058,10 +2009,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -2227,8 +2175,6 @@ resp = bc_pay.offline_pay(req_params)
 let data = {}, _this = this;
     data.channel = 'ALI_SCAN';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
-    data.app_secret = 'appSecret';
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
@@ -2241,10 +2187,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -2410,8 +2353,6 @@ resp = bc_pay.offline_pay(req_params)
 let data = {}, _this = this;
     data.channel = 'WX_SCAN';//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = 'appId';//App在BeeCloud平台的唯一标识	
-    data.app_secret = 'appSecret';
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
@@ -2424,10 +2365,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -2764,8 +2702,6 @@ result = bc_pay.bc_transfer(transfer_params)
 //前端传参
   let data = {}, _this = this;
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
-    data.app_secret = config.APP_SECRET;
     data.total_fee = 1;
     data.bill_no = `bc企业打款`;
     data.title = '白开水';
@@ -2782,10 +2718,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bcTransfer', (req, res, next) => { 
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -2909,8 +2842,6 @@ result = bc_pay.transfer(transfer_params)
 //前端传参
   let data = {}, _this = this;
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
-    data.app_secret = config.APP_SECRET;
     data.channel = 'ALI_TRANSFER';
     data.transfer_no = 'udjfiienx2334';//支付宝为11-32位数字字母组合， 微信企业打款为8-32位数字字母组合，微信红包为10位数字	
     data.total_fee = 100;//此次打款的金额,单位分,正整数(微信红包1.00-200元，微信打款>=1元)	
@@ -2924,10 +2855,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/transfer', (req, res, next) => { 
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -3035,8 +2963,6 @@ result = bc_pay.transfer(transfer_params)
 //前端传参
   let data = {}, _this = this;
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
-    data.app_secret = config.APP_SECRET;
     data.channel = 'WX_TRANSFER';
     data.transfer_no = 'udjfiienx2334';//支付宝为11-32位数字字母组合， 微信企业打款为8-32位数字字母组合，微信红包为10位数字	
     data.total_fee = 100;//此次打款的金额,单位分,正整数(微信红包1.00-200元，微信打款>=1元)	
@@ -3053,10 +2979,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/transfer', (req, res, next) => { 
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -3162,8 +3085,6 @@ result = verify_card_factors(bc_app,	# BCApp实例
 //前端
 let data = {},_this = this;
         data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-        data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
-        data.app_secret = config.APP_SECRET;
         data.name = 'xuqi';
         data.id_no = '23082619860124xxxx';
         data.card_no = '6227856101009660xxx';
@@ -3175,10 +3096,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/auth', (req, res, next) => { 
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -3271,8 +3189,6 @@ result = bc_query.query_bills(query_params)
 let data = {}, _this = this;
         data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式	
         data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-        data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
-        data.app_secret = config.APP_SECRET;
         //data.limit = 20;//默认为10，最大为50. 设置为10表示只返回满足条件的10条数据
         //start_time - 毫秒时间戳, 13位
         //end_time - 毫秒时间戳, 13位
@@ -3285,10 +3201,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bills', (req, res, next) => { 
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -3379,9 +3292,7 @@ result = bc_query.query_bill_by_id('bill id')
 //前端
 let data = {},_this = this;
         data.id = this.props.params.id;
-        data.app_id = config.APP_ID;
         data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-        data.app_secret = config.APP_SECRET;
         data.type = this.props.params.type;
 
 //后端
@@ -3389,10 +3300,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/queryById', (req, res, next) => { 
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -3480,9 +3388,7 @@ result = bc_query.query_refunds(query_params)
 let data = {}, _this = this;
     data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式	
     data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-    data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
     data.app_sign = md5(config.APP_ID + data.timestamp + config.APP_SECRET);
-    data.app_secret = config.APP_SECRET;
     //start_time - 毫秒时间戳, 13位
     //end_time - 毫秒时间戳, 13位
     data.need_approval = this.props.params.type==='refunds'?false:true;
@@ -3494,10 +3400,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/refunds', (req, res, next) => { 
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -3582,9 +3485,7 @@ result = bc_query.query_refund_by_id(refund_id)
 //前端
 let data = {},_this = this;
         data.id = this.props.params.id;
-        data.app_id = config.APP_ID;
         data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-        data.app_secret = config.APP_SECRET;
         data.type = 'refund';
 
 //后端
@@ -3592,10 +3493,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/queryById', (req, res, next) => { 
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
@@ -3713,8 +3611,6 @@ result = bc_pay.refund(refund_params)
 let data = refundData,_this = this;
             data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式	
             data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-            data.app_id = config.APP_ID;//App在BeeCloud平台的唯一标识	
-            data.app_sign = md5(config.APP_ID + data.timestamp + config.APP_SECRET);
             //格式为:退款日期(8位) + 流水号(3~24 位)。请自行确保在商户系统中唯一，
             //且退款日期必须是发起退款的当天日期,同一退款单号不可重复提交，否则会造成退款单重复。
             //流水号可以接受数字或英文字符，建议使用数字，但不可接受“000”	
@@ -3728,10 +3624,7 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/refund', (req, res, next) => { 
-    let data = req.body;
-    //MD5加密在后端进行
-    data.app_sign = API.md5(data.app_id + data.timestamp + data.app_secret);
-    API.bill(data).then((response) => {
+    API.bill(req.body).then((response) => {
         res.send(response);
     })
 })
