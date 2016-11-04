@@ -36,7 +36,7 @@ BeeCloud支持线上线下各种场景的支付解决方案，本文档以场景
 微信公众号的申请： [这里](http://beecloud.cn/doc/payapply/?index=2)  
 支付宝APP/PC网页/移动网页的申请： [这里](http://beecloud.cn/doc/payapply/?index=4)
 <aside class="notice">
-BeeCloud提供自有的支付宝/微信/银联渠道，请联系我们商务(15011103441 刘经理)了解更多详情
+BeeCloud提供低费率的特惠通道（包括：支付宝/微信/银联），请联系我们商务(15011103441 刘经理)了解更多详情
 </aside>
 
 ### 1.1.2 渠道参数配置
@@ -230,7 +230,7 @@ BeeCloud.setAppIdAndSecret("appId", "appSecret");
 > 支付宝收银台收款代码示例：
 
 ``` java
-BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
+BCOrder bcOrder = new BCOrder('渠道code', '金额', '订单编号', '订单标题');//设定订单信息
 bcOrder.setBillTimeout(360);//设置订单超时时间
 bcOrder.setReturnUrl(aliReturnUrl);//设置return url
 try {
@@ -244,7 +244,7 @@ try {
 ```
 
 ```csharp
-BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+BCBill bill = new BCBill('渠道code', '金额', '订单号', '订单标题');
 
 //支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，中间请勿有#,?等字符,必填参数
 bill.returnUrl = "http://localhost:50003/return_ali_url.aspx";
@@ -352,7 +352,7 @@ app.post('/api/bill', (req, res, next) => {
 > 支付宝网页二维码收款代码示例：
 
 ``` csharp
-BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+BCBill bill = new BCBill('渠道code', '金额', '订单号', '订单标题');
 bill.qrPayMode = "0";
 
 //支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，中间请勿有#,?等字符,必填参数
@@ -373,7 +373,17 @@ catch (Exception excption)
 ```
 
 ```java
-#
+BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
+bcOrder.setBillTimeout(360);//设置订单超时时间
+bcOrder.setReturnUrl(aliReturnUrl);//设置return url
+try {
+    bcOrder = BCPay.startBCPay(bcOrder);
+    //out.println(bcOrder.getObjectId());
+    out.println(bcOrder.getHtml()); // 输出支付宝收银台二维码到页面
+} catch (BCException e) {
+    log.error(e.getMessage(), e);
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -473,7 +483,7 @@ app.post('/api/bill', (req, res, next) => {
 > 支付宝移动网页收款代码示例：
 
 ``` csharp
-BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+BCBill bill = new BCBill('渠道code', '金额', '订单号', '订单标题');
 
 //支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，中间请勿有#,?等字符,必填参数
 bill.returnUrl = "http://localhost:50003/return_ali_url.aspx";
@@ -493,7 +503,17 @@ catch (Exception excption)
 ```
 
 ```java
-#
+BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
+bcOrder.setBillTimeout(360);//设置订单超时时间
+bcOrder.setReturnUrl(aliReturnUrl);//设置return url
+try {
+    bcOrder = BCPay.startBCPay(bcOrder);
+    //out.println(bcOrder.getObjectId());
+    out.println(bcOrder.getHtml()); // 输出支付宝收银台到页面
+} catch (BCException e) {
+    log.error(e.getMessage(), e);
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -606,7 +626,7 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 
 ```csharp
 //服务端部分，服务端将从beecloud获取的参数传递给js，去调用微信的方法实现支付
-BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+BCBill bill = new BCBill('渠道code', '金额', '订单号', '订单标题');
 bill.openId = jsApiPay.openid;
 try
 {
@@ -672,7 +692,82 @@ catch (Exception excption)
 ```
 
 ```java
-#
+//后端部分
+//微信 公众号id（读取配置文件conf.properties）及微信 redirec_uri
+Properties prop = loadProperty();
+String wxJSAPIAppId = prop.get("wxJSAPIAppId").toString();
+String wxJSAPISecret = prop.get("wxJSAPISecret").toString();
+String wxJSAPIRedirectUrl = "http://javademo.beecloud.cn/demo/pay_example/pay.jsp?paytype=" + channel;
+String encodedWSJSAPIRedirectUrl = URLEncoder.encode(wxJSAPIRedirectUrl);
+if (request.getParameter("code") == null || request.getParameter("code").toString().equals("")) {
+    String redirectUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + wxJSAPIAppId + "&redirect_uri=" + encodedWSJSAPIRedirectUrl + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+    log.info("wx jsapi redirct url:" + redirectUrl);
+    response.sendRedirect(redirectUrl);
+} else {
+    String code = request.getParameter("code");
+    String result = sendGet("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + wxJSAPIAppId + "&secret=" + wxJSAPISecret + "&code=" + code + "&grant_type=authorization_code");
+    log.info("result:" + result);
+    JSONObject resultObject = JSONObject.fromObject(result);
+    if (resultObject.containsKey("errcode")) {
+        out.println("获取access_token出错！错误信息为：" + resultObject.get("errmsg").toString());
+    } else {
+        String openId = resultObject.get("openid").toString();
+        bcOrder.setOpenId(openId);
+        try {
+            bcOrder = BCPay.startBCPay(bcOrder);
+            out.println(bcOrder.getObjectId());
+            System.out.print(bcOrder.getObjectId());
+            Map<String, String> map = bcOrder.getWxJSAPIMap();
+            jsapiAppid = map.get("appId").toString();
+            timeStamp = map.get("timeStamp").toString();
+            nonceStr = map.get("nonceStr").toString();
+            jsapipackage = map.get("package").toString();
+            signType = map.get("signType").toString();
+            paySign = map.get("paySign").toString();
+        } catch (BCException e) {
+            log.error(e.getMessage(), e);
+            out.println(e.getMessage());
+        }
+    }
+}
+
+//js部分
+<script type="text/javascript">
+    callpay();
+    function jsApiCall() {
+        var data = {
+            //以下参数的值由BCPayByChannel方法返回来的数据填入即可
+            "appId": "<%=jsapiAppid%>",
+            "timeStamp": "<%=timeStamp%>",
+            "nonceStr": "<%=nonceStr%>",
+            "package": "<%=jsapipackage%>",
+            "signType": "<%=signType%>",
+            "paySign": "<%=paySign%>"
+        };
+        alert(JSON.stringify(data));
+        WeixinJSBridge.invoke(
+                'getBrandWCPayRequest',
+                data,
+                function (res) {
+                    alert(res.err_msg);
+                    alert(JSON.stringify(res));
+                    WeixinJSBridge.log(res.err_msg);
+                }
+        );
+    }
+    function callpay() {
+        if (typeof WeixinJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+            } else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+            }
+        } else {
+            jsApiCall();
+        }
+    }
+</script>
 ```
 
 ```php
@@ -850,7 +945,7 @@ app.post('/api/bill', (req, res, next) => { //支付
 > 微信移动网页（非微信浏览器）收款代码示例：
 
 ``` csharp
-BCBill bill = new BCBill(BCPay.PayChannel.BC_WX_WAP.ToString(), 100, BCUtil.GetUUID(), "dotNet白开水");
+BCBill bill = new BCBill('渠道code', '金额', '订单号', '订单标题');
 bill.returnUrl = "http://www.baidu.com";
 try
 {
@@ -865,7 +960,14 @@ catch (Exception excption)
 ```
 
 ```java
-#
+bcOrder.setReturnUrl(returnUrl);
+try {
+    bcOrder = BCPay.startBCPay(bcOrder);
+    response.sendRedirect(bcOrder.getUrl()); //跳转到微信APP
+} catch (BCException e) {
+    log.error(e.getMessage(), e);
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -962,7 +1064,7 @@ app.post('/api/bill', (req, res, next) => {
 > 微信在PC网页通过二维码收款代码示例：
 
 ```csharp
-BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+BCBill bill = new BCBill('渠道code', '金额', '订单号', '订单标题');
 try
 {
     BCBill resultBill = BCPay.BCPayByChannel(bill);
@@ -992,7 +1094,14 @@ catch (Exception excption)
 ```
 
 ```java
-#
+try {
+    bcOrder.setNotifyUrl("https:///apidynamic.beecloud.cn/test");
+    bcOrder = BCPay.startBCPay(bcOrder);
+    //将bcOrder.getCodeUrl()是二维码的值，用生成二维码的方法生成二维码即可
+} catch (BCException e) {
+    log.error(e.getMessage(), e);
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -1118,7 +1227,7 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 > 银联PC网页收款代码示例：
 
 ```csharp
-BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+BCBill bill = new BCBill('渠道code', '金额', '订单号', '订单标题');
 bill.returnUrl = "http://localhost:50003/return_un_url.aspx";
 try
 {
@@ -1132,7 +1241,14 @@ catch (Exception excption)
 ```
 
 ```java
-#
+bcOrder.setReturnUrl(unReturnUrl);
+try {
+    bcOrder = BCPay.startBCPay(bcOrder);
+    out.println(bcOrder.getHtml());
+} catch (BCException e) {
+    log.error(e.getMessage(), e);
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -1231,7 +1347,7 @@ app.post('/api/bill', (req, res, next) => { //支付
 > 银联移动网页收款代码示例：
 
 ```csharp
-BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+BCBill bill = new BCBill('渠道code', '金额', '订单号', '订单标题');
 bill.returnUrl = "http://localhost:50003/return_un_url.aspx";
 try
 {
@@ -1245,7 +1361,14 @@ catch (Exception excption)
 ```
 
 ```java
-#
+bcOrder.setReturnUrl(returnUrl);
+try {
+    bcOrder = BCPay.startBCPay(bcOrder);
+    out.println(bcOrder.getHtml());
+} catch (BCException e) {
+    log.error(e.getMessage(), e);
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -1366,7 +1489,7 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 > 网关收款代码示例：
 
 ```csharp
-BCBill bill = new BCBill(渠道code, 金额, 订单号, 订单标题);
+BCBill bill = new BCBill('渠道code', '金额', '订单号', '订单标题');
 bill.bank = BCPay.Banks.BOC.ToString();//设置所选银行
 bill.returnUrl = "http://www.baidu.com";
 try
@@ -1381,7 +1504,15 @@ catch (Exception excption)
 ```
 
 ```java
-#
+try {
+    bcOrder.setReturnUrl(bcGatewayReturnUrl);
+    bcOrder.setGatewayBank('银行code');
+    bcOrder = BCPay.startBCPay(bcOrder);
+    out.println(bcOrder.getHtml());
+} catch (BCException e) {
+    log.error(e.getMessage(), e);
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -1542,7 +1673,18 @@ Bool isSuccess = BCOfflineBillStatus(订单号, null);
 ```
 
 ```java
-#
+//收款部分
+try {
+    bcOrder.setTotalFee(1);
+    bcOrder = BCPay.startBCPay(bcOrder);
+    //bcOrder.getCodeUrl()是二维码的值，用生成二维码的方法生成二维码即可
+} catch (BCException e) {
+    log.error(e.getMessage(), e);
+    out.println(e.getMessage());
+}
+
+//查询收款状态(可以循环查询直到取消或者查询到成功)
+TODO
 ```
 
 ```php
@@ -1731,7 +1873,18 @@ Bool isSuccess = BCOfflineBillStatus(订单号, null);
 
 
 ```java
-#
+//收款部分
+try {
+    bcOrder.setTotalFee(1);
+    bcOrder = BCPay.startBCPay(bcOrder);
+    //bcOrder.getCodeUrl()是二维码的值，用生成二维码的方法生成二维码即可
+} catch (BCException e) {
+    log.error(e.getMessage(), e);
+    out.println(e.getMessage());
+}
+
+//查询收款状态(可以循环查询直到取消或者查询到成功)
+TODO
 ```
 
 ```php
@@ -1899,7 +2052,17 @@ Bool isSuccess = BCOfflineBillStatus(订单号, null);
 ```
 
 ```java
-#
+//收款部分
+try {
+    bcOrder.setAuthCode("130145749397413855");
+    bcOrder = BCPay.startBCOfflinePay(bcOrder);
+} catch (BCException e) {
+    log.error(e.getMessage(), e);
+    out.println(e.getMessage());
+}
+
+//查询收款状态(可以循环查询直到取消或者查询到成功)
+TODO
 ```
 
 ```php
@@ -2067,7 +2230,17 @@ Bool isSuccess = BCOfflineBillStatus(订单号, null);
 ```
 
 ```java
-#
+//收款部分
+try {
+    bcOrder.setAuthCode("130145749397413855");
+    bcOrder = BCPay.startBCOfflinePay(bcOrder);
+} catch (BCException e) {
+    log.error(e.getMessage(), e);
+    out.println(e.getMessage());
+}
+
+//查询收款状态(可以循环查询直到取消或者查询到成功)
+TODO
 ```
 
 ```php
@@ -2433,7 +2606,24 @@ catch (Exception excption)
 ```
 
 ```java
-#
+String billNo = BCUtil.generateRandomUUIDPure();
+BCTransferParameter bCTransferParameter = new BCTransferParameter();
+bCTransferParameter.setBillNo(billNo);
+bCTransferParameter.setTotalFee(1);
+bCTransferParameter.setTitle("测试代付");
+bCTransferParameter.setTradeSource("OUT_PC");
+bCTransferParameter.setBankFullName("中国银行");
+bCTransferParameter.setCardType("DE");
+bCTransferParameter.setAccountType("C");
+//测试时，请填写真实号码和姓名
+bCTransferParameter.setAccountNo("12345678666");
+bCTransferParameter.setAccountName("大宇宙银河系地球集团");
+try {
+    BCPay.startBCTransfer(bCTransferParameter);
+    out.println("success");
+} catch (BCException e) {
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -2578,7 +2768,21 @@ Response.Write("<a href=" + aliURL + ">付款地址</a><br/>");
 ```
 
 ```java
-#
+param = new TransferParameter();
+param.setChannel(TRANSFER_CHANNEL.ALI_TRANSFER);
+param.setChannelUserId(aliUserId);
+param.setChannelUserName(aliUserName);
+param.setTotalFee(1);
+param.setDescription("支付宝单笔打款！");
+param.setAccountName("苏州比可网络科技有限公司");
+param.setTransferNo(aliTransferNo);
+try {
+    String url = BCPay.startTransfer(param);
+    response.sendRedirect(url);
+} catch (BCException e) {
+    log.error(e.getMessage(), e);
+    out.println(e.getMessage());
+}
 ```
 
 ```php
@@ -2695,7 +2899,19 @@ Response.Write("完成");
 ```
 
 ```java
-#
+param = new TransferParameter();
+param.setChannel(TRANSFER_CHANNEL.WX_TRANSFER);
+param.setChannelUserId(openId);
+param.setTransferNo(redpackTransferNo);
+param.setTotalFee(200);
+param.setDescription("微信单笔打款！");
+try {
+    String result = BCPay.startTransfer(param);
+    out.println("微信单笔打款成功！");
+} catch (BCException e) {
+        log.error(e.getMessage(), e);
+        out.println(e.getMessage());
+}
 ```
 
 ```php
