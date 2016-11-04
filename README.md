@@ -10,3 +10,5 @@ bundle exec middleman server
 ```
 
 see the docs at http://localhost:4567
+
+Update Nodejs sdk
