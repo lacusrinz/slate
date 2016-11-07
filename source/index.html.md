@@ -3554,7 +3554,14 @@ BCQuery.getInstance().queryRefundByIDAsync(
                     new BCCallback() {...});
 ```
 
-# 7. 退款
+# 8. 退款
+
+1. 商户发起退款请求
+2. 系统生成退款订单，包括退款单号，需要退款的订单号，金额等信息
+3. 将退款单存入自己系统数据库中，标记订单为未退款
+4. 调用BeeCloud SDK中的退款接口，根据用户订单的渠道，调用相应的接口
+5. 微信，银联在调用退款接口后直接进行退款，支付宝需要打开支付宝的退款页，输入密码完成退款 **（支付宝不支持无秘退款）**
+6. 退款成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为退款成功
 
 <aside class="warning">
 退款只能从服务器端发起，会用到`Master Secret`进行加密，切勿泄露`Master Secret`  
@@ -3568,6 +3575,10 @@ BCQuery.getInstance().queryRefundByIDAsync(
 退款单号格式为:退款日期(8位) + 流水号(3~24 位)。请自行确保在商户系统中唯一，且退款日期必须是发起退款的当天日期,同一退款单号不可重复提交，否则会造成退款单重复。流水号可以接受数字或英文字符，建议使用数字，但不可接受“000”
 </aside>
 
+<aside class="success">
+支持多次退款，只需有余额可以退
+</aside>
+
 > 退款代码示例：
 
 ```csharp
@@ -3577,7 +3588,8 @@ refund.channel = BCPay.RefundChannel.ALI.ToString();
 try
 {
     refund = BCPay.BCRefundByChannel(refund);
-    Response.Redirect(refund.url);
+    //如果是支付宝，则跳转去支付宝的退款页输入密码完成退款
+    //Response.Redirect(refund.url);
 }
 catch (Exception excption)
 {
