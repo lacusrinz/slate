@@ -1794,10 +1794,15 @@ const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
-    API.bill(req.body).then((response) => {
-        res.send(response);
-    })
+     API.bill(req.body).then((response) => {
+         res.send(response);
+     })
 })
+
+//查询收款状态(可以循环查询直到取消或者查询到成功)
+API.getOfflineStatus({
+    bll_no:'bill_no'
+}).then(res=>res.send(res))
 ```
 
 ## 3.3 微信扫码支付
@@ -1997,6 +2002,11 @@ app.post('/api/bill', (req, res, next) => { //支付
         res.send(response);
     })
 })
+
+//查询收款状态(可以循环查询直到取消或者查询到成功)
+API.getOfflineStatus({
+    bll_no:'bill_no'
+}).then(res=>res.send(res))
 ```
 
 ## 3.4 支付宝刷卡收款
@@ -2174,6 +2184,12 @@ app.post('/api/bill', (req, res, next) => { //支付
         res.send(response);
     })
 })
+
+
+//查询收款状态(可以循环查询直到取消或者查询到成功)
+API.getOfflineStatus({
+    bll_no:'bill_no'
+}).then(res=>res.send(res))
 ```
 
 ## 3.5 微信刷卡收款
@@ -2351,6 +2367,11 @@ app.post('/api/bill', (req, res, next) => { //支付
         res.send(response);
     })
 })
+
+//查询收款状态(可以循环查询直到取消或者查询到成功)
+API.getOfflineStatus({
+    bll_no:'bill_no'
+}).then(res=>res.send(res))
 ```
 
 ## 3.6 附： 刷卡/扫码支付其他可选参数：
