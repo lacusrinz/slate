@@ -1793,9 +1793,11 @@ let data = {}, _this = this;
 const BCRESTAPI = require('beecloud-node-sdk');
 const API = new BCRESTAPI();
 
-    API.bill(req.body).then((response) => {
-        res.send(response);
-    })
+app.post('/api/bill', (req, res, next) => { //支付
+     API.bill(req.body).then((response) => {
+         res.send(response);
+     })
+})
 
 //查询收款状态(可以循环查询直到取消或者查询到成功)
 API.getOfflineStatus({
