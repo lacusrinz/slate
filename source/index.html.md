@@ -1,12 +1,12 @@
 ---
-title: API Reference
+title: BeeCloud SDK支付文档
 
 language_tabs:
   - java: Java
   - php: PHP
   - csharp: C#
   - python: Python
-  - javascript: Node.Js
+  - javascript: Node.js
   - xml: Android
   - swift: Objective-C
 
