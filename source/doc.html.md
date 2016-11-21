@@ -1,5 +1,5 @@
 ---
-title: BeeCloud SDK支付文档
+title: BeeCloud 技术文档
 
 language_tabs:
   - java: Java
@@ -21,13 +21,15 @@ language_tabs:
 <!-- search: true -->
 ---
 
-# 1. 概览
+# 1. SDK开发
+
+## 1.1 概览
 
 BeeCloud支持线上线下各种场景的支付解决方案，本文档以场景的形式展示如何使用BeeCloud开发，完成支付技术的接入。
 
-## 1.1 渠道的开通和参数配置
+### 1.1.1 渠道的开通和参数配置
 
-### 1.1.1 开通渠道
+#### 1.1.1.1 开通渠道
 
 **官方渠道**申请指导：  
 微信APP的申请： [这里](http://beecloud.cn/doc/payapply/?index=0)  
@@ -37,7 +39,7 @@ BeeCloud支持线上线下各种场景的支付解决方案，本文档以场景
 BeeCloud提供低费率的特惠通道（包括：支付宝/微信/银联），请联系我们商务(15011103441 刘经理)了解更多详情
 </aside>
 
-### 1.1.2 渠道参数配置
+#### 1.1.1.2 渠道参数配置
 
 微信APP参数配置： [这里](http://beecloud.cn/doc/payapply/?index=1)  
 微信公众号参数配置： [这里](http://beecloud.cn/doc/payapply/?index=3)   
@@ -45,7 +47,7 @@ BeeCloud提供低费率的特惠通道（包括：支付宝/微信/银联），�
 支付宝RSA秘钥配置： [这里](http://beecloud.cn/doc/payapply/?index=14)   
 
 
-## 1.2 SDK安装
+### 1.1.2 SDK安装
 
 SDK下载地址 [这里](http://beecloud.cn/download/)
 <aside class="notice">
@@ -53,7 +55,7 @@ SDK下载地址 [这里](http://beecloud.cn/download/)
 </aside>
 
 
-## 1.3 在代码中注册BeeCloud
+### 1.1.3 在代码中注册BeeCloud
 
 1. 注册开发者：猛击[这里](http://www.beecloud.cn/register)注册成为BeeCloud开发者， 并完成企业认证
 <aside class="notice">
@@ -181,9 +183,9 @@ BeeCloud.setAppIdAndSecret("appId", "appSecret");
 }
 ```
 
-# 2. 网页上收款
+## 1.2 网页上收款
 
-## 2.1 流程概述
+### 1.2.1 流程概述
 
 ![pic](http://7xavqo.com1.z0.glb.clouddn.com/img-beecloud%20sdk.png)
 
@@ -197,14 +199,14 @@ BeeCloud.setAppIdAndSecret("appId", "appSecret");
 
 此时商户的网页需要做相应界面展示的更新（比如告诉用户"支付成功"或"支付失败")。**不允许**使用同步回调的结果来作为最终的支付结果，因为同步回调有极大的可能性出现丢失的情况（即用户支付完没有执行return url，直接关掉了网站等等），最终支付结果应以下面的异步回调为准。
 
-步骤⑤：**（在商户后端服务端）处理异步回调结果（[Webhook](https://beecloud.cn/doc/?index=webhook)）**
+步骤⑤：**（在商户后端服务端）处理异步回调结果(Webhook)**
  
 付款完成之后，根据客户在BeeCloud后台的设置，BeeCloud会向客户服务端发送一个Webhook请求，里面包括了数字签名，订单号，订单金额等一系列信息。客户需要在服务端依据规则要验证**数字签名是否正确，购买的产品与订单金额是否匹配，这两个验证缺一不可**。验证结束后即可开始走支付完成后的逻辑。
 
 
-## 2.2 网页上实现支付宝收款
+### 1.2.2 网页上实现支付宝收款
 
-### 2.2.1 支付宝收银台收款
+#### 1.2.2.1 支付宝收银台收款
 
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -301,13 +303,13 @@ result = bc_pay.pay(req_params)
 ```javascript
 //前端传参
 let data = {}, _this = this;
-    data.channel = 'ALI_WEB';//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = 'ALI_WEB';//根据不同场景选择不同的支付方式  
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
     data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
 
 //后端
@@ -321,7 +323,7 @@ app.post('/api/bill', (req, res, next) => {
 })
 ```
 
-### 2.2.2 支付宝网页二维码收款
+#### 1.2.2.2 支付宝网页二维码收款
 
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -422,19 +424,16 @@ result = bc_pay.pay(req_params)
 # 然后对返回参数url重定向
 ```
 
-```shell
-
-```
 ```javascript
 //前端传参
 let data = {}, _this = this;
-    data.channel = 'ALI_QRCODE';//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = 'ALI_QRCODE';//根据不同场景选择不同的支付方式 
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
     data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
 
 //后端
@@ -448,7 +447,7 @@ app.post('/api/bill', (req, res, next) => {
 })
 ```
 
-### 2.2.3 支付宝移动网页收款
+#### 1.2.2.3 支付宝移动网页收款
 
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -548,19 +547,16 @@ result = bc_pay.pay(req_params)
 # 然后对返回参数url重定向
 ```
 
-```shell
-
-```
 ```javascript
 //前端传参
 let data = {}, _this = this;
-    data.channel = 'ALI_WAP';//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = 'ALI_WAP';//根据不同场景选择不同的支付方式  
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
     data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
     data.use_app = true;//是否尝试掉起支付宝APP原生支付
 
@@ -575,7 +571,7 @@ app.post('/api/bill', (req, res, next) => {
 })
 ```
 
-### 2.2.4 附： 支付宝支付其他可选参数：
+#### 1.2.2.4 附： 支付宝支付其他可选参数：
 
 参数名 | 类型 | 含义 | 描述 | 示例 
 ----  | ---- | ---- | ---- | ---- 
@@ -583,9 +579,9 @@ optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通�
 notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
 
-## 2.3 网页上实现微信收款
+### 1.2.3 网页上实现微信收款
 
-### 2.3.1 微信公众号内网页收款
+#### 1.2.3.1 微信公众号内网页收款
 
 0. 微信公众号配置参数：[文档](http://beecloud.cn/doc/payapply/?index=3)
 1. 用户发起付款请求
@@ -868,7 +864,7 @@ try {
 ```python
 # 先获取open id
 req_params = BCPayReqParams()
-req_params.channel = 'WX_JSAPI'	   # 或者BC_WX_JSAPI
+req_params.channel = 'WX_JSAPI'    # 或者BC_WX_JSAPI
 req_params.title = u'支付测试'
 # 分为单位
 req_params.total_fee = 1
@@ -879,9 +875,6 @@ result = bc_pay.pay(req_params)
 # 然后对返回参数(包含app_id, package, nonce_str, timestamp, pay_sign, sign_type)做下一步处理
 ```
 
-```shell
-
-```
 ```javascript
 /**
  * 微信用户的openid获取请参考官方demo sdk和文档
@@ -890,13 +883,13 @@ result = bc_pay.pay(req_params)
  */
 /前端传参
 let data = {}, _this = this;
-    data.channel = 'WX_JSAPI';//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = 'WX_JSAPI';//根据不同场景选择不同的支付方式 
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
     data.openid = '0950c062-5e41-xxxxxxxxxxx';//openid
 
 //后端
@@ -910,7 +903,7 @@ app.post('/api/bill', (req, res, next) => { //支付
 })
 ```
 
-### 2.3.2 微信移动网页（非微信浏览器）收款
+#### 1.2.3.2 微信移动网页（非微信浏览器）收款
 
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -1002,13 +995,13 @@ result = bc_pay.pay(req_params)
 ```javascript
 //前端传参
 let data = {}, _this = this;
-    data.channel = 'BC_WX_WAP';//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = 'BC_WX_WAP';//根据不同场景选择不同的支付方式  
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
 
 //后端
 const BCRESTAPI = require('beecloud-node-sdk');
@@ -1021,7 +1014,7 @@ app.post('/api/bill', (req, res, next) => {
 })
 ```
 
-### 2.3.3 微信在PC网页通过二维码收款
+#### 1.2.3.3 微信在PC网页通过二维码收款
 
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -1142,7 +1135,7 @@ try {
 
 ```python
 req_params = BCPayReqParams()
-req_params.channel = 'WX_NATIVE'	# 或者BC_NATIVE
+req_params.channel = 'WX_NATIVE'  # 或者BC_NATIVE
 req_params.title = u'支付测试'
 # 分为单位
 req_params.total_fee = 1
@@ -1152,20 +1145,16 @@ result = bc_pay.pay(req_params)
 # 然后根据返回参数code_url生成二维码
 ```
 
-```shell
-
-```
-
 ```javascript
 //前端传参
 let data = {}, _this = this;
-    data.channel = 'WX_NATIVE';//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = 'WX_NATIVE';//根据不同场景选择不同的支付方式  
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
 
 //后端
 const BCRESTAPI = require('beecloud-node-sdk');
@@ -1178,7 +1167,7 @@ app.post('/api/bill', (req, res, next) => {
 })
 ```
 
-### 2.3.4 附： 微信支付其他可选参数：
+#### 1.2.3.4 附： 微信支付其他可选参数：
 
 参数名 | 类型 | 含义 | 描述 | 示例 
 ----  | ---- | ---- | ---- | ---- 
@@ -1186,9 +1175,9 @@ optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通�
 notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
 
-## 2.4 网页上实现银联收款
+### 1.2.4 网页上实现银联收款
 
-### 2.4.1 银联PC网页收款
+#### 1.2.4.1 银联PC网页收款
 
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -1262,7 +1251,7 @@ try {
 
 ```python
 req_params = BCPayReqParams()
-req_params.channel = 'UN_WEB'	# 或者BC_EXPRESS
+req_params.channel = 'UN_WEB' # 或者BC_EXPRESS
 req_params.title = u'支付测试'
 # 分为单位
 req_params.total_fee = 1
@@ -1274,10 +1263,6 @@ result = bc_pay.pay(req_params)
 # 然后加载返回的表单html
 ```
 
-```shell
-
-```
-
 ```javascript
 /**
  * 微信用户的openid获取请参考官方demo sdk和文档
@@ -1286,13 +1271,13 @@ result = bc_pay.pay(req_params)
  */
 //前端传参
 let data = {}, _this = this;
-    data.channel = 'UN_WEB';//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = 'UN_WEB';//根据不同场景选择不同的支付方式 
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
     data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
                 
 
@@ -1307,7 +1292,7 @@ app.post('/api/bill', (req, res, next) => { //支付
 })
 ```
 
-### 2.4.2 银联移动网页收款
+#### 1.2.4.2 银联移动网页收款
 
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -1381,7 +1366,7 @@ try {
 
 ```python
 req_params = BCPayReqParams()
-req_params.channel = 'UN_WAP'	# 或者BC_EXPRESS
+req_params.channel = 'UN_WAP' # 或者BC_EXPRESS
 req_params.title = u'支付测试'
 # 分为单位
 req_params.total_fee = 1
@@ -1393,10 +1378,6 @@ result = bc_pay.pay(req_params)
 # 然后加载返回的表单html
 ```
 
-```shell
-
-```
-
 ```javascript
 /**
  * 微信用户的openid获取请参考官方demo sdk和文档
@@ -1405,13 +1386,13 @@ result = bc_pay.pay(req_params)
  */
 //前端传参
 let data = {}, _this = this;
-    data.channel = 'UN_WAP';//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = 'UN_WAP';//根据不同场景选择不同的支付方式 
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
     data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
                 
 
@@ -1426,7 +1407,7 @@ app.post('/api/bill', (req, res, next) => { //支付
 })
 ```
 
-### 2.4.3 附： 银联支付其他可选参数：
+#### 1.2.4.3 附： 银联支付其他可选参数：
 
 参数名 | 类型 | 含义 | 描述 | 示例 
 ----  | ---- | ---- | ---- | ---- 
@@ -1435,7 +1416,7 @@ notify_url | String | 商户自定义回调地址 | 商户可通过此参数设�
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
 
 
-## 2.5 网页上实现银行网关收款
+### 1.2.5 网页上实现银行网关收款
 
 <aside class="notice">
 银行网关是指直接进入选定的银行接口进行支付
@@ -1535,20 +1516,16 @@ result = bc_pay.pay(req_params)
 # 然后对返回参数url重定向
 ```
 
-```shell
-
-```
-
 ```javascript
 //前端传参
 let data = {}, _this = this;
-    data.channel = 'BC_GETEWAY';//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = 'BC_GETEWAY';//根据不同场景选择不同的支付方式 
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
                 
 
 //后端
@@ -1571,13 +1548,13 @@ notify_url | String | 商户自定义回调地址 | 商户可通过此参数设�
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360
 
 
-# 3. 线下通过二维码收款
+## 1.3. 线下通过二维码收款
 
-## 3.1 流程概述
+### 1.3.1 流程概述
 
 支付宝微信支持面对面通过二维码的方式进行收付款
 
-### 3.1.1 用户扫商户的二维码称为扫码支付
+#### 1.3.1.1 用户扫商户的二维码称为扫码支付
 
 步骤①：**商家根据用户购买商品确定金额，向BeeCloud请求**  
 
@@ -1587,14 +1564,14 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 
 步骤④：**用户支付完成后通过查询订单状态完成收款**
 
-### 3.1.2 商户扫用户的二维码称为刷卡收款
+#### 1.3.1.2 商户扫用户的二维码称为刷卡收款
 
 步骤①：**商家根据用户购买商品确定金额，并且通过扫码枪等工具获取用户付款二维码的内容，向BeeCloud请求**  
 
 步骤②：**用户支付完成后通过查询订单状态完成收款**  
 
 
-## 3.2 支付宝扫码支付
+### 1.3.2 支付宝扫码支付
 
 1. 商户发起收款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -1662,7 +1639,6 @@ try {
 }
 
 //查询收款状态(可以循环查询直到取消或者查询到成功)
-TODO
 ```
 
 ```php
@@ -1756,7 +1732,7 @@ try {
 
 ```python
 req_params = BCPayReqParams()
-req_params.channel = 'ALI_OFFLINE_QRCODE'	# 或者BC_ALI_QRCODE
+req_params.channel = 'ALI_OFFLINE_QRCODE' # 或者BC_ALI_QRCODE
 req_params.title = u'支付测试'
 req_params.total_fee = 1
 req_params.bill_no = 'bill number'
@@ -1766,20 +1742,16 @@ resp = bc_pay.offline_pay(req_params)
 # 然后根据返回参数code_url生成二维码
 ```
 
-```shell
-
-```
-
 ```javascript
 //前端传参
 let data = {}, _this = this;
-    data.channel = 'ALI_OFFLINE_QRCODE';//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = 'ALI_OFFLINE_QRCODE';//根据不同场景选择不同的支付方式 
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
                 
 
 //后端
@@ -1798,7 +1770,7 @@ API.getOfflineStatus({
 }).then(res=>res.send(res))
 ```
 
-## 3.3 微信扫码支付
+### 1.3.3 微信扫码支付
 
 1. 商户发起收款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -1867,8 +1839,7 @@ try {
 }
 
 //查询收款状态(可以循环查询直到取消或者查询到成功)
-TODO
-```
+
 
 ```php
 //获取二维码地址
@@ -1960,7 +1931,7 @@ try {
 
 ```python
 req_params = BCPayReqParams()
-req_params.channel = 'WX_NATIVE'	# 或者BC_NATIVE
+req_params.channel = 'WX_NATIVE'  # 或者BC_NATIVE
 req_params.title = u'支付测试'
 req_params.total_fee = 1
 req_params.bill_no = 'bill number'
@@ -1970,20 +1941,16 @@ resp = bc_pay.offline_pay(req_params)
 # 然后根据返回参数code_url生成二维码
 ```
 
-```shell
-
-```
-
 ```javascript
 //前端传参
 let data = {}, _this = this;
-    data.channel = 'BC_NATIVE';//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = 'BC_NATIVE';//根据不同场景选择不同的支付方式  
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
                 
 
 //后端
@@ -2002,7 +1969,7 @@ API.getOfflineStatus({
 }).then(res=>res.send(res))
 ```
 
-## 3.4 支付宝刷卡收款
+### 1.3.4 支付宝刷卡收款
 
 1. 商户发起收款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -2049,8 +2016,7 @@ try {
 }
 
 //查询收款状态(可以循环查询直到取消或者查询到成功)
-TODO
-```
+
 
 ```php
 try {
@@ -2142,7 +2108,7 @@ try {
 
 ```python
 req_params = BCPayReqParams()
-req_params.channel = 'ALI_SCAN'	# 或者BC_ALI_SCAN
+req_params.channel = 'ALI_SCAN' # 或者BC_ALI_SCAN
 req_params.title = u'支付测试'
 req_params.total_fee = 1
 req_params.bill_no = 'bill number'
@@ -2152,20 +2118,17 @@ resp = bc_pay.offline_pay(req_params)
 # 如果result.result_code为0表示请求成功
 ```
 
-```shell
-
-```
 
 ```javascript
 //前端传参
 let data = {}, _this = this;
-    data.channel = 'ALI_SCAN';//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = 'ALI_SCAN';//根据不同场景选择不同的支付方式 
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
                 
 
 //后端
@@ -2185,7 +2148,7 @@ API.getOfflineStatus({
 }).then(res=>res.send(res))
 ```
 
-## 3.5 微信刷卡收款
+### 1.3.5 微信刷卡收款
 
 1. 商户发起收款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -2232,7 +2195,7 @@ try {
 }
 
 //查询收款状态(可以循环查询直到取消或者查询到成功)
-TODO
+
 ```
 
 ```php
@@ -2325,7 +2288,7 @@ try {
 
 ```python
 req_params = BCPayReqParams()
-req_params.channel = 'WX_SCAN'	# 或者BC_WX_SCAN
+req_params.channel = 'WX_SCAN'  # 或者BC_WX_SCAN
 req_params.title = u'支付测试'
 req_params.total_fee = 1
 req_params.bill_no = 'bill number'
@@ -2335,20 +2298,16 @@ resp = bc_pay.offline_pay(req_params)
 # 如果result.result_code为0表示请求成功
 ```
 
-```shell
-
-```
-
 ```javascript
 //前端传参
 let data = {}, _this = this;
-    data.channel = 'WX_SCAN';//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = 'WX_SCAN';//根据不同场景选择不同的支付方式  
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
-    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。	
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
                 
 
 //后端
@@ -2367,7 +2326,7 @@ API.getOfflineStatus({
 }).then(res=>res.send(res))
 ```
 
-## 3.6 附： 刷卡/扫码支付其他可选参数：
+### 1.3.6 附： 刷卡/扫码支付其他可选参数：
 
 参数名 | 类型 | 含义 | 描述 | 示例 
 ----  | ---- | ---- | ---- | ---- 
@@ -2375,9 +2334,9 @@ optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通�
 notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
 
-# 4. 移动APP收款
+## 1.4 移动APP收款
 
-## 4.1 流程概述
+### 1.4.1 流程概述
 
 下图为整个支付的流程:
 ![pic](http://7xavqo.com1.z0.glb.clouddn.com/UML01.png)
@@ -2396,7 +2355,7 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
  
 付款完成之后，根据客户在BeeCloud后台的设置，BeeCloud会向客户服务端发送一个Webhook请求，里面包括了数字签名，订单号，订单金额等一系列信息。客户需要在服务端依据规则要验证**数字签名是否正确，购买的产品与订单金额是否匹配，这两个验证缺一不可**。验证结束后即可开始走支付完成后的逻辑。
 
-## 4.2 在APP中使用支付宝收款
+### 1.4.2 在APP中使用支付宝收款
 
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -2450,7 +2409,7 @@ payParam.billNum = BillUtils.genBillNum();
 BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 ```
 
-## 4.3 在APP中使用微信收款
+### 1.4.3 在APP中使用微信收款
 
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -2501,7 +2460,7 @@ payParam.billNum = BillUtils.genBillNum();
 BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 ```
 
-## 4.4 在APP中使用银联收款
+### 1.4.4 在APP中使用银联收款
 
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
@@ -2553,16 +2512,16 @@ payParam.billNum = BillUtils.genBillNum();
 BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 ```
 
-# 5. 企业打款
+## 1.5 企业打款
 
-## 5.1 概述
+### 1.5.1 概述
 
 企业打款是指企业将钱从企业账户转到个人账号的操作
 <aside class="warning">
 打款只能从服务器端发起，会用到`Master Secret`进行加密，切勿泄露`Master Secret`
 </aside>
 
-## 5.2 BeeCloud打款到银行卡
+### 1.5.2 BeeCloud打款到银行卡
 
 <aside class="notice">
 打款到银行卡需要首先在BeeCloud打款账户充值，企业打款余额可以用于打款 
@@ -2699,17 +2658,17 @@ result = bc_pay.bc_transfer(transfer_params)
 ```javascript
 //前端传参
   let data = {}, _this = this;
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;
     data.bill_no = `bc企业打款`;
     data.title = '白开水';
-    data.trade_source = 'OUT_PC';//UTF8编码格式，目前只能填写OUT_PC	
-    data.bank_fullname = '中国银行';//中国银行，而不能写成"中行",因为“中行”也是中信银行和中兴银行的缩写	
-    data.card_type = 'DE';//DE代表借记卡，CR代表信用卡，其他值为非法	
-    data.account_type = 'P';//帐户类型，P代表私户，C代表公户，其他值为非法	
+    data.trade_source = 'OUT_PC';//UTF8编码格式，目前只能填写OUT_PC  
+    data.bank_fullname = '中国银行';//中国银行，而不能写成"中行",因为“中行”也是中信银行和中兴银行的缩写 
+    data.card_type = 'DE';//DE代表借记卡，CR代表信用卡，其他值为非法  
+    data.account_type = 'P';//帐户类型，P代表私户，C代表公户，其他值为非法 
     data.account_no = '6222691921993848888';//收款方银行卡号
     data.account_name = '周杰伦';//收款方账户名称
-    data.mobile = '13888888888';//银行绑定的手机号，当需要手机收到银行入账信息时，该值必填，前提是该手机在银行有短信通知业务，否则收不到银行信息	
+    data.mobile = '13888888888';//银行绑定的手机号，当需要手机收到银行入账信息时，该值必填，前提是该手机在银行有短信通知业务，否则收不到银行信息 
 
 //后端
 const BCRESTAPI = require('beecloud-node-sdk');
@@ -2738,7 +2697,7 @@ account_name|String | 收款帐户名称 | 收款方的姓名或者单位名 | �
 mobile | String | 银行绑定的手机号 | 银行绑定的手机号，当需要手机收到银行入账信息时，该值必填，前提是该手机在银行有短信通知业务，否则收不到银行信息 | 13888888888 
 optional | Map | 附加数据 | 用户自定义的参数，将会在Webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
 
-## 5.3 支付宝打款到支付宝
+### 1.5.3 支付宝打款到支付宝
 
 1. 商户发起打款请求
 2. 系统生成打款订单，包括打款单号，金额等信息
@@ -2831,20 +2790,16 @@ result = bc_pay.transfer(transfer_params)
 # 重定向返回的url，到支付宝页面输入密码确认
 ```
 
-```shell
-
-```
-
 ```javascript
 //前端传参
   let data = {}, _this = this;
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.channel = 'ALI_TRANSFER';
-    data.transfer_no = 'udjfiienx2334';//支付宝为11-32位数字字母组合， 微信企业打款为8-32位数字字母组合，微信红包为10位数字	
-    data.total_fee = 100;//此次打款的金额,单位分,正整数(微信红包1.00-200元，微信打款>=1元)	
-    data.desc = '赔偿';//此次打款的说明	
+    data.transfer_no = 'udjfiienx2334';//支付宝为11-32位数字字母组合， 微信企业打款为8-32位数字字母组合，微信红包为10位数字  
+    data.total_fee = 100;//此次打款的金额,单位分,正整数(微信红包1.00-200元，微信打款>=1元)  
+    data.desc = '赔偿';//此次打款的说明  
     data.channel_user_id = 'someone@126.com';//支付渠道方内收款人的标示, 微信为openid, 支付宝为支付宝账户
-    data.channel_user_name = '支付宝某人';//支付渠道内收款人账户名， 支付宝必填	
+    data.channel_user_name = '支付宝某人';//支付渠道内收款人账户名， 支付宝必填 
     data.account_name = '苏州比可网络科技有限公司';//打款方账号名称,支付宝必填
 
 //后端
@@ -2870,7 +2825,7 @@ channel_user\_id | String | 用户id | 支付渠道方内收款人的标示, 支
 channel_user\_name | String | 用户名| 支付渠道内收款人账户名 | 支付宝某人 | 是
 account_name|String|打款方账号名称|打款方账号名全称 | 苏州比可网络科技有限公司 | 是
 
-## 5.4 微信打款到微信
+### 1.5.4 微信打款到微信
 
 1. 商户发起打款请求
 2. 系统生成打款订单，包括打款单号，金额等信息
@@ -2958,16 +2913,16 @@ result = bc_pay.transfer(transfer_params)
 ```javascript
 //前端传参
   let data = {}, _this = this;
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.channel = 'WX_TRANSFER';
-    data.transfer_no = 'udjfiienx2334';//支付宝为11-32位数字字母组合， 微信企业打款为8-32位数字字母组合，微信红包为10位数字	
-    data.total_fee = 100;//此次打款的金额,单位分,正整数(微信红包1.00-200元，微信打款>=1元)	
-    data.desc = '赔偿';//此次打款的说明	
+    data.transfer_no = 'udjfiienx2334';//支付宝为11-32位数字字母组合， 微信企业打款为8-32位数字字母组合，微信红包为10位数字  
+    data.total_fee = 100;//此次打款的金额,单位分,正整数(微信红包1.00-200元，微信打款>=1元)  
+    data.desc = '赔偿';//此次打款的说明  
     data.channel_user_id = 'someone@126.com';//支付渠道方内收款人的标示, 微信为openid, 支付宝为支付宝账户
     data.redpack_info = {
-                            send_name: 'beecloud',//红包发送者名称 32位	
-                            wishing: 'BeeCloud祝福开发者工作顺利!',//红包祝福语 128 位	
-                            act_name: 'BeeCloud开发者红包轰动'//红包活动名称 32位	
+                            send_name: 'beecloud',//红包发送者名称 32位 
+                            wishing: 'BeeCloud祝福开发者工作顺利!',//红包祝福语 128 位 
+                            act_name: 'BeeCloud开发者红包轰动'//红包活动名称 32位 
                         };
 
 //后端
@@ -2991,9 +2946,9 @@ total_fee | Int | 打款金额 | 此次打款的金额,单位分,正整数(微�
 desc | String | 打款说明 | 此次打款的说明 | 赔偿 | 是
 channel_user\_id | String | 用户id | 支付渠道方内收款人的标示, 微信为openid | xx_sjiwajeirhwefhsahfwhru |是
 
-# 6. 实名身份认证
+## 1.6 实名身份认证
 
-## 6.1 概述
+### 1.6.1 概述
 
 商户在APP认证用户实名信息或者在打款钱验证用户卡号信息都需要用到身份实名验证接口，BeeCloud支持的验证方式分为二要素，三要素，四要素三种，商户可以根据自己需求选择，比如APP实名验证不需要验证银行卡信息，则只需要使用二要素验证，企业打款前需要验证银行卡和姓名，可以使用三要素或者四要素验证。
 
@@ -3006,7 +2961,7 @@ channel_user\_id | String | 用户id | 支付渠道方内收款人的标示, 微
 四要素验证：姓名、身份证号、银行账户、手机号码  
 
 
-## 6.2 实名身份认证
+### 1.6.2 实名身份认证
 
 <aside class="notice">
 移动端暂时只支持二要素的认证
@@ -3047,7 +3002,7 @@ try {
 
 ```php
 try {
-	$data = array(
+  $data = array(
         'timestamp' => time() * 1000,
         'name' => 'jason',
         'card_no' => '6227856101009660xxx',
@@ -3063,7 +3018,7 @@ try {
     }
     print_r($result);
 }catch(Exception $e){
-	echo $e->getMessage();
+  echo $e->getMessage();
 }
 
 ```
@@ -3074,11 +3029,11 @@ try {
 
 ```python
 # 方法在beecloud.utils包中
-result = verify_card_factors(bc_app,	# BCApp实例
+result = verify_card_factors(bc_app,  # BCApp实例
                              '身份证姓名',
                              '身份证号',
-                             '用户银行卡号',	# 选填
-                             '用户银行卡预留手机号'	# 选填
+                             '用户银行卡号',  # 选填
+                             '用户银行卡预留手机号' # 选填
                              )
 # result.result_code为0表示鉴权成功
 ```
@@ -3090,7 +3045,7 @@ result = verify_card_factors(bc_app,	# BCApp实例
 ```javascript
 //前端
 let data = {},_this = this;
-        data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+        data.timestamp = new Date().valueOf();//时间戳，毫秒数 
         data.name = 'xuqi';
         data.id_no = '23082619860124xxxx';
         data.card_no = '6227856101009660xxx';
@@ -3120,29 +3075,15 @@ BCValidationUtil.verifyCardFactors(
     new BCCallback() { ... });
 ```
 
-# 7. 查询
+## 1.7 查询
 
-## 7.1 订单查询
+### 1.7.1 订单查询
 
-### 7.1.1 通过条件查询
+#### 1.7.1.1 通过条件查询
 
 <aside class="success">
 条件包括渠道，订单号，时间段等可选参数
 </aside>
-
-请求参数详情:  
-
-参数名 | 类型 | 含义 | 描述 | 例子
-----  | ---- | ---- | ---- | ---- 
-channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB、UN\_WAP、PAYPAL、PAYPAL\_SANDBOX、PAYPAL\_LIVE、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB、JD、YEE、KUAIQIAN、BD、BD\_APP、BD\_WEB、BD\_WAP、BC、BC\_GATEWAY、BC\_EXPRESS、BC\_APP、BC\_NATIVE、BC\_WX\_WAP、BC\_WX\_JSAPI、BC\_ALI\_QRCODE(详见附注）
-bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 
-spay_result | Bool | 订单是否成功 | 标识订单是否支付成功 | true 
-refund_result | Bool | 订单是否已退款 | 标识订单是否已退款 | true 
-need_detail | Bool | 是否需要返回渠道详细信息 | 决定是否需要返回渠道的回调信息，true为需要 | true 
-start_time | Long | 起始时间 | 毫秒时间戳, 13位 | 1435890530000 
-end_time | Long | 结束时间 | 毫秒时间戳, 13位   | 1435890540000 
-skip | Integer| 查询起始位置 | 默认为0. 设置为10表示忽略满足条件的前10条数据| 0 
-limit| Integer | 查询的条数 | 默认为10，最大为50. 设置为10表示只返回满足条件的10条数据 | 10 
 
 > 通过条件查询代码示例：
 
@@ -3228,8 +3169,8 @@ result = bc_query.query_bills(query_params)
 ```javascript
 //前端
 let data = {}, _this = this;
-        data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式	
-        data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+        data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式  
+        data.timestamp = new Date().valueOf();//时间戳，毫秒数 
         //data.limit = 20;//默认为10，最大为50. 设置为10表示只返回满足条件的10条数据
         //start_time - 毫秒时间戳, 13位
         //end_time - 毫秒时间戳, 13位
@@ -3272,7 +3213,21 @@ BCQuery.getInstance().queryBillsAsync(params, new BCCallback() { ... });
 # callback中将BCResult转成BCQueryBillsResult做后续处理
 ```
 
-### 7.1.2 通过支付订单ID查询
+可选参数详情:  
+
+参数名 | 类型 | 含义 | 描述 | 例子
+----  | ---- | ---- | ---- | ---- 
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_APP等
+bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 
+spay_result | Bool | 订单是否成功 | 标识订单是否支付成功 | true 
+refund_result | Bool | 订单是否已退款 | 标识订单是否已退款 | true 
+need_detail | Bool | 是否需要返回渠道详细信息 | 决定是否需要返回渠道的回调信息，true为需要 | true 
+start_time | Long | 起始时间 | 毫秒时间戳, 13位 | 1435890530000 
+end_time | Long | 结束时间 | 毫秒时间戳, 13位   | 1435890540000 
+skip | Integer| 查询起始位置 | 默认为0. 设置为10表示忽略满足条件的前10条数据| 0 
+limit| Integer | 查询的条数 | 默认为10，最大为50. 设置为10表示只返回满足条件的10条数据 | 10 
+
+#### 1.7.1.2 通过支付订单ID查询
 
 <aside class="success">
 订单ID可以通过发起支付时的返回值获取，或者通过条件查询订单详情时获取
@@ -3337,7 +3292,7 @@ result = bc_query.query_bill_by_id('bill id')
 //前端
 let data = {},_this = this;
         data.id = this.props.params.id;
-        data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+        data.timestamp = new Date().valueOf();//时间戳，毫秒数 
         data.type = this.props.params.type;
 
 //后端
@@ -3364,9 +3319,9 @@ BCQuery.getInstance().queryBillByIDAsync(
                 new BCCallback(){...});
 ```
 
-## 7.2 退款查询
+### 1.7.2 退款查询
 
-### 7.2.1 通过条件查询
+#### 1.7.2.1 通过条件查询
 
 <aside class="success">
 条件包括渠道，订单号，时间段等可选参数
@@ -3447,15 +3402,11 @@ result = bc_query.query_refunds(query_params)
 # 如果查询成功result.refunds为beecloud.entity.BCRefund的实例列表
 ```
 
-```shell
-
-```
-
 ```javascript
 //前端
 let data = {}, _this = this;
-    data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式	
-    data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+    data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式  
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.app_sign = md5(config.APP_ID + data.timestamp + config.APP_SECRET);
     //start_time - 毫秒时间戳, 13位
     //end_time - 毫秒时间戳, 13位
@@ -3497,7 +3448,21 @@ BCQuery.getInstance().queryRefundsAsync(params, new BCCallback() { ... });
 # callback中将BCResult转成BCQueryRefundsResult做后续处理
 ```
 
-### 7.2.2 通过退款订单ID查询
+可选参数详情:
+
+参数名 | 类型 | 含义 | 描述 | 例子 
+----  | ---- | ---- | ---- | ---- 
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_NATIVE等
+bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 
+refund_no | String | 商户退款单号 | 发起退款时填写的退款单号 | 201506101035040000001 
+start_time | Long | 起始时间 | 毫秒时间戳, 13位 | 1435890530000 
+end_time | Long | 结束时间 | 毫秒时间戳, 13位   | 1435890540000 
+need_approval | Bool | 需要审核 | 标识退款记录是否为预退款   | true 
+need_detail | Bool | 是否需要返回渠道详细信息 | 决定是否需要返回渠道的回调信息，true为需要 | true 
+skip | Integer | 查询起始位置 | 默认为0. 设置为10，表示忽略满足条件的前10条数据| 0 
+limit| Integer | 查询的条数 | 默认为10，最大为50. 设置为10，表示只查询满足条件的10条数据 | 10 
+
+#### 1.7.2.2 通过退款订单ID查询
 
 > 通过退款订单ID查询代码示例：
 
@@ -3557,7 +3522,7 @@ result = bc_query.query_refund_by_id(refund_id)
 //前端
 let data = {},_this = this;
         data.id = this.props.params.id;
-        data.timestamp = new Date().valueOf();//时间戳，毫秒数	
+        data.timestamp = new Date().valueOf();//时间戳，毫秒数 
         data.type = 'refund';
 
 //后端
@@ -3581,11 +3546,11 @@ BCQueryRefundByIdReq *req = [[BCQueryRefundByIdReq alloc] initWithObjectId:bcId]
 
 ```xml
 BCQuery.getInstance().queryRefundByIDAsync(
-					"refund id",
+          "refund id",
                     new BCCallback() {...});
 ```
 
-# 8. 退款
+## 1.8 退款
 
 1. 商户发起退款请求
 2. 系统生成退款订单，包括退款单号，需要退款的订单号，金额等信息
@@ -3704,22 +3669,18 @@ result = bc_pay.refund(refund_params)
 # 对于支付宝退款，需要重定向至result.url
 ```
 
-```shell
-
-```
-
 ```javascript
 //前端
 let data = refundData,_this = this;
-            data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式	
-            data.timestamp = new Date().valueOf();//时间戳，毫秒数	
-            //格式为:退款日期(8位) + 流水号(3~24 位)。请自行确保在商户系统中唯一，
-            //且退款日期必须是发起退款的当天日期,同一退款单号不可重复提交，否则会造成退款单重复。
-            //流水号可以接受数字或英文字符，建议使用数字，但不可接受“000”	
-            data.refund_no ='201506101035040000001';
-            data.refund_fee = parseInt(this.refs.fee.value);
-            //用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据	
-            data.optional = {"key1":"value1","key2":"value2"};
+data.channel = this.props.params.channel;//根据不同场景选择不同的支付方式  
+data.timestamp = new Date().valueOf();//时间戳，毫秒数 
+//格式为:退款日期(8位) + 流水号(3~24 位)。请自行确保在商户系统中唯一，
+//且退款日期必须是发起退款的当天日期,同一退款单号不可重复提交，否则会造成退款单重复。
+//流水号可以接受数字或英文字符，建议使用数字，但不可接受“000”  
+data.refund_no ='201506101035040000001';
+data.refund_fee = parseInt(this.refs.fee.value);
+//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据  
+data.optional = {"key1":"value1","key2":"value2"};
 
 //后端
 const BCRESTAPI = require('beecloud-node-sdk');
@@ -3739,3 +3700,2415 @@ app.post('/api/refund', (req, res, next) => {
 ---- | ---- | ---- | ---- | ---- | ----
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
 refund_account | Integer | 微信退款资金来源 | 1:可用余额退款 0:未结算资金退款（默认使用未结算资金退款） | 1 
+
+# 2. 秒支付Button开发
+
+## 2.1 概览
+
+秒收款基于BeeCloud SDK，是BeeCloud在SDK基础上专门开发出的一个轻量级版本。它只需要短短一句代码即可使用，并且内嵌了一套风格简约的支付页面和完成页面，同时适用于PC端和移动端。这个功能对于入门级开发者来说，不但降低了开发成本，还能够优化用户在支付流程当中的体验。
+
+### 2.1.1 使用效果
+
+网页上出现支付渠道选择菜单，点击其中渠道跳转到指定渠道的支付页面，WEB和WAP端效果分别如下图：  
+
+PC端如下：
+
+![Button GIF](http://7xavqo.com1.z0.glb.clouddn.com/button2.gif)
+
+移动H5端如下：  
+
+![Button GIF](http://7xavqo.com1.z0.glb.clouddn.com/button_wap.gif)
+
+### 2.1.2 适用范围
+<aside class="success">
+可以实现:
+</aside>
+1. 秒支付button支持的渠道**支付宝网页/移动网页支付**，**公众号内微信支付**，**微信扫码支付**，**银联网页/移动网页支付**，**京东支付**，**百度支付**，**易宝支付**
+2. 不需要自己写样式
+3. 不需要自己做移动适配
+4. 如果只有一个支付渠道，可以直接跳转付款页不弹出渠道选择框
+
+<aside class="warning">
+不能满足:
+</aside>
+1. 不能定制UI
+2. 一些进阶的参数不能在秒支付button使用，比如设置订单的超时时间等
+
+## 2.2 使用前准备
+
+1. BeeCloud[注册](http://beecloud.cn/register/)账号, 并完成企业认证
+
+2. BeeCloud中创建应用，填写支付渠道所需参数, 可以参考[官网帮助文档](http://beecloud.cn/doc/payapply)
+
+3. 申请渠道参数，并配置BeeCLoud各个支付渠道的参数，此处请参考官网的[渠道参数帮助页](https://beecloud.cn/doc/payapply/?index=0)
+<aside class="notify">
+BeeCloud中配置参数需要完成企业认证后才能填写!
+</aside>
+
+4. 激活秒支付button功能，进入APP->设置->秒支付button项，拖拽支付渠道开启该支付渠道，同时还可以调整你需要的渠道菜单的显示顺序，点击”保存“后会生成appid对应的**script标签**。**需要将此script标签放到任何需要使用秒支付Button的网页里**。
+
+![支付设置前](http://beeclouddoc.qiniudn.com/sbutton.jpg)
+
+## 2.3 接口说明
+### 2.3.1 BC.click原型
+  
+`
+BC.click(data, event);
+` 
+
+### 2.3.2 参数data选填字段说明
+参数名 | 类型 | 含义 | 限制
+----  | ---- | ---- | ---- 
+return\_url | String | 支付成功后跳转地址，除微信内jsapi支付不支持 | 必须以http://或https://开头, **不允许带任何参数** 
+debug | bool | 调试信息开关, 开启后将alert一些信息 | 默认为false 
+optional | Object | 支付完成后，webhook将收到的自定义订单相关信息 | 目前只支持javascript基本类型的{key:value}, 不支持嵌套对象 
+instant\_channel | String | 设置该字段后将直接调用渠道支付，不再显示渠道选择菜单 | "ali"(支付宝网页/移动网页), <br>"wxmp"(微信扫码),<br>"bcwxmp"(BC微信扫码),<br>"wx"(微信公众号支付),<br>"bcwx"(BC微信公众号),<br>"un"(银联网页),<br>"unwap"(银联手机网页),<br>"bckj"(银联快捷)
+need\_ali\_guide | bool | 微信内是否使用支付宝支付引导页，若不使用设置false | 默认为true 
+openid | String | 微信内调JSAPI支付必须参数 | 需要开发者微信网页授权获取  
+use_app | bool | 移动端网页直接调用支付宝APP支付，默认true，传false不启用 | 仅限支付宝移动网页端起作用 
+
+### 2.3.3 选填参数event说明
+<aside class="notify">
+注意只有在支付授权目录下支付时，微信才会调用jsapi中注册的函数；
+</aside>
+<aside class="notify">
+测试授权目录下的支付不会出发wxJsapiFinish等事件
+</aside>
+<aside class="notify">
+有关微信jsapi的返回结果res,请参考 https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=7_7
+</aside>
+
+参数名 | 类型 | 描述 
+----  | ---- | ---- 
+dataError | function(msg) | 数据获取出错,将调用此接口; 只传递一个参数为Object,其中有错误描述 
+wxJsapiFinish | function(res) | 微信jsapi的支付接口调用完成后将调用此接口; 只传递一个参数，为微信原生的结果Object 
+wxJsapiSuccess | function(res) | 微信jsapi的接口支付成功后将调用此接口; 只传递一个参数，为微信原生的结果Object 
+wxJsapiFail | function(res) | 微信jsapi的接口支付非成功都将调用此接口; 只传递一个参数，为微信原生的结果Object 
+
+## 2.4 在支付页面集成代码
+
+### 2.4.1 普通浏览器示例
+
+若为移动端H5页面，页面头部需加上 `<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">` 做移动适配。
+
+Javascript传递的参数中sign比较特殊，用来保证订单的信息的完整性，需要集成者自行在服务器端生成；
+
+生成规则 : 依次将以下字段（注意是UTF8编码）连接BeeCloud appId、 title、 amount、 out\_trade\_no、 BeeCloud appSecret, 然后计算连接后的字符串的MD5, 该签名用于验证价格，title 和订单的一致
+
+```java
+<%
+    /* *
+     jsp中集成 BeeCloud js button
+     * */
+%>
+<%!
+String getMessageDigest(String s) {
+    char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    try {
+        byte[] buffer = s.getBytes("UTF-8");
+        //获得MD5摘要算法的 MessageDigest 对象
+        MessageDigest mdTemp = MessageDigest.getInstance("MD5");
+        //使用指定的字节更新摘要
+        mdTemp.update(buffer);
+        //获得密文
+        byte[] md = mdTemp.digest();
+        //把密文转换成十六进制的字符串形式
+        int j = md.length;
+        char str[] = new char[j * 2];
+        int k = 0;
+        for (int i = 0; i < j; i++) {
+            byte byte0 = md[i];
+            str[k++] = hexDigits[byte0 >>> 4 & 0xf];
+            str[k++] = hexDigits[byte0 & 0xf];
+        }
+        return new String(str);
+    } catch (Exception e) {
+        return null;
+    }
+}
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>spay demo</title>
+</head>
+<body>
+<button id="test">test online</button>
+</div>
+</body>
+<!--添加控制台活的的script标签-->
+<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<body>
+    <%
+        String app_id = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
+        String app_secret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
+        String title = "testPay";
+        String amount = "1"; //单位分
+        String out_trade_no = "test" + System.currentTimeMillis();
+        //2.根据订单参数生成 订单签名 sign
+        String sign = getMessageDigest(app_id + title + amount + out_trade_no + app_secret);
+        String optional = "{\"msg\":\"addtion msg\"}";
+    %>
+</body>
+
+<script type="text/javascript">
+    document.getElementById("test").onclick = function() {
+        BC.err = function(data) {
+            //注册错误信息接受
+            alert(data["ERROR"]);
+        }
+        /**
+        * 需要支付时调用BC.click接口传入参数
+        */
+        BC.click({
+            "title":"<%=title%>", //商品名
+            "amount":"<%=amount%>",  //总价（分）
+            "out_trade_no":"<%=out_trade_no%>", //自定义订单号
+            "sign":"<%=sign%>", //商品信息hash值，含义和生成方式见下文
+            "return_url" : "http://payservice.beecloud.cn/spay/result.php", //支付成功后跳转的商户页面,可选，默认为http://payservice.beecloud.cn/spay/result.php
+            "optional" : <%=optional%>//可选，自定义webhook的optional回调参数
+        });
+        /**
+        * click调用错误返回：默认行为console.log(err)
+        */
+        BC.err = function(err) {
+            //err 为object, 例 ｛”ERROR“ : "xxxx"｝;
+        }
+    };
+</script>
+</html>
+```
+
+``` php
+<?php
+$app_id = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
+$app_secret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
+$title = "你的订单标题";
+$amount = 1;//支付总价
+$out_trade_no = "bc" . time();//订单号，需要保证唯一性
+//1.生成sign
+$sign = md5($app_id . $title . $amount . $out_trade_no . $app_secret);
+?>
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>demo js button</title>
+</head>
+<body>
+<button id="test">test online</button>
+
+
+<!--2.添加控制台->APP->设置->秒支付button项获得的script标签-->
+<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<script>
+    //3. 需要发起支付时(示例中绑定在一个按钮的click事件中),调用BC.click方法
+    document.getElementById("test").onclick = function() {
+        asyncPay();
+    };
+    function bcPay() {
+        BC.click({
+            "title": "<?php echo $title; ?>",
+            "amount": <?php echo $amount; ?>,
+            "out_trade_no": "<?php echo $out_trade_no;?>", //唯一订单号
+            "sign" : "<?php echo $sign;?>",
+            /**
+             * optional 为自定义参数对象，目前只支持基本类型的key ＝》 value, 不支持嵌套对象；
+             * 回调时如果有optional则会传递给webhook地址，webhook的使用请查阅文档
+             */
+            "optional": {"test": "willreturn"}
+        });
+    }
+    // 这里不直接调用BC.click的原因是防止用户点击过快，BC的JS还没加载完成就点击了支付按钮。
+    // 实际使用过程中，如果用户不可能在页面加载过程中立刻点击支付按钮，就没有必要利用asyncPay的方式，而是可以直接调用BC.click。
+    function asyncPay() {
+        if (typeof BC == "undefined") {
+            if (document.addEventListener) { // 大部分浏览器
+                document.addEventListener('beecloud:onready', bcPay, false);
+            } else if (document.attachEvent) { // 兼容IE 11之前的版本
+                document.attachEvent('beecloud:onready', bcPay);
+            }
+        } else {
+            bcPay();
+        }
+    }
+</script>
+</body>
+</html>
+```
+
+```python
+//页面部分
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>demo js pay</title>
+</head>
+<body>
+<button id="test">test</button>
+<!--添加控制台获得的script标签-->
+<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<script>
+    document.getElementById("test").onclick = function() {
+        BC.err = function(data) {
+            //注册错误信息接受
+            alert(data["ERROR"]);
+        }
+        /**
+         * 调用BC.click 接口传递参数
+         */
+        BC.click({
+            "title": "{{title}}",
+            "amount": "{{amount}}",
+            "out_trade_no": "{{out_trade_no}}", //唯一订单号
+            "sign" : "{{sign}}",
+            /**
+             * optional 为自定义参数对象，目前只支持基本类型的key ＝》 value, 不支持嵌套对象；
+             * 回调时如果有optional则会传递给webhook地址，webhook的使用请查阅文档
+             */
+            "optional": {"test": "willreturn"}
+        });
+    };
+</script>
+</body>
+</html>
+
+//服务端部分
+import tornado.httpserver
+import tornado.ioloop
+import tornado.options
+import tornado.web
+import os
+import hashlib
+
+from time import time
+from tornado.options import define, options
+
+define("port", default=8088, help="run on the given port", type=int)
+bc_app_id = 'c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'
+bc_app_secret = '39a7a518-9ac8-4a9e-87bc-7885f33cf18c'
+
+class SpayButtonHandler(tornado.web.RequestHandler):
+    def get(self):
+        title = "test"
+        out_trade_no = "test" + str(int(time()))
+        amount = "1"
+        #2 计算签名sign
+        md5 = hashlib.md5()
+        md5.update(bc_app_id + title + amount + out_trade_no + bc_app_secret)
+        sign = md5.hexdigest()
+        self.render("templates/spay-button.html", title=title, amount=amount, out_trade_no=out_trade_no, sign=sign)
+
+def main():
+    settings = {"static_path": os.path.join(os.path.dirname(__file__), "static")}
+    tornado.options.parse_command_line()
+    application = tornado.web.Application([(r"/", SpayButtonHandler)], **settings)
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
+    tornado.ioloop.IOLoop.instance().start()
+if __name__ == "__main__":
+    main()
+```
+
+```csharp
+//页面部分
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>spay demo</title>
+</head>
+<body>
+<button id="test">test online</button>
+</div>
+</body>
+<!--添加控制台活的的script标签-->
+<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+
+<script type="text/javascript">
+    document.getElementById("test").onclick = function() {
+        BC.err = function(data) {
+            //注册错误信息接受
+            alert(data["ERROR"]);
+        }
+        /**
+        * 需要支付时调用BC.click接口传入参数
+        */
+        BC.click({
+            "title":"你的订单标题", //商品名
+            "amount":"1",  //总价（分）
+            "out_trade_no":"<%=out_trade_no%>", //自定义订单号
+            "sign":"<%=sign%>", //商品信息hash值，含义和生成方式见下文
+            "return_url" : "http://payservice.beecloud.cn/spay/result.php", //支付成功后跳转的商户页面,可选，默认为http://payservice.beecloud.cn/spay/result.php
+            "optional" : ""//可选，自定义webhook的optional回调参数
+        });
+        /**
+        * click调用错误返回：默认行为console.log(err)
+        */
+        BC.err = function(err) {
+            //err 为object, 例 ｛”ERROR“ : "xxxx"｝;
+        }
+    };
+</script>
+</html>
+
+//服务端部分
+protected string out_trade_no;
+protected string sign;
+protected void Page_Load(object sender, EventArgs e)
+{
+    if (!IsPostBack)
+    {
+        string out_trade_no = Guid.NewGuid().ToString().Replace("-", "");
+        string input = bc_app_id + title + amount + out_trade_no + bc_app_secret;
+        string sign = FormsAuthentication.HashPasswordForStoringInConfigFile(input, "MD5").ToLower();
+    }
+}
+```
+
+```javascript
+//页面部分
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div class="description">
+      这是个秒支付button的Node.js示例，使用的是Express框架
+      <p><center><button id="test" class="button">点击支付</button></center></p>
+    </div>
+
+    <script id='spay-script' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+  <script>
+    document.getElementById("test").onclick = function() {
+        asyncPay();
+    };
+    function bcPay() {
+        var  out_trade_no = "<%= OutTradeNo%>";
+        var sign = "<%= Sign %>";
+        /**
+         * click调用错误返回：默认行为console.log(err)
+         */
+        BC.err = function(data) {
+            //注册错误信息接受
+            alert(data["ERROR"]);
+        }
+        /**
+         * 3. 调用BC.click 接口传递参数
+         */
+        BC.click({
+            "title": "中文 node.js water",
+            "amount": "1",
+            "out_trade_no": out_trade_no, //唯一订单号
+            "sign" : sign,
+            /**
+             * optional 为自定义参数对象，目前只支持基本类型的key ＝》 value, 不支持嵌套对象；
+             * 回调时如果有optional则会传递给webhook地址，webhook的使用请查阅文档
+             */
+            "optional": {"test": "willreturn"}
+        });
+    }
+    function asyncPay() {
+        if (typeof BC == "undefined"){
+            if( document.addEventListener ){
+                document.addEventListener('beecloud:onready', bcPay, false);
+            }else if (document.attachEvent){
+                document.attachEvent('beecloud:onready', bcPay);
+            }
+        }else{
+            bcPay();
+        }
+    }
+  </script>
+  </body>
+</html>
+
+//服务端部分
+var express = require('express');
+var router = express.Router();
+
+/* GET home page. */
+router.get('/', function(req, res, next) {
+    
+    var appid = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
+    var secret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
+    var title = "中文 node.js water"
+    var amount = "1"
+
+    var uuid = require('node-uuid');
+    var outTradeNo = uuid.v4();
+    outTradeNo = outTradeNo.replace(/-/g, '');
+
+    var data = appid + title + amount + outTradeNo + secret;
+    var sign = require('crypto');
+    var signStr = sign.createHash('md5').update(data, 'utf8').digest("hex");
+
+    res.render('index', { title: 'JSButton', OutTradeNo: outTradeNo, Sign: signStr});
+});
+
+module.exports = router;
+```
+
+### 2.4.2 微信JSAPI（微信公众号内支付）示例
+
+若为移动端H5页面，页面头部需加上 `<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">` 做移动适配。
+
+Javascript传递的参数中sign比较特殊，用来保证订单的信息的完整性，需要集成者自行在服务器端生成；
+
+生成规则 : 依次将以下字段（注意是UTF8编码）连接BeeCloud appId、 title、 amount、 out\_trade\_no、 BeeCloud appSecret, 然后计算连接后的字符串的MD5, 该签名用于验证价格，title 和订单的一致
+
+微信内使用网页JSAPI支付比较特殊，需要自行获取用户的`openid`，微信提供了各语言的封装的[函数库(点击查看)](https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=11_1)。在PHP的代码示例里有openid的获取过程
+
+```java
+<%
+    /* *
+     jsp中集成 BeeCloud js button
+     * */
+%>
+<%!
+String getMessageDigest(String s) {
+    char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    try {
+        byte[] buffer = s.getBytes("UTF-8");
+        //获得MD5摘要算法的 MessageDigest 对象
+        MessageDigest mdTemp = MessageDigest.getInstance("MD5");
+        //使用指定的字节更新摘要
+        mdTemp.update(buffer);
+        //获得密文
+        byte[] md = mdTemp.digest();
+        //把密文转换成十六进制的字符串形式
+        int j = md.length;
+        char str[] = new char[j * 2];
+        int k = 0;
+        for (int i = 0; i < j; i++) {
+            byte byte0 = md[i];
+            str[k++] = hexDigits[byte0 >>> 4 & 0xf];
+            str[k++] = hexDigits[byte0 & 0xf];
+        }
+        return new String(str);
+    } catch (Exception e) {
+        return null;
+    }
+}
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>spay demo</title>
+</head>
+<body>
+<button id="test">test online</button>
+</div>
+</body>
+<!--添加控制台活的的script标签-->
+<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<body>
+    <%
+        String app_id = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
+        String app_secret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
+        String title = "testPay";
+        String amount = "1"; //单位分
+        String out_trade_no = "test" + System.currentTimeMillis();
+        //2.根据订单参数生成 订单签名 sign
+        String sign = getMessageDigest(app_id + title + amount + out_trade_no + app_secret);
+        string openid = "xxxxxxxxxxxxxxx"//自行获取用户openid
+        String optional = "{\"msg\":\"addtion msg\"}";
+    %>
+</body>
+
+<script type="text/javascript">
+    document.getElementById("test").onclick = function() {
+        BC.err = function(data) {
+            //注册错误信息接受
+            alert(data["ERROR"]);
+        }
+        /**
+        * 需要支付时调用BC.click接口传入参数
+        */
+        BC.click({
+            "title":"<%=title%>", //商品名
+            "amount":"<%=amount%>",  //总价（分）
+            "out_trade_no":"<%=out_trade_no%>", //自定义订单号
+            "sign":"<%=sign%>", //商品信息hash值，含义和生成方式见下文
+            "openid" : "<%=openid%>"
+            "optional" : "<%=optional%>"//可选，自定义webhook的optional回调参数
+        }, 
+        {
+            wxJsapiFinish : function(res) {
+                //jsapi接口调用完成后
+                alert(JSON.stringify(res));
+            }
+        });
+        /**
+        * click调用错误返回：默认行为console.log(err)
+        */
+        BC.err = function(err) {
+            //err 为object, 例 ｛”ERROR“ : "xxxx"｝;
+        }
+    };
+</script>
+</html>
+```
+
+```python
+//页面部分
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>demo js pay</title>
+</head>
+<body>
+<button id="test">test</button>
+<!--添加控制台获得的script标签-->
+<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<script>
+    document.getElementById("test").onclick = function() {
+        BC.err = function(data) {
+            //注册错误信息接受
+            alert(data["ERROR"]);
+        }
+        /**
+         * 调用BC.click 接口传递参数
+         */
+        BC.click({
+            "title": "{{title}}",
+            "amount": "{{amount}}",
+            "out_trade_no": "{{out_trade_no}}", //唯一订单号
+            "sign" : "{{sign}}",
+            "openid" : "{{openid}}",//商户自己获取用户的openid
+            /**
+             * optional 为自定义参数对象，目前只支持基本类型的key ＝》 value, 不支持嵌套对象；
+             * 回调时如果有optional则会传递给webhook地址，webhook的使用请查阅文档
+             */
+            "optional": {"test": "willreturn"}
+        }, 
+        {
+            wxJsapiFinish : function(res) {
+                //jsapi接口调用完成后
+                alert(JSON.stringify(res));
+            }
+        });
+    };
+</script>
+</body>
+</html>
+
+//服务端部分
+import tornado.httpserver
+import tornado.ioloop
+import tornado.options
+import tornado.web
+import os
+import hashlib
+
+from time import time
+from tornado.options import define, options
+
+define("port", default=8088, help="run on the given port", type=int)
+bc_app_id = 'c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'
+bc_app_secret = '39a7a518-9ac8-4a9e-87bc-7885f33cf18c'
+
+class SpayButtonHandler(tornado.web.RequestHandler):
+    def get(self):
+        title = "test"
+        out_trade_no = "test" + str(int(time()))
+        amount = "1"
+        #2 计算签名sign
+        md5 = hashlib.md5()
+        md5.update(bc_app_id + title + amount + out_trade_no + bc_app_secret)
+        sign = md5.hexdigest()
+        self.render("templates/spay-button.html", title=title, amount=amount, out_trade_no=out_trade_no, sign=sign)
+
+def main():
+    settings = {"static_path": os.path.join(os.path.dirname(__file__), "static")}
+    tornado.options.parse_command_line()
+    application = tornado.web.Application([(r"/", SpayButtonHandler)], **settings)
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
+    tornado.ioloop.IOLoop.instance().start()
+if __name__ == "__main__":
+    main()
+```
+
+```csharp
+//页面部分
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>spay demo</title>
+</head>
+<body>
+<button id="test">test online</button>
+</div>
+</body>
+<!--添加控制台活的的script标签-->
+<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+
+<script type="text/javascript">
+    document.getElementById("test").onclick = function() {
+        BC.err = function(data) {
+            //注册错误信息接受
+            alert(data["ERROR"]);
+        }
+        /**
+        * 需要支付时调用BC.click接口传入参数
+        */
+        BC.click({
+            "title":"你的订单标题", //商品名
+            "amount":"1",  //总价（分）
+            "out_trade_no":"<%=out_trade_no%>", //自定义订单号
+            "sign":"<%=sign%>", //商品信息hash值，含义和生成方式见下文
+            "openid" : "xxxxxxxxxxxxxxx" //自行获取用户openid
+            "optional" : ""//可选，自定义webhook的optional回调参数
+        }, 
+        {
+            wxJsapiFinish : function(res) {
+                //jsapi接口调用完成后
+                alert(JSON.stringify(res));
+            }
+        });
+        /**
+        * click调用错误返回：默认行为console.log(err)
+        */
+        BC.err = function(err) {
+            //err 为object, 例 ｛”ERROR“ : "xxxx"｝;
+        }
+    };
+</script>
+</html>
+
+//服务端部分
+protected string out_trade_no;
+protected string sign;
+protected void Page_Load(object sender, EventArgs e)
+{
+    if (!IsPostBack)
+    {
+        string out_trade_no = Guid.NewGuid().ToString().Replace("-", "");
+        string input = bc_app_id + title + amount + out_trade_no + bc_app_secret;
+        string sign = FormsAuthentication.HashPasswordForStoringInConfigFile(input, "MD5").ToLower();
+    }
+}
+```
+
+```javascript
+//页面部分
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div class="description">
+      这是个秒支付button的Node.js示例，使用的是Express框架
+      <p><center><button id="test" class="button">点击支付</button></center></p>
+    </div>
+
+    <script id='spay-script' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+  <script>
+    document.getElementById("test").onclick = function() {
+        asyncPay();
+    };
+    function bcPay() {
+        var  out_trade_no = "<%= OutTradeNo%>";
+        var sign = "<%= Sign %>";
+        /**
+         * click调用错误返回：默认行为console.log(err)
+         */
+        BC.err = function(data) {
+            //注册错误信息接受
+            alert(data["ERROR"]);
+        }
+        /**
+         * 3. 调用BC.click 接口传递参数
+         */
+        BC.click({
+            "title": "中文 node.js water",
+            "amount": "1",
+            "out_trade_no": out_trade_no, //唯一订单号
+            "sign" : sign,
+            "openid" : "xxxxxxxxxxxxxxx" //自行获取用户openid
+            /**
+             * optional 为自定义参数对象，目前只支持基本类型的key ＝》 value, 不支持嵌套对象；
+             * 回调时如果有optional则会传递给webhook地址，webhook的使用请查阅文档
+             */
+            "optional": {"test": "willreturn"}
+        }, 
+        {
+            wxJsapiFinish : function(res) {
+                //jsapi接口调用完成后
+                alert(JSON.stringify(res));
+            }
+        });
+    }
+    function asyncPay() {
+        if (typeof BC == "undefined"){
+            if( document.addEventListener ){
+                document.addEventListener('beecloud:onready', bcPay, false);
+            }else if (document.attachEvent){
+                document.attachEvent('beecloud:onready', bcPay);
+            }
+        }else{
+            bcPay();
+        }
+    }
+  </script>
+  </body>
+</html>
+
+//服务端部分
+var express = require('express');
+var router = express.Router();
+
+/* GET home page. */
+router.get('/', function(req, res, next) {
+    
+    var appid = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
+    var secret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
+    var title = "中文 node.js water"
+    var amount = "1"
+
+    var uuid = require('node-uuid');
+    var outTradeNo = uuid.v4();
+    outTradeNo = outTradeNo.replace(/-/g, '');
+
+    var data = appid + title + amount + outTradeNo + secret;
+    var sign = require('crypto');
+    var signStr = sign.createHash('md5').update(data, 'utf8').digest("hex");
+
+    res.render('index', { title: 'JSButton', OutTradeNo: outTradeNo, Sign: signStr});
+});
+
+module.exports = router;
+```
+
+``` php
+<?php
+include_once('dependency/WxPayPubHelper/WxPayPubHelper.php');
+
+$jsApi = new JsApi_pub();
+//网页授权获取用户openid
+//通过code获得openid
+$openid = "";
+try {
+    if (!isset($_GET['code'])) {
+        //触发微信返回code码
+        $url = $jsApi->createOauthUrlForCode("你的微信网页地址");
+        Header("Location: $url");
+    } else {
+        //获取code码，以获取openid
+        $code = $_GET['code'];
+        $jsApi->setCode($code);
+        $openid = $jsApi->getOpenId();
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>demo js pay</title>
+    <link rel="stylesheet" href="../src/css/api.css" >
+</head>
+<body>
+<button id="test" style="position: absolute; left: 10px; top: 10px; z-index: 99999;">test</button>
+<div id="qr"></div>
+<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<?php
+$data = array(
+    "app_id" =>  "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719",
+    "title" => "test",
+    "amount" => "1",
+    "out_trade_no" => "test".time(),
+    "openid" => $openid
+);
+
+$app_secret = "39a7a518-9ac8-4a9e-87bc-7885f33cf18c";
+$sign = md5($data['app_id'] . $data['title'] . $data['amount'] . $data['out_trade_no'] . $app_secret);
+$data["sign"] = $sign;
+$data["optional"] = json_decode(json_encode(array("hello" => "1")));
+//    $data["openid"] ="o3kKrjlUsMnv__cK5DYZMl0JoAkY";   //o3kKrjlUsMnv__cK5DYZMl0JoAkY   oOCyauJ6nKcXiIIQ_bixiQpaL6PQ(me)
+?>
+
+<div><?php echo json_encode($data) ?></div>
+<script>
+    document.getElementById("test").onclick = function() {
+        asyncPay();
+    };
+
+    function bcPay() {
+        BC.click(<?php echo json_encode($data) ?>, {
+            wxJsapiFinish : function(res) {
+                //jsapi接口调用完成后
+                alert(JSON.stringify(res));
+            }
+        });
+    }
+    
+    // 这里不直接调用BC.click的原因是防止用户点击过快，BC的JS还没加载完成就点击了支付按钮。
+    // 实际使用过程中，如果用户不可能在页面加载过程中立刻点击支付按钮，就没有必要利用asyncPay的方式，而是可以直接调用BC.click。
+    function asyncPay() {
+        if (typeof BC == "undefined") {
+            if (document.addEventListener) { // 大部分浏览器
+                document.addEventListener('beecloud:onready', bcPay, false);
+            } else if (document.attachEvent) { // 兼容IE 11之前的版本
+                document.attachEvent('beecloud:onready', bcPay);
+            }
+        } else {
+            bcPay();
+        }
+    }
+</script>
+</body>
+</html>
+```
+
+## 2.5 处理支付结果
+各支付渠道通常会提供多种方式获取支付结果：
+
+1. (建议不要用)客户的支付页面在支付成功后跳转到商户指定的的url(秒支付 Button统一包装为return_url参数), 但是此方式受到客户操作影响,可能不成功。
+2. 支付渠道在支付成功后，将相关通知（俗称’回调‘）商户指定的url（BeeCloud统一封装为webhook并且统一支持用户自定义回调参数’optional‘）
+
+建议使用webhook作为处理支付结果方式，使用请参考[webhook指南]
+
+# 3. Webhook开发
+## 3.1 简介
+
+Webhook是BeeCloud获得渠道的确认信息后，立刻向客户服务器发送的异步回调。支付，代付，退款成功时，BeeCloud将向用户指定的URL发送HTTP/HTTPS的POST数据请求。
+
+如果客户需要接收此类消息来实现业务逻辑，需要:
+
+1. 开通公网可以访问的IP地址(或域名）和端口（如果需要对传输加密，请使用支持HTTPS的URL地址，BeeCloud不要求HTTPS根证书认证）
+2. 在 **控制台->App设置->Webhook** 中设置接收端URL，不同应用可设置不同URL，同一应用能且仅能设置一个测试URL，一个生产URL
+2. 处理POST请求报文，实现业务逻辑
+
+<aside class="notify">
+服务器间的交互，不像页面跳转同步通知（REST API中bill的参数return_url指定）可以在页面上显示出来，这种交互方式是通过后台通信来完成的，对用户是不可见的。
+</aside>
+
+## 3.2 推送机制
+
+BeeCloud在收到渠道的确认结果后立刻发送Webhook，Webhook只会从如下IP地址发送：
+
+- 123.57.146.46
+- 182.92.114.175
+
+客户服务器接收到某条Webhook消息时如果未返回字符串 **success**, BeeCloud将认为此条消息未能被成功处理, 将触发推送重试机制：
+
+BeeCloud将在2秒，4秒，8秒，...，2^17秒（约36小时）时刻重发；如果在以上任一时刻，BeeCloud收到了 **success**，重试将终止。
+
+## 3.3 处理Webhook消息
+
+请参考各开发语言的Webhook demo学习如何处理Webhook消息。
+
+### 3.3.1 验证数字签名
+
+目的在于验证Webhook是由BeeCloud发起的，防止黑客向此Webhook接口发送伪造的订单信息。验证签名需要验证传入的 **sign** 是否与 **App ID + App Secret + timestamp** 的 MD5 生成的签名 (32字符十六进制) 是否相等，**App ID** 与 **App Secret** 存储在客户服务器上，**timestamp** 是Webhook传入的。
+
+### 3.3.2 过滤重复的Webhook
+
+同一条订单可能会发送多条支付成功的webhook消息，这有可能是由支付渠道本身触发的(比如渠道的重试)，也有可能是BeeCloud的Webhook重试。客户需要根据订单号进行判重，忽略已经处理过的订单号对应的Webhook。
+
+
+### 3.3.3 验证订单金额
+
+客户需要验证Webhook中的 **transaction_fee** （实际的交易金额）与客户内部系统中的相应订单的金额匹配。
+
+这个验证的目的在于防止黑客反编译了iOS或者Android app的代码，将本来比如100元的订单金额改成了1分钱，应该识别这种情况，避免误以为用户已经足额支付。Webhook传入的消息里面应该以某种形式包含此次购买的商品信息，比如title或者optional里面的某个参数说明此次购买的产品是一部iPhone手机，或者直接根据订单号查询，客户需要在内部数据库里去查询iPhone的金额是否与该Webhook的订单金额一致，仅有一致的情况下，才继续走正常的业务逻辑。如果发现不一致的情况，排除程序bug外，需要去查明原因，防止不法分子对你的app进行二次打包，对你的客户的利益构成潜在威胁。而且即使有这样极端的情况发生，只要按照前述要求做了购买的产品与订单金额的匹配性验证，客户也不会有任何经济损失。
+
+### 3.3.4 处理业务逻辑和返回
+
+这里就可以完成业务逻辑的处理。最后返回结果。用户返回 **success** 字符串给BeeCloud表示 - **正确接收并处理了本次Webhook**，其他所有返回都代表需要继续重传本次的Webhook请求。
+
+## 3.4 Webhook接口标准
+
+```python
+HTTP 请求类型 : POST
+HTTP 数据格式 : JSON
+HTTP Content-type : application/json
+```
+
+### 3.4.1 字段说明
+
+
+  Key             | Type          | Example
+-------------     | ------------- | -------------
+  sign            | String        | 32位小写
+  timestamp       | Long          | 1426817510111
+  channel_type     | String        | 'WX' or 'ALI' or 'UN' or 'KUAIQIAN' or 'JD' or 'BD' or 'YEE' or 'PAYPAL' or 'BC'
+  sub\_channel\_type | String        | 'WX\_APP' or 'WX\_NATIVE' or 'WX\_JSAPI' or 'WX\_SCAN' or 'ALI\_APP' or 'ALI\_SCAN' or 'ALI\_WEB' or 'ALI\_QRCODE' or 'ALI\_OFFLINE\_QRCODE' or 'ALI\_WAP' or 'UN\_APP' or 'UN\_WEB' or 'PAYPAL\_SANDBOX' or 'PAYPAL\_LIVE' or 'JD\_WAP' or 'JD\_WEB' or 'YEE\_WAP' or 'YEE\_WEB' or 'YEE\_NOBANKCARD' or 'KUAIQIAN\_WAP' or 'KUAIQIAN\_WEB' or 'BD\_APP' or 'BD\_WEB' or 'BD\_WAP' or 'BC\_TRANSFER' or 'ALI_TRANSFER'  
+  transaction_type | String        | 'PAY' or 'REFUND' or 'TRANSFER'（TRANSFER只代表BC企业打款和支付宝打款；微信打款和红包，没有webhook）
+  transaction_id   | String        | '201506101035040000001'
+  transaction_fee  | Integer       | 1 表示0.01元 
+  trade_success  | Bool       | true
+  message_detail   | Map(JSON)     | {orderId:xxxx}
+  optional        | Map(JSON)     | {"agent_id":"Alice"}
+
+### 3.4.2 参数含义
+
+key  | value
+---- | -----
+sign | 服务器端通过计算 **App ID + App Secret + timestamp** 的MD5生成的签名(32字符十六进制),请在接受数据时自行按照此方式验证sign的正确性，不正确不返回success即可
+timestamp | 服务端的时间（毫秒），用以验证sign, MD5计算请参考sign的解释
+channel_type| WX/ALI/UN/KUAIQIAN/JD/BD/YEE/PAYPAL   分别代表微信/支付宝/银联/快钱/京东/百度/易宝/PAYPAL
+sub_channel\_type|  代表以上各个渠道的子渠道，参看字段说明
+transaction_type| PAY/REFUND  分别代表支付和退款的结果确认
+transaction_id | 交易单号，对应支付请求的bill\_no或者退款请求的refund\_no,对于秒支付button为传入的out\_trade\_no
+transaction_fee | 交易金额，是以分为单位的整数，对应支付请求的total\_fee或者退款请求的refund\_fee
+trade_success | 交易是否成功，目前收到的消息都是交易成功的消息
+message_detail| {orderId:xxx…..} 从支付渠道方获得的详细结果信息，例如支付的订单号，金额， 商品信息等，详见附录
+optional| 附加参数，为一个JSON格式的Map，客户在发起购买或者退款操作时添加的附加信息
+  
+## 3.5 样例代码
+目前BeeCloud提供获取webhook消息的各语言代码样例：  
+[PHP DEMO](https://github.com/beecloud/beecloud-php/blob/master/demo/webhook.php)  
+[.NET DEMO](https://github.com/beecloud/beecloud-dotnet/blob/master/BeeCloudSDKDemo/notify.aspx.cs)  
+[Java DEMO](https://github.com/beecloud/beecloud-java/blob/master/demo/WebRoot/webhook_receiver_example/webhook_receiver.jsp)  
+[Python DEMO](https://github.com/beecloud/beecloud-python/blob/master/demo/webhook.py)
+
+
+<aside class="notify">
+请注意发送的HTTP头部Content-type为application/json,而非大部分框架自动解析的application/x-www-form-urlencoded格式,可能需要自行读取后解析,注意参考各样例代码中的读取写法。
+</aside>
+
+
+## 3.6 附录 - message_detail 样例 
+
+- **支付宝 (ALI)**
+
+>支付宝 (ALI)
+
+```
+"message_detail":{
+"bc_appid":"test”,
+"discount":"0.00",
+"payment_type":"1",
+"subject":"测试",
+"trade_no":"2015052300001000620053541865",
+"buyer_email":"13909965298",
+"gmt_create":"2015-05-23 22:26:20",
+"notify_type":"trade_status_sync",
+"quantity":"1",
+"out_trade_no":"test_no",
+"seller_id":"2088911356553910",
+"notify_time":"2015-05-23 22:26:20",
+"body":"测试",
+"trade_status":"WAIT_BUYER_PAY",
+"is_total_fee_adjust":"Y",
+"total_fee":"0.10",
+"seller_email":"test@test.com",
+"price":"0.10",
+"buyer_id":"2088802823343621",
+"notify_id":"e79d45a7c43180db6041da31deb51bdf5g",
+"use_coupon":"N",
+"sign_type":"RSA",
+"sign":"eOwNVySlvFDENsww4zWmo4iSv5XUG+O6T9jma1szEe15DlSFdMl8eJfwUzu37V77Tws+gfcKjvWSOX5mIS82vZU2Ga2u19COFFM20Zp0YEJwxw5zllCIAhd+A7KXX1EbcXid5Q/bVi/XUVffy9sd0HL39Ak53lyduzYQ/MmiwWY="
+}
+```
+
+*部分字段含义*
+
+  Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+    trade_status | String | WAIT_BUYER_PAY | 交易状态
+     trade_no        | String        | 2014040311001004370000361525|支付宝交易号
+  out\_trade_no | String  | test_no   |    商家内部交易号
+     buyer_email   |  String | 13758698870 | 买家支付宝账号可以是email或者手机号
+  total_fee | String  | 0.01  | 商品总价，单位为元
+    price | String  | 0.01  | 商品单价，单位为元
+  subject         | String        | 白开水                 |  订单标题
+  discount        | String        | 0                     | 折扣     
+  gmt_create    | String  | 2008-10-22 20:49:31 | 交易创建时间
+  notify_type   | String | trade\_status_sync | 通知类型
+  quantity  |   String  | 1 | 购买数量
+  seller_id   | String  | 2088911356553910  | 卖家支付宝唯一用户号
+  buyer_id  | String  | 2088802823343621 |  买家支付宝唯一用户号
+  use_coupon  | String  |  N  |  买家是否使用了红包  （N/Y)
+
+
+- **银联 (UN)**
+
+>银联 (UN)
+
+```
+"message_detail":{
+"bizType":"000201",
+"orderId":"aa0c27e47b9e4ea1a595118ee0acf79f",
+"txnSubType":"01",
+"signature":"FPD/1uJ1HL9hRax8gR5S29rXYa9d9+U03qHgN4vNMJPWdK2NC9c0TIcfUVYYCKfphNiuzxXQUUWG3iLHe37QAdl2IDGbz76u3jQ5xZvXJBZ7d7CTfCBn5iBQuu8G4bFJOQMZYyQfPYz7joMSjdJl0/Nu7Lu1/m2xOxDIL90PhD5TrxheAWrCUfaN3Uw10dKXIwSiKVdu9wp32D9M1l6Wkhrso0jWbaKY4HNsa+jjzTAMpIvpROjRQZukdMM8NaI2uzXyBOewbSKY7/hexSW2tuXVnOUuiyPUDsk44RciZsaaDZkkql0HyB/hJCVsochYqzo6k9j0UYb8Xdj6e3UtXA==",
+"traceNo":"510016",
+"settleAmt":"1",
+"settleCurrencyCode":"156",
+"settleDate":"0528",
+"txnType":"01",
+"certId":"21267647932558653966460913033289351200",
+"encoding":"UTF-8",
+"version":"5.0.0",
+"queryId":"201505281038235100168",
+"accessType":"0",
+"respMsg":"Success!",
+"traceTime":"0528103823",
+"txnTime":"20150528103823",
+"merId":"898320548160202",
+"currencyCode":"156",
+"respCode":"00",
+"signMethod":"01",
+"txnAmt":"1"
+}
+```
+ *部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  queryId        | String        | 2015081216170048 | 银联交易流水号
+  traceNo       | String     | 510067 | 银联系统跟踪号
+  orderId | String  | 2015081216171028   |    商家内部交易号
+  txnTime    | String  | 20150528103823 | 交易创建时间
+  txnAmt  | String  | 1 | 商品总价，单位为分
+  signature        |   String  |      |   银联签名串 ，商户可忽略
+  respCode   |  String |  00 |   交易返回码 00 代表成功
+  respMsg    |  String |  Success! | 交易返回信息  Success!  代表成功
+  
+
+- **微信 (WX)**
+
+>微信 (WX)
+
+```
+"message_detail":{
+"transaction_id":"1006410636201505250163820565",
+"nonce_str":"441956259efc417291d904f90f76fd69",
+"bank_type":"CMB_CREDIT",
+"openid":"oPSDwtwFnD54dB_ggPFGBO_KMdpo",
+"fee_type":"CNY",
+"mch_id":"xxx",
+"cash_fee":"1",
+"out_trade_no":"4095601432530130",
+"appid":"xxx",
+"total_fee":"1",
+"trade_type":"JSAPI",
+"result_code":"SUCCESS",
+"time_end":"20150525130218",
+"is_subscribe":"Y",
+"return_code":"SUCCESS"
+}
+```
+
+*部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  transaction_id        | String     | 1006410636201505250163820565 | 微信交易号
+  time_end    | String  | 20150528103823 | 交易结束时间
+  out\_trade_no | String  | test_no   |    商家内部交易号
+  total_fee | String  | 1 | 商品总价，单位为分
+  cash_fee  | String  | 1 | 现金付款额
+  openid        |   String  |      |   买家的openid
+  return_code   |  String |  SUCCESS |   通信标示
+  result_code    |  String |  SUCCESS |  业务结果
+  
+- **京东 (JD)**
+
+>京东 (JD)
+
+```
+"message_detail":{
+"CURRENCY":"CNY",
+"CARDHOLDERNAME":"*俊",
+"CARDHOLDERID":"**************8888",
+"PAYAMOUNT":"2",
+"TIME":"152337",
+"DESC":"成功",
+"DATE":"20150921",
+"STATUS":"0",
+"CODE":"0000",
+"CARDHOLDERMOBILE":"138****8888",
+"BANKCODE":"BOC",
+"AMOUNT":"2",
+"tradeSuccess":true,
+"NOTE":"买矿泉水",
+"ID":"159f69842fad43e3b3c2770130a2da75"
+"CARDTYPE":"DEBIT_CARD",
+"REMARK":"",
+"TYPE":"S",
+"CARDNO":"621790****8888",
+
+}
+```
+
+*部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  PAYAMOUNT        | String     | 2 | 支付金额，单位是分，退款时无此字段
+  DATE  | String  | 20150921   |    交易时间，格式yyyyMMdd
+  TIME  | String  | 152337  | 交易时间，格式HHmmss
+  STATUS     |   String  |    0  |   交易返回码 0：状态成功，3：退款，4：部分退款，6：处理中，7：失败
+  CODE   |  String |  0000 |   交易返回码，0000代表交易成功
+  AMOUNT    |  String |  2|  交易金额，单位是分，一般和PAYAMOUNT相等，如果京东支付有满减活动，则为用户实际支付金额；退款时为退款金额
+  ID    |  String |  159f69842fad43e3b3c2770130a2da75 |  交易号；退款时为退款单号
+  OID    |  String |  159f69842fad43e3b3c2770130a2da75 |  原交易号，退款时才有，是指这笔退款在原来支付时候的订单号
+  TYPE    |  String |  S |  交易类型编码，S：支付，R：退款 
+  
+
+- **百度 (BD)**
+
+>百度 (BD)
+
+```
+"message_detail":{
+"order_no":"e599fad3d7e149abaa318b74166517d7",
+"bfb_order_no":"2015091010001399281110681948040",
+"input_charset":"1",
+"sign":"094fbaf6e3adea755cc0b06d65be2156",
+"sp_no":"1000139928",
+"unit_amount":"1",
+"bank_no":"",
+"transport_amount":"0",
+"version":"2",
+"bfb_order_create_time":"20150910143407",
+"pay_result":"1",
+"pay_time":"20150910143407",
+"fee_amount":"0",
+"buyer_sp_username":"",
+"total_amount":"1",
+"tradeSuccess":true,
+"extra":"",
+"sign_method":"1",
+"currency":"1",
+"pay_type":"2",
+"unit_count":"1"}
+```
+
+*部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  order_no        | String     | e599fad3d7e149abaa318b74166517d7 | 商户订单号
+  bfb_order_no  | String  | 2015091010001399281110681948040   |    百度钱包交易号
+  sp_no | String  | 1000139928  | 百度钱包商户号
+  pay_result     |   String  |    1  |   支付结果代码 1：支付成功，2：等待支付，3：退款成功
+  total_amount   |  Integer |  1 |   总金额，以分为单位
+  pay_time   |  String |  20150910143407 |   支付时间
+  pay_type   |  String |  2 |   支付方式,1:余额支付;2:网银支付;3:银行网关支付
+   
+
+- **PayPal (PAYPAL)**
+
+>PayPal (PAYPAL)
+
+```
+"message_detail":{
+"title":"PayPal payment test",
+"total_fee":1,
+"optional":{"PayPal key2":"PayPal value2","PayPal key1":"PayPal value1"},
+"bill_no":"8D876079M42176727KXZKHFQ",
+"channel":"PAYPAL_SANDBOX",
+"access_token":"Bearer A015qoqdOWu7gGpk-1SQxYHrO97rfe18ONMJALm4-m4LGgI",
+"currency":"USD",
+"tradeSuccess":true}
+```
+
+*部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  access_token        | String     | Bearer A015qoqdOWu7gGpk-1SQxYHrO97rfe18ONMJALm4-m4LGgI | PAYPAL访问授权码
+  currency  | String  | USD   |    币种
+  channel | String  | PAYPAL_SANDBOX  | PAYPAL沙箱支付或者真实支付
+
+
+- **易宝网银 (YEE_WEB)**
+
+>易宝网银 (YEE_WEB)
+
+```
+"message_detail":{
+"r0_Cmd":"Buy",
+"rb_BankId":"BOCO-NET",
+"rp_PayDate":"20150912151013",
+"p1_MerId":"10012506312",
+"r3_Amt":"0.01",
+"r9_BType":"2",
+"r7_Uid":"",
+"rq_SourceFee":"0.0",
+"r5_Pid":"买矿泉水",
+"rq_TargetFee":"0.0",
+"r4_Cur":"RMB",
+"r6_Order":"bfea66381a6149009fba5d35e2f0cfbf",
+"r1_Code":"1",
+"tradeSuccess":true,
+"hmac":"4e37569abca34e4f1462568daaca9da6",
+"r2_TrxId":"118262251787405I",
+"ru_Trxtime":"20150912151043",
+"r8_MP":"c37d661d-7e61-49ea-96a5-68c34e83db3b:dc5582b0-8c54-4bf5-b70b-4694283d2aa7",
+"rq_CardNo":"",
+"ro_BankOrderId":"2843719202150912"}
+```
+
+*部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  r0_Cmd        | String     | Buy | 业务类型,固定值：Buy 
+  p1_MerId  | String  | 10012506312   |    商户编号 
+  r3_Amt  | String  | 0.01  | 支付金额 
+  r2_TrxId  | String  | 118262251787405I  | 易宝交易流水号 
+  r6_Order  | String  | bfea66381a6149009fba5d35e2f0cfbf  | 商户订单号 
+  r1_Code | String  | 1 | 固定值：1 - 代表支付成功 
+  r8_MP | String  | 测试  | 商户扩展信息
+  r9_BType  | String  | 2 | 通知类型 1 - 浏览器重定向；2 - 服务器点对点通讯
+  
+
+- **易宝一键支付 (YEE_WAP)**
+
+>易宝一键支付 (YEE_WAP)
+
+```
+"message_detail":{
+"amount":1,
+"bank":"招商银行",
+"bankcode":"CMB",
+"cardtype":2,
+"lastno":"8530",
+"merchantaccount":"10000418926",
+"orderid":"1f74528ae33d478c8b64d8385357fbe0",
+"sign":"KlGQYOJP8fXY7cfximI7xuO8VG9F2wbXy28fijmaFXqvqc3IhskKiStLTlt1rVTpejhqAAA9n9SxVOjgEeRqjjOTJcX4rNexlVsr1eCsN7SPjt2+CA+9elEHBG/oflhbg4RzkmbWUqZ1Hiib2cHqxB1mj+RZtEgW1MqO6QLqpaY=",
+"status":1,
+"tradeSuccess":true,
+"yborderid":"411508290439050771"}
+```
+
+*部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  amount        | Integer     | 1 | 订单金额,以「分」为单位
+  merchantaccount | String  | 10000418926   |    商户编号 
+  orderid | String  | 1f74528ae33d478c8b64d8385357fbe0  | 商户订单号 
+  yborderid | Long  | 411508290439050771  | 易宝交易流水号 
+  status  | Integer | 1 | 订单状态.1：成功
+  bank  | String  | 招商银行  | 支付卡所属银行的名称 
+  cardtype  | Integer | 2 | 支付卡的类型，1 为借记卡，2 为信用卡
+  lastno  | String  | 8530  | 支付卡卡号后 4 位
+  
+- **易宝点卡支付 (YEE_NOBANKCARD)**
+
+>易宝点卡支付 (YEE_NOBANKCARD)
+
+```
+"message_detail":{
+"r0_Cmd":"ChargeCardDirect",
+"p6_confirmAmount":"19.9",
+"p1_MerId":"10001126856",
+"p7_realAmount":"19.9",
+"pc_BalanceAct":"0111001507010658538",
+"r1_Code":"1",
+"p8_cardStatus":"0",
+"p5_CardNo":"0111001507010658538",
+"p3_Amt":"0.1",
+"tradeSuccess":true,
+"p2_Order":"201509240000000000010",
+"p4_FrpId":"TELECOM",
+"hmac":"a571d6c3796dda8f83b5ef717d59000d",
+"r2_TrxId":"516222232623803I",
+"pb_BalanceAmt":"19.8",
+"p9_MP":""}
+```
+
+*部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  r1_Code        | String     | 1 | "1"代表支付成功，其他结果代表失败
+  p1_MerId  | String  | 10001126856   |    商户编号 
+  p2_Order  | String  | 201509240000000000010 | 易宝支付返回商户订单号 
+  p3_Amt  | String  | 0.1 | 成功金额， 单位是元，保留两位小数,不足两位小数的将保留一位!(如0.10 将返回 0.1,0 会返回 0.0)
+  p4_FrpId  | String  | TELECOM | 支付方式，“TELECOM”代表电信卡
+  p5_CardNo | String  | 0111001507010658538 | 点卡卡号
+  p6_confirmAmount  | String  | 19.9| 确认金额
+  p7_realAmount | String  | 19.9  | 实际金额
+  p8_cardStatus | String  | 0|  卡状态，0代表销卡成功，订单成功，其他为异常
+  pb_BalanceAmt | String  | 19.8  | 支付余额
+  pc_BalanceAct | String  | 0111001507010658538 | 余额卡号
+  
+- **BC企业打款**
+
+>BC企业打款
+
+```
+"message_detail":{
+"trade_pay_date":"Wed Jan 13 16:27:04 CST 2016",
+"merchant_no":"110119759002",
+"bank_code":"BOC",
+"return_params":"beecloud",
+"notify_datetime":"20162713T162401444",
+"pay_tool":"TRAN",
+"trade_currency":"CNY",
+"category_code":"beecloud",
+"buyer_info":{},
+"is_success":"Y",
+"card_type":"DE",
+"trade_class":"DEFY",
+"biz_trade_no":"bfe1dea75cae4bdcb52c406add16d398",
+"out_trade_no":"bfe1dea75cae4bdcb52c406add16d398",
+"trade_amount":"1",
+"tradeSuccess":true,
+"trade_finish_time":"Wed Jan 13 16:27:04 CST 2016",
+"trade_status":"FINI",
+"trade_pay_time":"Wed Jan 13 16:27:04 CST 2016",
+"trade_no":"20160113100042000010570232",
+"trade_subject":"测试代付",
+"trade_finish_date":"Wed Jan 13 16:27:04 CST 2016"}
+```  
+  
+  *部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  bank_code        | String     | BOC | 中国银行
+  card_type | String  | DE   |    借记卡=DE;信用卡=CR
+  out\_trade\_no  | String  | 201509240000000000010|商户订单号 
+  trade_amount  | String  | 1 | 交易金额
+  trade_status  | String  | FINI  | FINI=交易成功;REFU=交易退款;CLOS=交易关闭，失败
+  trade_no  | String  | BC代付内部交易  | 20160113100042000010570232
+  trade_subject | String  | 标题| 测试代付
+
+- **BC_NATIVE,BC_WX_JSAPI,BC_WAP**
+
+>BC_NATIVE,BC_WX_JSAPI,BC_WAP
+
+```
+"message_detail":{
+"transaction_id":"1006410636201505250163820565",
+"nonce_str":"",
+"bank_type":"CFT",
+"openid":"",
+"fee_type":"CNY",
+"mch_id":"",
+"cash_fee":"1",
+"out_trade_no":"4095601432530130",
+"appid":"",
+"total_fee":"1",
+"trade_type":"NATIVE",
+"result_code":"SUCCESS",
+"time_end":"20150525130218",
+"is_subscribe":"Y",
+"return_code":"SUCCESS"
+}
+```
+
+*部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  transaction_id        | String     | 1006410636201505250163820565 | 渠道交易号
+  time_end    | String  | 20150528103823 | 交易结束时间
+  out\_trade_no | String  | test_no   |    商家内部交易号
+  total_fee | String  | 1 | 商品总价，单位为分
+  cash_fee  | String  | 1 | 现金付款额
+  return_code   |  String |  SUCCESS |   通信标示
+  result_code    |  String |  SUCCESS |  业务结果
+  trade_type    |  String |  wap,native,jsapi |  业务结果
+  
+- **BC_ALI_QRCODE**
+
+>BC_ALI_QRCODE 
+
+```
+"message_detail":{
+"gmt_payment":"2016-09-05 11:14:24",
+"trade_status":"TRADE_SUCCESS",
+"buyer_email":"",
+"notify_type":"trade_status_sync",
+"gmt_create":"2016-09-05 11:14:24",
+"sign":"",
+"price":"0.01",
+"notify_time":"2016-09-05 11:14:24",
+"buyer_id":"",
+"quantity":"1",
+"sign_type":"RSA",
+"seller_email":"",
+"discount":"0.00",
+"is_total_fee_adjust":"N",
+"total_fee":"0.01",
+"payment_type":"1",
+"seller_id":"",
+"bc_appid":"",
+"transactionFee":1,
+"out_trade_no":"bcdemo1473045206000",
+"use_coupon":"N",
+"subject":"PHP BC_ALI_QRCODE支付测试",
+"trade_no":"100570018608201609055044123465",
+"tradeSuccess":true
+}
+```
+
+*部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  out_trade_no        | String     | bcdemo1473045206000 | 自定义订单号
+  trade_no    | String  | 100570018608201609055044123465 | 渠道交易号
+  total_fee | String  | 0.01  | 商品总价，单位为元
+
+
+- **BC_ALI_SCAN, BC_WX_SCAN**
+
+>BC_ALI_SCAN, BC_WX_SCAN
+
+```
+"message_detail":{
+"transaction_id":"100570018608201609085047252161",
+"charset":"UTF-8",
+"nonce_str":"1473299066490",
+"bank_type":"CFT",
+"openid":"oMJGHs6zGfvbb118O2iM6qq728p4",
+"out_transaction_id":"4009092001201609083395588114",
+"fee_type":"CNY",
+"mch_id":"100570018608",
+"uuid":"7437e977bb775ff863bf6649297a8fc6",
+"version":"2.0",
+"pay_result":"0",
+"out_trade_no":"201609084000003",
+"appid":"wx290ce4878c94369d",
+"total_fee":"1",
+"trade_type":"pay.weixin.micropay",
+"result_code":"0",
+"attach":"8fd7ab51-9a77-48a3-a537-a7f012e471f5",
+"time_end":"20160908094426",
+"is_subscribe":"N",
+"sign_type":"MD5",
+"status":"0"}
+```
+
+*部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  out_trade_no        | String     | bcdemo1473045206000 | 自定义订单号
+  transaction_id    | String  | 100570018608201609055044123465 | 渠道交易号
+  total_fee | String  | 1 | 商品总价，单位为分
+  
+- **BC_GATEWAY,BC_EXPRESS**
+
+>BC_GATEWAY,BC_EXPRESS
+
+```
+"message_detail":{
+"order_no":"C201609100757505729611425",
+"gmt_create":"2016-09-10 19:57:54",
+"seller_email":"admin@beecloud.cn",
+"sign":"6dc3aa46c724c3f443bd5d8ac6cf67f5",
+"discount":"0.00",
+"body":"线上付款",
+"title":"线上付款",
+"is_success":"T",
+"notify_id":"0071f71e6711413d87eaa72d38023773",
+"notify_type":"WAIT_TRIGGER",
+"tradeSuccess":true,
+"price":"2000.00",
+"total_fee":"2000.00",
+"trade_status":"TRADE_FINISHED",
+"sign_type":"MD5",
+"seller_id":"100000000002164",
+"is_total_fee_adjust":"0",
+"notify_time":"2016-09-10 19:58:31",
+"gmt_payment":"2016-09-10 19:58:31",
+"quantity":"1",
+"gmt_logistics_modify":"2016-09-10 19:58:35",
+"payment_type":"2",
+"transactionFee":"2000.00",
+"trade_no":"101609103784154",
+"seller_actions":"SEND_GOODS"}
+```
+
+*部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  order_no        | String     | bcdemo1473045206000 | 自定义订单号
+  trade_no    | String  | 100570018608201609055044123465 | 渠道交易号
+  total_fee | String  | 2000.00 | 商品总价，单位为元
+  
+- **BC_APP**
+
+>BC_APP
+
+```
+"messageDetail"{
+"amount":"25.00",doc
+"transactionFee":"25.00",
+"signature":"6d697026506564e0685323d1d933e7b3",
+"tradeSuccess":true,
+"transId":"20160910194901604",
+"sign":"67f9254843673765c163dd868fa283e3",
+"transDate":"20160910194916",
+"sign_type":"MD5",
+"transStatus":"00000",
+"notify_id":"a3c119d2f9784e10a85539e7caabd476"},
+```
+
+*部分字段含义：*
+ 
+ Key             | 类型           | Example               | 含义
+-------------     | ------------- | -------------         | -------
+  transId        | String     | bcdemo1473045206000 | 自定义订单号
+  amount  | String  | 2000.00 | 商品总价，单位为元
+
+
+# 4. Restful API列表
+
+## 4.1 API请求地址
+
+https://api.beecloud.cn
+
+## 4.2 支付
+
+此接口为支付流程的第一步，主要功能在于生成订单，获取必要的参数信息，来进行下一步的支付流程。对于不同的渠道和支付方式，接口的返回值与后续的操作都不尽相同（例如微信App支付需要调用微信支付SDK的接口，支付宝网页支付需要跳转到获取的一段HTML网址等），请根据每一个channel的详细描述分别处理.
+
+### 4.2.1 线上支付（网页/APP）
+
+URL:   */2/rest/bill*
+
+Method: *POST*
+
+请求参数格式: *JSON: Map*
+
+请求参数详情:
+
+- 公共请求参数：
+
+参数名 | 类型 | 含义 | 描述 | 示例 | 是否必填
+----  | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud平台的AppID | App在BeeCloud平台的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE\_QRCODE、ALI\_WAP、UN\_APP、UN\_WEB、UN\_WAP、PAYPAL\_SANDBOX、PAYPAL\_LIVE、JD\_WAP、JD\_WEB、YEE\_WAP、YEE\_WEB、YEE\_NOBANKCARD、KUAIQIAN\_WAP、KUAIQIAN\_WEB、BD\_APP、BD\_WEB、BD\_WAP、BC\_GATEWAY、BC\_EXPRESS、BC\_APP、BC\_NATIVE、BC\_WX\_WAP、BC\_WX\_JSAPI、BC\_ALI\_QRCODE（详见附注）| 是
+total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 | 是
+bill_no | String | 商户订单号 | 8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 | 是
+title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 | 是
+optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} | 否
+analysis | Map | 分析数据 | 用于统计分析的数据，将会在控制台的统计分析报表中展示，**<mark>用户自愿上传</mark>** | 包括以下基本字段：`os_name(系统名称，如"iOS"，"Android")` `os_version(系统版本，如"5.1")` `model(手机型号，如"iPhone 6")` `app_name(应用名称)` `app_version(应用版本号)` `device_id(设备ID)` `category(类别，用户可自定义，如游戏分发渠道，门店ID等)` `browser_name(浏览器名称)` `browser_version(浏览器版本)` | 否
+return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，**<mark>中间请勿有#,?等字符</mark>** | http://beecloud.cn/returnUrl.jsp | 当channel参数为 ALI\_WEB 或 ALI\_QRCODE 或  UN\_WEB 或 JD\_WAP 或 JD\_WEB时为必填
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 | 否, **<mark>京东(JD)不支持该参数。</mark>** 
+
+
+> 注：channel的参数值含义：  
+WX\_APP: 微信手机原生APP支付  
+WX\_NATIVE: 微信公众号二维码支付  
+WX\_JSAPI: 微信公众号支付  
+ALI\_APP: 支付宝手机原生APP支付  
+ALI\_WEB: 支付宝PC网页支付  
+ALI\_QRCODE: 支付宝内嵌二维码支付  
+ALI\_OFFLINE_QRCODE: 支付宝线下二维码支付  
+ALI\_WAP: 支付宝移动网页支付  
+UN\_APP: 银联手机原生APP支付  
+UN\_WEB: 银联PC网页支付  
+UN\_WAP: 银联移动网页支付  
+JD\_WAP: 京东移动网页支付   
+JD\_WEB: 京东PC网页支付  
+YEE\_WAP: 易宝移动网页支付  
+YEE\_WEB: 易宝PC网页支付  
+YEE\_NOBANKCARDB: 易宝充值卡支付
+KUAIQIAN\_WAP: 快钱移动网页支付  
+KUAIQIAN\_WEB: 快钱PC网页支付  
+PAYPAL\_LIVE: PAYPAL生产环境支付   
+PAYPAL\_SANDBOX: PAYPAL沙箱环境支付   
+BD\_APP: 百度手机原生APP支付   
+BD\_WAP: 百度移动网页支付   
+BD\_WEB: 百度PC网页支付   
+BC\_GATEWAY: BC版网关支付  
+BC\_EXPRESS: BC版快捷支付  
+BC\_APP: BC版手机APP支付  
+BC\_NATIVE: BC版微信二维码支付  
+BC\_WX\_WAP: BC版微信手机WAP支付  
+BC\_WX\_JSAPI: BC版微信公众号支付  
+BC\_ALI\_QRCODE: BC版支付宝线下扫码支付  
+
+- 以下是`微信公众号支付(WX\_JSAPI、BC\_WX\_JSAPI)`的必填参数
+
+参数名 | 类型 | 含义 | 例子
+---- | ---- | ---- | ----
+openid| String | 用户相对于微信公众号的唯一id | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb
+
+- 以下是`支付宝网页支付(ALI_WEB)`的选填参数
+
+参数名 | 类型 | 含义 | 例子
+---- | ---- | ---- | ----
+show_url| String | 商品展示地址以http://开头 | http://beecloud.cn
+
+- 以下是`支付宝移动网页支付(ALI_WAP)`的选填参数
+
+参数名 | 类型 | 含义 | 例子
+---- | ---- | ---- | ----
+use_app| Bool | 是否尝试掉起支付宝APP原生支付 | true
+
+- 以下是`支付宝内嵌二维码支付(ALI_QRCODE)`的必填参数
+
+参数名 | 类型 | 含义 | 例子
+---- | ---- | ---- | ----
+qr\_pay\_mode| String | 二维码类型 | 0,1,3
+
+> 注： 二维码类型含义   
+0： 订单码-简约前置模式, 对应 iframe 宽度不能小于 600px, 高度不能小于 300px   
+1： 订单码-前置模式, 对应 iframe 宽度不能小于 300px, 高度不能小于 600px  
+3： 订单码-迷你前置模式, 对应 iframe 宽度不能小于 75px, 高度不能小于 75px  
+
+- 以下是`易宝移动网页支付(YEE_WAP)`的必填参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+identity_id | String | 50位以内数字和/或字母组合，易宝移动网页（一键）支付用户唯一标识符，用于绑定用户一键支付的银行卡信息
+
+
+返回类型: *JSON: Map*
+返回参数:
+
+- 公共返回参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result_code | Integer | 返回码，0为正常
+result_msg  | String | 返回信息， OK为正常
+err_detail  | String | 具体错误信息
+id  | String | 成功发起支付后返回支付表记录唯一标识
+
+- **公共返回参数取值列表及其含义**
+
+result_code | result_msg             | 含义
+----        | ----                     | ----
+0           | OK                     | 调用成功
+1           | APP\_INVALID           | 根据app\_id找不到对应的APP或者app\_sign不正确
+2           | PAY\_FACTOR_NOT\_SET   | 支付要素在后台没有设置
+3           | CHANNEL\_INVALID       | channel参数不合法
+4           | MISS\_PARAM            | 缺少必填参数
+5           | PARAM\_INVALID         | 参数不合法
+6           | CERT\_FILE\_ERROR      | 证书错误
+7           | CHANNEL\_ERROR         | 渠道内部错误
+14          | RUNTIME\_ERROR         | 运行时错误
+
+> **当result_code不为0时，如需详细信息，请查看err\_detail字段**
+
+**以下字段在result_code为0时有返回**
+
+- WX_APP
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+app_id | String | 微信应用APPID
+partner_id | String | 微信支付商户号
+package  | String | 微信支付打包参数
+nonce_str  | String | 随机字符串
+timestamp | String | 当前时间戳，单位是毫秒，13位
+pay_sign  | String | 签名值
+prepay_id  | String | 微信预支付id
+
+- WX\_NATIVE、BC\_NATIVE  BC\_ALI\_QRCODE
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+code_url | String | 二维码地址
+
+- WX\_JSAPI、BC\_WX\_JSAPI
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+app_id | String | 微信应用APPID
+package  | String | 微信支付打包参数
+nonce_str  | String | 随机字符串
+timestamp | String | 当前时间戳，单位是毫秒，13位
+pay_sign  | String | 签名
+sign_type  | String | 签名类型，固定为MD5
+
+- BC\_WX\_WAP
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+url  | String | BC版微信WAP的跳转url
+
+- ALI_APP
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+order\_string | String | 支付宝签名串
+
+- ALI\_WEB，ALI\_WAP
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+html | String | 支付宝跳转form，是一段HTML代码，自动提交
+url  | String | 支付宝跳转url
+
+- ALI\_OFFLINE\_QRCODE
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+qr_code | String | 二维码码串,可以用二维码生成工具根据该码串值生成对应的二维码
+
+- ALI_QRCODE
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+html | String | 支付宝跳转form，是一段HTML代码，自动提交
+url  | String | 支付宝内嵌二维码地址，是一个URL
+
+- UN_APP
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+tn | String | 银联支付ticket number
+
+- UN\_WEB、UN\_WAP、JD\_WAP、JD\_WEB、KUAIQIAN\_WAP、KUAIQIAN\_WEB
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+html | String | 支付页自动提交form表单内容
+
+- YEE\_WAP、YEE\_WEB、BD\_WAP、BD\_WEB
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+url | String | 支付页跳转地址
+
+- BD\_APP
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+orderInfo | String | 百度支付order info
+
+### 4.2.2 线下支付（线下扫码/刷卡）
+
+URL:   */2/rest/offline/bill*
+Method: *POST*
+请求参数格式: *JSON: Map*
+
+- 以下为公共参数：
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud平台的AppID | App在BeeCloud平台的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX\_NATIVE、WX_SCAN、ALI\_OFFLINE\_QRCODE、ALI_SCAN、SCAN、BC\_ALI\_SCAN,BC\_WX\_SCAN(详见附注）| 是
+total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 | 是
+bill_no | String | 商户订单号 | 8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 | 是
+title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 | 是
+auth_code | String | 用户授权码| 当商户用扫码枪扫用户的条形码时得到的字符串 | 23891113455872 | 当channel参数为BC\_ALI\_SCAN,BC\_WX\_SCAN,WX_SCAN或ALI_SCAN 时为必填
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+optional | Map | 附加数据 | 用户自定义的参数，将会在Webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} | 否
+analysis | Map | 分析数据 | 用于统计分析的数据，将会在控制台的统计分析报表中展示，**<mark>用户自愿上传</mark>** | 包括以下基本字段：`os_name(系统名称，如"iOS"，"Android")` `os_version(系统版本，如"5.1")` `model(手机型号，如"iPhone 6")` `app_name(应用名称)` `app_version(应用版本号)` `device_id(设备ID)` `category(类别，用户可自定义，如游戏分发渠道，门店ID等)` `browser_name(浏览器名称)` `browser_version(浏览器版本)` | 否
+
+> 注1：channel的参数值含义：  
+WX\_NATIVE: 微信二维码支付   
+ALI\_OFFLINE\_QRCODE: 支付宝二维码支付  
+WX\_SCAN: 微信条形码支付  
+ALI\_SCAN: 支付宝条形码支付  
+SCAN: 支付宝、微信统一条形码支付
+BC\_ALI\_SCAN: BC版支付宝条形码支付  
+BC\_WX\_SCAN: BC版支付宝条形码支付
+
+
+- 以下是支付宝条码(ALI_SCAN)的选填参数：
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ---
+terminal_id | string | 机具终端编号 | 商户机具终端编号 最长32位 | NJ\_T\_001 | 若机具商接入，terminal\_id(机具终端编号)必填，store\_id(商户门店编号)选填
+store\_id | string | 商户门店编号 | 商户门店编号 最长32位 | NJ\_001 | 若系统商接入，store\_id（商户的门店编号）必填，terminal\_id(机具终端编号)选填
+
+返回类型: *JSON: Map*
+返回参数:
+
+- 公共返回参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result_code | Integer | 返回码，0为正常
+result_msg  | String | 返回信息， OK为正常
+err_detail  | String | 具体错误信息
+
+- 公共返回参数取值列表及其含义
+
+result_code | result_msg             | 含义
+----        | ----                     | ----
+0           | OK                     | 调用成功
+1           | APP\_INVALID           | 根据app\_id找不到对应的APP或者app\_sign不正确
+2           | PAY\_FACTOR_NOT\_SET   | 支付要素在后台没有设置
+3           | CHANNEL\_INVALID       | channel参数不合法
+4           | MISS\_PARAM            | 缺少必填参数
+5           | PARAM\_INVALID         | 参数不合法
+6           | CERT\_FILE\_ERROR      | 证书错误
+7           | CHANNEL\_ERROR         | 渠道内部错误
+14          | RUNTIME\_ERROR         | 运行时错误
+
+> **当result_code不为0时，如需详细信息，请查看err\_detail字段**
+
+以下字段在result_code为0时有返回
+
+- ALI\_SCAN | WX\_SCAN | BC\_ALI\_SCAN|BC\_WX\_SCAN
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+pay_result | boolean | 是否支付成功，false代表在等待用户输入密码，需查询
+
+- WX\_NATIVE | ALI\_OFFLINE_QRCODE
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+code_url | String | 二维码地址
+
+- SCAN
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+channel_type | String | 具体条形码支付类型，ALI\_SCAN或者WX\_SCAN
+
+
+## 4.3 退款
+
+### 4.3.1 退款/预退款（线上）
+
+退款接口仅支持对已经支付成功的订单进行退款。 退款金额refund\_fee必须小于或者等于原始支付订单的total\_fee，如果是小于，则表示部分退款.
+
+退款接口包含预退款功能，当need_approval字段的值为true时，该接口开启预退款功能，预退款仅创建退款记录，并不真正发起退款，需后续调用审核接口，审核同意或者否决，才真正发起退款或者拒绝预退款。
+
+URL: */2/rest/refund*
+Method: *POST*
+
+请求参数格式: *JSON: Map*
+请求参数详情:
+
+- 请求参数
+
+参数名 | 类型 | 含义   | 描述 | 例子 | 是否必填 |
+---- | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062\-5e41\-44e3\-8f52\-f89d8cf2b6eb | 是 
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+master\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+channel| String | 渠道类型 | 根据不同渠道选不同的值 | WX ALI UN KUAIQIAN BD JD YEE | 否
+refund_no | String | 商户退款单号 | 格式为:退款日期(8位) + 流水号(3~24 位)。请自行确保在商户系统中唯一，且退款日期必须是发起退款的当天日期,同一退款单号不可重复提交，否则会造成退款单重复。流水号可以接受数字或英文字符，建议使用数字，但不可接受“000” | 201506101035040000001 | 是
+bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 | 是 
+refund_fee | Integer | 退款金额 | 必须为正整数，单位为分，必须小于或等于对应的已支付订单的total_fee | 1 | 是
+optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} | 否
+need_approval| Bool | 是否为预退款 | 预退款need_approval值传true,直接退款不传此参数或者传false | true | 否
+refund_account | Integer | 退款资金来源 | 1:可用余额退款 0:未结算资金退款（默认使用未结算资金退款） | 1 | 否
+
+返回类型: *JSON: Map*
+返回参数:
+
+- 公共返回参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result\_code | Integer | 返回码，0为正常
+result\_msg  | String | 返回信息，OK为正常
+err\_detail  | String | 具体错误信息
+id  | String | 成功发起预退款或者直接退款后返回退款表记录唯一标识
+
+- 返回码和返回信息取值及含义参见支付公共返回参数部分, 以下是退款所特有的
+
+result\_code | result\_msg                | 含义
+----        | ----                         | ----
+8           | NO\_SUCH_BILL             | 没有该订单
+9           | BILL\_UNSUCCESS            | 该订单没有支付成功
+10          | REFUND\_EXCEED\_TIME       | 已超过可退款时间
+11          | ALREADY\_REFUNDING         | 该订单已有正在处理中的退款
+12          | REFUND\_AMOUNT\_TOO\_LARGE | 提交的退款金额超出可退额度
+13          | NO\_SUCH\_REFUND           | 没有该退款记录
+
+**当channel为`ALI`，并且不是预退款时，以下字段在result_code为0时有返回**
+ 
+参数名 | 类型 | 含义 
+---- | ---- | ----
+url | String | 支付宝退款地址，需用户在支付宝平台上手动输入支付密码处理
+
+
+
+### 4.3.2 预退款批量审核
+
+批量审核接口仅支持预退款，批量审核分为批量驳回和批量同意。
+
+URL: */2/rest/refund*
+Method: *PUT*
+
+请求参数格式: *JSON: Map*
+请求参数详情:
+
+- 请求参数
+
+参数名 | 类型 | 含义   | 描述 | 例子 | 是否必填 |
+---- | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062\-5e41\-44e3\-8f52\-f89d8cf2b6eb | 是 
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+master\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+channel| String | 渠道类型 | 根据不同渠道选不同的值 | WX ALI UN KUAIQIAN BD JD YEE | 是
+ids | List<String> | 退款记录id列表 | 批量审核的退款记录的唯一标识符集合 | ["d9690a6e-ae99-44b7-9904-bd9d43fcc21b", "6f263aa6-111d-4c95-b51e-001b3f7e6ddf", "  7d1f69e4-3ff2-4b7d-b764-eb018620e00d"] | 是
+agree| Bool | 同意或者驳回 | 批量驳回传false，批量同意传true | true | 是
+deny_reason| String | 驳回理由 | 批量驳回原因 | "审核不通过" | 否
+
+返回类型: *JSON: Map*
+返回参数:
+
+- 公共返回参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result\_code | Integer | 返回码，0为正常
+result\_msg  | String | 返回信息，OK为正常
+err\_detail  | String | 具体错误信息
+
+**当agree为true时，以下字段在result_code为0时有返回**
+ 
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result_map | Map<String, String>; |批量同意单笔结果集合，key:单笔记录id; value:此笔记录结果。 当退款处理成功时，value值为"OK"；当退款处理失败时， value值为具体的错误信息。
+
+
+**当channel为`ALI`时，以下字段在agree为true时有返回**
+ 
+参数名 | 类型 | 含义 
+---- | ---- | ----
+url | String | 支付宝退款地址，需用户在支付宝平台上手动输入支付密码处理
+
+### 4.3.3 退款（线下）
+
+URL: */2/rest/offline/refund*
+Method: *POST*
+
+请求参数格式: *JSON: Map*
+请求参数详情:
+
+- 参数列表
+
+参数名 | 类型 | 含义   | 描述 | 例子 | 是否必填 |
+---- | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062\-5e41\-44e3\-8f52\-f89d8cf2b6eb | 是 
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+master\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+channel| String | 渠道类型 | 根据不同渠道选不同的值 | 暂时仅支持ALI、WX| 否
+refund_no | String | 商户退款单号 | 格式为:退款日期(8位) + 流水号(3~24 位)。请自行确保在商户系统中唯一，且退款日期必须是发起退款的当天日期,同一退款单号不可重复提交，否则会造成退款单重复。流水号可以接受数字或英文字符，建议使用数字，但不可接受“000” | 201506101035040000001 | 是
+bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 | 是 
+refund_fee | Integer | 退款金额 | 必须为正整数，单位为分，必须小于或等于对应的已支付订单的total_fee | 1 | 是
+refund_reason | String | 退款的原因说明 | 正常退款 | 否
+optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} | 否
+operator_id | String | 商户的操作员编号 | OP001 | 否
+store_id | String | 商户的门店编号 | NJ_S_001 | 否
+refund_account | Integer | 退款资金来源 | 1:可用余额退款 0:未结算资金退款（默认使用未结算资金退款） | 1 | 否
+
+返回类型: *JSON: Map*
+返回参数:
+
+- 公共返回参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result\_code | Integer | 返回码，0为正常
+result\_msg  | String | 返回信息，OK为正常
+err\_detail  | String | 具体错误信息
+id  | String | 成功发起退款后返回退款表记录唯一标识
+refund_result | Bool | 退款是否成功
+
+> 公共返回参数取值及含义参见支付公共返回参数部分, 以下是退款所特有的
+
+result\_code | result\_msg                | 含义
+----        | ----                         | ----
+8           | NO\_SUCH_BILL             | 没有该订单
+9           | BILL\_UNSUCCESS            | 该订单没有支付成功
+10          | REFUND\_EXCEED\_TIME       | 已超过可退款时间
+11          | ALREADY\_REFUNDING         | 该订单已有正在处理中的退款
+12          | REFUND\_AMOUNT\_TOO\_LARGE | 提交的退款金额超出可退额度
+13          | NO\_SUCH\_REFUND           | 没有该退款记录
+
+## 4.4 查询
+
+### 4.4.1 支付订单查询
+
+URL:   */2/rest/bills*
+Method: *GET*
+
+请求参数类型: *JSON, 以para=**{}**的方式请求*
+
+示例: para={"key\_a":1,"key\_b":"value\_b"}, 需要对para=后面的部分做URL encode.
+
+- 请求参数
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB、UN\_WAP、PAYPAL、PAYPAL\_SANDBOX、PAYPAL\_LIVE、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB、JD、YEE、KUAIQIAN、BD、BD\_APP、BD\_WEB、BD\_WAP、BC、BC\_GATEWAY、BC\_EXPRESS、BC\_APP、BC\_NATIVE、BC\_WX\_WAP、BC\_WX\_JSAPI、BC\_ALI\_QRCODE(详见附注）| 否
+bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 | 否
+spay_result | Bool | 订单是否成功 | 标识订单是否支付成功 | true | 否
+refund_result | Bool | 订单是否已退款 | 标识订单是否已退款 | true | 否
+need_detail | Bool | 是否需要返回渠道详细信息 | 决定是否需要返回渠道的回调信息，true为需要 | true | 否
+start_time | Long | 起始时间 | 毫秒时间戳, 13位 | 1435890530000 | 否
+end_time | Long | 结束时间 | 毫秒时间戳, 13位   | 1435890540000 | 否
+skip | Integer| 查询起始位置 | 默认为0. 设置为10表示忽略满足条件的前10条数据| 0 | 否
+limit| Integer | 查询的条数 | 默认为10，最大为50. 设置为10表示只返回满足条件的10条数据 | 10 | 否
+
+> 注：  
+1. bill\_no, start\_time, end\_time等查询条件互相为且关系  
+2. start\_time, end\_time指的是订单生成的时间，而不是订单支付的时间   
+
+
+返回类型: *JSON: Map*
+返回参数:
+
+- 返回参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result\_code | Integer| 返回码，0为正常
+result\_msg  | String | 返回信息， OK为正常
+err\_detail  | String | 具体错误信息
+bills | List<Map> | 订单列表
+
+- bills说明，每个Map的key\-value
+
+参数名         | 类型          | 含义 
+----          | ----         | ----
+id      | String       | 订单记录的唯一标识，可用于查询单笔记录
+bill\_no      | String       | 订单号
+total\_fee    | Integer         | 订单金额，单位为分
+trade\_no    | String         | 渠道交易号， 当支付成功时有值
+channel       | String       | 渠道类型 WX、ALI、UN、JD、YEE、KUAIQIAN、PAYPAL、BD
+sub_channel         | String       | 子渠道类型 WX_APP、WX_NATIVE、WX_JSAPI、WX_SCAN、ALI_APP、ALI_SCAN、ALI_WEB、ALI_QRCODE、ALI_OFFLINE_QRCODE、ALI_WAP、UN_APP、UN_WEB、UN_WAP、PAYPAL_SANDBOX、PAYPAL_LIVE、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、YEE_NOBANKCARD、KUAIQIAN_WAP、KUAIQIAN_WEB、BD_APP、BD_WEB、BD_WAP(详见 2. 支付 附注）
+title         | String       | 订单标题
+spay\_result  | Bool         | 订单是否成功
+create_time | Long         | 订单创建时间, 毫秒时间戳, 13位
+optional | String | 附加数据,用户自定义的参数，将会在webhook通知中原样返回，该字段是JSON格式的字符串 {"key1":"value1","key2":"value2",...}
+message_detail | String         | 渠道详细信息， 当need_detail传入true时返回
+revert_result  | Bool         | 订单是否已经撤销
+refund_result  | Bool         | 订单是否已经退款
+
+
+### 4.4.2 订单总数查询
+
+URL:   */2/rest/bills/count*
+Method: *GET*
+
+请求参数类型: *JSON, 以para=**{}**的方式请求*
+
+示例: para={"key\_a":1,"key\_b":"value\_b"}, 需要对para=后面的部分做URL encode.
+
+- 请求参数
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB、UN\_WAP、PAYPAL、PAYPAL\_SANDBOX、PAYPAL\_LIVE、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB、JD、YEE、KUAIQIAN、BD、BD\_APP、BD\_WEB、BD\_WAP、BC、BC\_GATEWAY、BC\_EXPRESS、BC\_APP、BC\_NATIVE、BC\_WX\_WAP、BC\_WX\_JSAPI、BC\_ALI\_QRCODE(详见附注）| 否
+bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 | 否
+spay_result | Bool | 订单是否成功 | 标识订单是否支付成功 | true | 否
+start_time | Long | 起始时间 | 毫秒时间戳, 13位 | 1435890530000 | 否
+end_time | Long | 结束时间 | 毫秒时间戳, 13位   | 1435890540000 | 否
+
+> 注：  
+1. bill\_no, start\_time, end\_time等查询条件互相为**<mark>且</mark>**关系  
+2. start\_time, end\_time指的是订单生成的时间，而不是订单支付的时间   
+
+
+返回类型: *JSON: Map*
+返回参数:
+
+- 返回参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result\_code | Integer| 返回码，0为正常
+result\_msg  | String | 返回信息， OK为正常
+err\_detail  | String | 具体错误信息
+count | Integer | 查询订单结果数量
+
+
+### 4.4.3 退款查询
+
+URL:   */2/rest/refunds*
+Method: GET
+
+请求参数类型: JSON，以para=**{}**的方式请求
+
+示例: para={"key\_a":1,"key\_b":"value\_b"}, 需要对para=后面的部分做URL encode.
+
+- 请求参数
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB、UN\_WAP、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB、JD、YEE、KUAIQIAN、BD、BD\_APP、BD\_WEB、BD\_WAP(详见2.支付附注）| 否
+bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 | 否
+refund_no | String | 商户退款单号 | 发起退款时填写的退款单号 | 201506101035040000001 | 否
+start_time | Long | 起始时间 | 毫秒时间戳, 13位 | 1435890530000 | 否
+end_time | Long | 结束时间 | 毫秒时间戳, 13位   | 1435890540000 | 否
+need_approval | Bool | 需要审核 | 标识退款记录是否为预退款   | true | 否
+need_detail | Bool | 是否需要返回渠道详细信息 | 决定是否需要返回渠道的回调信息，true为需要 | true | 否
+skip | Integer | 查询起始位置 | 默认为0. 设置为10，表示忽略满足条件的前10条数据| 0 | 否
+limit| Integer | 查询的条数 | 默认为10，最大为50. 设置为10，表示只查询满足条件的10条数据 | 10 | 否
+
+> 注：  
+1. bill\_no, refund\_no, start\_time, end\_time等查询条件互相为**<mark>且</mark>**关系.   
+2. start\_time, end\_time指的是订单生成的时间，而不是订单支付的时间.   
+
+
+返回类型: *JSON, Map*
+返回详情:
+
+- 返回参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result\_code | Integer| 返回码，0为正常
+result\_msg  | String | 返回信息， OK为正常
+err\_detail  | String | 具体错误信息
+refunds | List<Map> | 退款列表
+
+
+- refunds说明，每个Map的key\-value
+
+参数名      | 类型         | 含义 
+----       | ----        | ----
+id      | String       | 退款记录的唯一标识，可用于查询单笔记录
+bill\_no    | String      | 订单号
+refund\_no  | String      | 退款号
+total\_fee  | Integer      | 订单金额，单位为分
+refund\_fee | Integer      | 退款金额，单位为分
+title         | String       | 订单标题
+channel    | String      | 渠道类型 WX、ALI、UN、JD、YEE、KUAIQIAN、BD
+sub\_channel    | String      | 子渠道类型 WX\_NATIVE、WX\_JSAPI、WX\_APP、ALI\_APP、ALI\_WEB、ALI\_QRCODE、UN\_APP、UN\_WEB、UN\_WAP、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB、BD\_APP、BD\_WEB、BD\_WAP(详见 1. 支付 附注）
+finish     | bool        | 退款是否完成
+result     | bool        | 退款是否成功
+optional | String | 附加数据,用户自定义的参数，将会在webhook通知中原样返回，该字段是JSON格式的字符串 {"key1":"value1","key2":"value2",...}
+message\_detail | String         | 渠道详细信息， 当need_detail传入true时返回
+create\_time | Long       | 退款创建时间, 毫秒时间戳, 13位
+
+
+### 4.4.4 退款总数查询
+
+URL:   */2/rest/refunds/count*
+Method: GET
+
+请求参数类型: JSON，以para=**{}**的方式请求
+
+示例: para={"key\_a":1,"key\_b":"value\_b"}, 需要对para=后面的部分做URL encode.
+
+- 请求参数
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX、WX\_NATIVE、WX\_JSAPI、ALI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI_WAP、UN、UN\_APP、UN\_WEB、UN\_WAP、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB、JD、YEE、KUAIQIAN、BD、BD\_APP、BD\_WEB、BD\_WAP(详见2.支付附注）| 否
+bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 | 否
+refund_no | String | 商户退款单号 | 发起退款时填写的退款单号 | 201506101035040000001 | 否
+start_time | Long | 起始时间 | 毫秒时间戳, 13位 | 1435890530000 | 否
+end_time | Long | 结束时间 | 毫秒时间戳, 13位   | 1435890540000 | 否
+need_approval | Bool | 需要审核 | 标识退款记录是否为预退款   | true | 否
+
+> 注：  
+1. bill\_no, refund\_no, start\_time, end\_time等查询条件互相为**<mark>且</mark>**关系.   
+2. start\_time, end\_time指的是订单生成的时间，而不是订单支付的时间.   
+
+
+返回类型: *JSON, Map*
+返回详情:
+
+- 返回参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result\_code | Integer| 返回码，0为正常
+result\_msg  | String | 返回信息， OK为正常
+err\_detail  | String | 具体错误信息
+count | Integer | 查询退款结果数量
+
+
+### 4.4.5 退款状态更新
+
+退款状态更新接口提供查询退款状态以更新退款状态的功能，用于对退款后不发送回调的渠道（WX、YEE、KUAIQIAN、BD）退款后的状态更新。
+
+URL:   */2/rest/refund/status*
+Method: GET
+
+请求参数类型:JSON，以para=**{}**的方式请求
+
+示例: para={"key\_a":1,"key\_b":"value\_b"}, 需要对para=后面的部分做URL encode.
+
+- 请求参数
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式，不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | 目前只支持WX、YEE、KUAIQIAN、BD | 是
+refund_no | String | 商户退款单号 | 发起退款时填写的退款单号 | 201506101035040000001 | 是
+
+返回类型: *JSON, Map*
+返回详情:
+
+- 返回参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result\_code | Integer | 返回码，0为正常
+result\_msg  | String | 返回信息， OK为正常
+err\_detail  | String | 具体错误信息
+refund\_status | String | 退款状态
+
+### 4.4.6 退款订单查询(指定ID)
+
+URL:   */2/rest/refund/{id}*
+Method: *GET*
+id : 退款订单唯一标识
+
+请求参数类型: *JSON, 以para=**{}**的方式请求*
+
+示例: para={"key\_a":1,"key\_b":"value\_b"}, 需要对para=后面的部分做URL encode.
+
+- 请求参数
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+
+
+返回类型: *JSON: Map*
+返回参数:
+
+- 返回参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result\_code | Integer| 返回码，0为正常
+result\_msg  | String | 返回信息， OK为正常
+err\_detail  | String | 具体错误信息，有错误时，不会返回refund结果
+refund | Map | 退款结果
+
+- refund说明，每个Map的key\-value
+
+参数名      | 类型         | 含义 
+----       | ----        | ----
+id      | String       | 退款记录的唯一标识，可用于查询单笔记录
+bill\_no | String | 支付订单号
+channel | String | WX、ALI、UN、JD、KUAIQIAN、BD、YEE
+sub\_channel | String | WX_APP、WX_NATIVE、WX_JSAPI、ALI_APP、ALI_WEB、ALI_QRCODE、ALI_WAP、UN_APP、UN_WEB、UN_WAP、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、KUAIQIAN_WAP、KUAIQIAN_WEB、BD_APP、BD_WEB、BD_WAP (详见 2. 支付 附注）
+finish | Bool | 退款是否完成
+create_time | Long | 退款创建时间, 毫秒时间戳, 13位
+optional | String | 附加数据,用户自定义的参数，将会在webhook通知中原样返回，该字段是JSON格式的字符串 {"key1":"value1","key2":"value2",...}
+result | Bool| 退款是否成功
+title | String | 商品标题
+total_fee | Integer | 订单金额，单位为分
+refund_fee | Integer | 退款金额，单位为分
+refund_no | String | 退款单号
+message\_detail | String         | 渠道详细信息
+
+### 4.4.7 支付订单查询(指定ID)
+
+URL:   */2/rest/bill/{id}*
+Method: *GET*
+id : 支付订单唯一标识
+
+请求参数类型: *JSON, 以para=**{}**的方式请求*
+
+示例: para={"key\_a":1,"key\_b":"value\_b"}, 需要对para=后面的部分做URL encode.
+
+- 请求参数
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+
+
+返回类型: *JSON: Map*
+
+- 返回参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result\_code | Integer| 返回码，0为正常
+result\_msg  | String | 返回信息， OK为正常
+err\_detail  | String | 具体错误信息，有错误时，不会返回pay结果
+pay | Map | 支付结果
+
+- 返回码和返回信息取值及含义参见支付公共返回参数部分
+
+- pay说明，每个Map的key\-value
+
+参数名      | 类型         | 含义 
+----       | ----        | ----
+id      | String       | 订单记录的唯一标识，可用于查询单笔记录
+bill\_no | String | 支付订单号
+channel | String | WX、ALI、UN、JD、KUAIQIAN、YEE、BD、PAYPAL
+sub\_channel | String | WX_APP、WX_NATIVE、WX_JSAPI、WX_SCAN、ALI_APP、ALI_SCAN、ALI_WEB、ALI_QRCODE、ALI_OFFLINE_QRCODE、ALI_WAP、UN_APP、UN_WEB、UN_WAP、PAYPAL_SANDBOX、PAYPAL_LIVE、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、YEE_NOBANKCARD、KUAIQIAN_WAP、KUAIQIAN_WEB、BD_APP、BD_WEB、BD_WAP (详见 2. 支付 附注）
+trade\_no | String | 渠道返回的交易号，当支付成功时有值
+create\_time | Long | 订单创建时间, 毫秒时间戳, 13位
+optional | String | 附加数据,用户自定义的参数，将会在webhook通知中原样返回，该字段是JSON格式的字符串 {"key1":"value1","key2":"value2",...}
+spay\_result | Bool| 订单是否成功
+title | String | 商品标题
+total\_fee | Integer | 订单金额，单位为分
+message\_detail | String         | 渠道详细信息
+revert\_result  | Bool         | 订单是否已经撤销
+refund\_result  | Bool         | 订单是否已经退款
+
+### 4.4.8 订单状态查询(线下刷卡专用)
+
+URL:   */2/rest/offline/bill/status*
+Method: POST
+
+请求参数类型:JSON
+
+- 请求参数
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app_key)，32位16进制格式，不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+bill_no | String | 订单号 | 要查询的订单号 | -|是
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX\_NATIVE、WX\_SCAN、ALI\_OFFLINE\_QRCODE、ALI\_SCAN、BC\_ALI\_SCAN、BC\_WX\_SCAN(详见支付附注） | 否
+
+返回类型: *JSON, Map*
+返回详情:
+
+- 返回参数
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+result\_code | Integer | 返回码，0为正常
+result\_msg  | String | 返回信息， OK为正常
+err\_detail  | String | 具体错误信息
+pay_result | Bool | 订单是否成功
