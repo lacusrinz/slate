@@ -1442,7 +1442,7 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
                    NJCB   南京银行，    SRCB   上海农商行， BOB   北京银行
 </aside>
 <aside class="success">
-支持的渠道包括：`BC_GETEWAY` 
+支持的渠道包括：`BC_GATEWAY` 
 </aside>
 
 
@@ -1479,7 +1479,7 @@ try {
 try {
     $data = array(
         'timestamp' => time() * 1000,
-        'channel' => 'BC_GETEWAY', //渠道类型
+        'channel' => 'BC_GATEWAY', //渠道类型
         'title' => '网关支付测试',   //订单标题
         'bill_no' => "bcdemo" . time(),    //订单编号
         'total_fee' => 1, //订单金额(int 类型) ,单位分
@@ -1504,7 +1504,7 @@ try {
 
 ```python
 req_params = BCPayReqParams()
-req_params.channel = 'BC_GETEWAY'
+req_params.channel = 'BC_GATEWAY'
 req_params.title = u'支付测试'
 # 分为单位
 req_params.total_fee = 1
@@ -1519,7 +1519,7 @@ result = bc_pay.pay(req_params)
 ```javascript
 //前端传参
 let data = {}, _this = this;
-    data.channel = 'BC_GETEWAY';//根据不同场景选择不同的支付方式 
+    data.channel = 'BC_GATEWAY';//根据不同场景选择不同的支付方式 
     data.timestamp = new Date().valueOf();//时间戳，毫秒数 
     data.total_fee = 1;//total_fee(int 类型) 单位分
     data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
@@ -1839,7 +1839,7 @@ try {
 }
 
 //查询收款状态(可以循环查询直到取消或者查询到成功)
-
+```
 
 ```php
 //获取二维码地址
@@ -2016,6 +2016,7 @@ try {
 }
 
 //查询收款状态(可以循环查询直到取消或者查询到成功)
+```
 
 
 ```php
@@ -2116,6 +2117,9 @@ req_params.auth_code = 'auth code'
 
 resp = bc_pay.offline_pay(req_params)
 # 如果result.result_code为0表示请求成功
+
+# status查询接口查看支付是否成功
+bc_query.query_offline_bill_status(bill_no)
 ```
 
 
@@ -2296,6 +2300,9 @@ req_params.auth_code = 'auth code'
 
 resp = bc_pay.offline_pay(req_params)
 # 如果result.result_code为0表示请求成功
+
+# status查询接口查看支付是否成功
+bc_query.query_offline_bill_status(bill_no)
 ```
 
 ```javascript
@@ -4603,7 +4610,7 @@ Webhook是BeeCloud获得渠道的确认信息后，立刻向客户服务器发�
 如果客户需要接收此类消息来实现业务逻辑，需要:
 
 1. 开通公网可以访问的IP地址(或域名）和端口（如果需要对传输加密，请使用支持HTTPS的URL地址，BeeCloud不要求HTTPS根证书认证）
-2. 在 **控制台->App设置->Webhook** 中设置接收端URL，不同应用可设置不同URL，同一应用能且仅能设置一个测试URL，一个生产URL
+2. 在 **控制台->选择应用->应用设置->Webhook参数设置** 中设置接收端URL，不同应用可设置不同URL，同一应用能且仅能设置一个测试URL，一个生产URL
 2. 处理POST请求报文，实现业务逻辑
 
 <aside class="notify">
@@ -4646,7 +4653,7 @@ BeeCloud将在2秒，4秒，8秒，...，2^17秒（约36小时）时刻重发；
 
 ## 3.4 Webhook接口标准
 
-```python
+```
 HTTP 请求类型 : POST
 HTTP 数据格式 : JSON
 HTTP Content-type : application/json
@@ -5351,7 +5358,7 @@ BC\_WX\_WAP: BC版微信手机WAP支付
 BC\_WX\_JSAPI: BC版微信公众号支付  
 BC\_ALI\_QRCODE: BC版支付宝线下扫码支付  
 
-- 以下是`微信公众号支付(WX\_JSAPI、BC\_WX\_JSAPI)`的必填参数
+- 以下是`微信公众号支付(WX_JSAPI、BC_WX_JSAPI)`的必填参数
 
 参数名 | 类型 | 含义 | 例子
 ---- | ---- | ---- | ----
@@ -5429,7 +5436,7 @@ timestamp | String | 当前时间戳，单位是毫秒，13位
 pay_sign  | String | 签名值
 prepay_id  | String | 微信预支付id
 
-- WX\_NATIVE、BC\_NATIVE  BC\_ALI\_QRCODE
+- WX\_NATIVE、BC\_NATIVE、BC\_ALI\_QRCODE、ALI\_OFFLINE\_QRCODE
 
 参数名 | 类型 | 含义 
 ---- | ---- | ----
@@ -5464,12 +5471,6 @@ order\_string | String | 支付宝签名串
 ---- | ---- | ----
 html | String | 支付宝跳转form，是一段HTML代码，自动提交
 url  | String | 支付宝跳转url
-
-- ALI\_OFFLINE\_QRCODE
-
-参数名 | 类型 | 含义 
----- | ---- | ----
-qr_code | String | 二维码码串,可以用二维码生成工具根据该码串值生成对应的二维码
 
 - ALI_QRCODE
 
@@ -5529,9 +5530,9 @@ WX\_NATIVE: 微信二维码支付
 ALI\_OFFLINE\_QRCODE: 支付宝二维码支付  
 WX\_SCAN: 微信条形码支付  
 ALI\_SCAN: 支付宝条形码支付  
-SCAN: 支付宝、微信统一条形码支付
-BC\_ALI\_SCAN: BC版支付宝条形码支付  
-BC\_WX\_SCAN: BC版支付宝条形码支付
+SCAN: 支付宝、微信统一条形码支付    
+BC\_ALI\_SCAN: BC版支付宝条形码支付    
+BC\_WX\_SCAN: BC版支付宝条形码支付  
 
 
 - 以下是支付宝条码(ALI_SCAN)的选填参数：
