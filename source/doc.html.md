@@ -217,7 +217,7 @@ BeeCloud.setAppIdAndSecret("appId", "appSecret");
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
 支持的渠道包括：`ALI_WEB`
@@ -334,7 +334,7 @@ app.post('/api/bill', (req, res, next) => {
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
 支持的渠道包括：`ALI_QRCODE`
@@ -458,7 +458,7 @@ app.post('/api/bill', (req, res, next) => {
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="notice">
 移动网页有特殊参数 use_app，默认掉起支付宝APP实现原生支付，可以关闭
@@ -599,7 +599,7 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 7. 支付完成返回微信公众号页面
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
 支持的渠道包括：`WX_JSAPI` `BC_WX_JSAPI`
@@ -914,7 +914,7 @@ app.post('/api/bill', (req, res, next) => { //支付
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
 支持的渠道包括：`BC_WX_WAP`
@@ -1031,10 +1031,10 @@ app.post('/api/bill', (req, res, next) => {
 </aside>
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
-支持的渠道包括：`WX_NATIVE` `BC_WX_NATIVE`
+支持的渠道包括：`WX_NATIVE` `BC_NATIVE`
 </aside>
 
 > 微信在PC网页通过二维码收款代码示例：
@@ -1188,7 +1188,7 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
 支持的渠道包括：`UN_WEB` `BC_EXPRESS`
@@ -1303,7 +1303,7 @@ app.post('/api/bill', (req, res, next) => { //支付
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
 支持的渠道包括：`UN_WAP` `BC_EXPRESS`
@@ -1431,7 +1431,7 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 7. 支付完成，用户跳转到设置的return url地址
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="notice">
 网关支付特有参数bank：CMB    招商银行，    ICBC  工商银行，
@@ -1582,7 +1582,7 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 7. 调用status查询接口查看支付是否成功(可以循环查询直到取消或者查询到成功)
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
 支持的渠道包括：`ALI_OFFLINE_QRCODE` `BC_ALI_QRCODE` 
@@ -1781,7 +1781,7 @@ API.getOfflineStatus({
 7. 调用status查询接口查看支付是否成功(可以循环查询直到取消或者查询到成功)
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
 支持的渠道包括：`WX_NATIVE` `BC_NATIVE` 
@@ -1979,7 +1979,7 @@ API.getOfflineStatus({
 6. 如果用户需要输入密码，调用status查询接口查看支付是否成功(可以循环查询直到取消或者查询到成功)
 7. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
 支持的渠道包括：`ALI_SCAN` `BC_ALI_SCAN` 
@@ -2162,7 +2162,7 @@ API.getOfflineStatus({
 6. 如果用户需要输入密码，调用status查询接口查看支付是否成功(可以循环查询直到取消或者查询到成功)
 7. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
 支持的渠道包括：`WX_SCAN` `BC_WX_SCAN` 
@@ -2374,7 +2374,7 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 iOS的支付宝有特殊参数scheme，详情查看SDK readme文件配置部分
 </aside>
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
 支持的渠道包括：`ALI_APP` 
@@ -2425,7 +2425,7 @@ BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 5. 调起微信APP，用户进行支付，支付完成后跳回商户APP
 6. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
 支持的渠道包括：`WX_APP` `BC_WX_APP` 
@@ -2475,7 +2475,7 @@ BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 4. 调用BeeCloud SDK中的支付接口，请求银联
 5. 调起银联插件，用户进行支付，支付完成后跳回商户APP
 <aside class="notice">
-参数bill_no(订单号)要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="success">
 支持的渠道包括：`UN_APP` `BC_APP` 
@@ -2710,8 +2710,9 @@ optional | Map | 附加数据 | 用户自定义的参数，将会在Webhook通�
 2. 系统生成打款订单，包括打款单号，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未成功
 4. 调用BeeCloud SDK中的支付接口，请求支付宝
-5. 返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
-6. 打款成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为打款成功
+5. 支付宝返回打款页面输入商户支付宝密码，完成打款
+6. 返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
+7. 打款成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为打款成功
 <aside class="success">
 支持的渠道包括：`ALI_TRANSFER`  
 </aside>
@@ -2837,8 +2838,8 @@ account_name|String|打款方账号名称|打款方账号名全称 | 苏州比�
 1. 商户发起打款请求
 2. 系统生成打款订单，包括打款单号，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未成功
-4. 调用BeeCloud SDK中的支付接口，请求支付宝
-5.返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
+4. 调用BeeCloud SDK中的支付接口，请求微信
+5. 返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
 6. 打款成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为打款成功
 <aside class="success">
 支持的渠道包括：`ALI_TRANSFER`  
@@ -5298,8 +5299,6 @@ https://api.beecloud.cn
 
 此接口为支付流程的第一步，主要功能在于生成订单，获取必要的参数信息，来进行下一步的支付流程。对于不同的渠道和支付方式，接口的返回值与后续的操作都不尽相同（例如微信App支付需要调用微信支付SDK的接口，支付宝网页支付需要跳转到获取的一段HTML网址等），请根据每一个channel的详细描述分别处理.
 
-### 4.2.1 线上支付（网页/APP）
-
 URL:   */2/rest/bill*
 
 Method: *POST*
@@ -5357,6 +5356,19 @@ BC\_NATIVE: BC版微信二维码支付
 BC\_WX\_WAP: BC版微信手机WAP支付  
 BC\_WX\_JSAPI: BC版微信公众号支付  
 BC\_ALI\_QRCODE: BC版支付宝线下扫码支付  
+WX\_NATIVE: 微信二维码支付   
+ALI\_OFFLINE\_QRCODE: 支付宝二维码支付  
+WX\_SCAN: 微信条形码支付  
+ALI\_SCAN: 支付宝条形码支付  
+SCAN: 支付宝、微信统一条形码支付    
+BC\_ALI\_SCAN: BC版支付宝条形码支付    
+BC\_WX\_SCAN: BC版支付宝条形码支付 
+
+- 以下是`银联快捷（恒丰通道）(BC_EXPRESS)`的必填参数
+
+参数名 | 类型 | 含义 | 例子
+---- | ---- | ---- | ----
+card_no| String | 银行卡号 | 
 
 - 以下是`微信公众号支付(WX_JSAPI、BC_WX_JSAPI)`的必填参数
 
@@ -5392,6 +5404,13 @@ qr\_pay\_mode| String | 二维码类型 | 0,1,3
 参数名 | 类型 | 含义 
 ---- | ---- | ----
 identity_id | String | 50位以内数字和/或字母组合，易宝移动网页（一键）支付用户唯一标识符，用于绑定用户一键支付的银行卡信息
+
+- 以下是支付宝条码(ALI_SCAN)的选填参数：
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ---
+terminal_id | string | 机具终端编号 | 商户机具终端编号 最长32位 | NJ\_T\_001 | 若机具商接入，terminal\_id(机具终端编号)必填，store\_id(商户门店编号)选填
+store\_id | string | 商户门店编号 | 商户门店编号 最长32位 | NJ\_001 | 若系统商接入，store\_id（商户的门店编号）必填，terminal\_id(机具终端编号)选填
 
 
 返回类型: *JSON: Map*
@@ -5485,6 +5504,12 @@ url  | String | 支付宝内嵌二维码地址，是一个URL
 ---- | ---- | ----
 tn | String | 银联支付ticket number
 
+- BC_EXPRESS
+
+参数名 | 类型 | 含义 
+---- | ---- | ----
+html | String | 银联跳转form，是一段HTML代码，自动提交
+
 - UN\_WEB、UN\_WAP、JD\_WAP、JD\_WEB、KUAIQIAN\_WAP、KUAIQIAN\_WEB
 
 参数名 | 类型 | 含义 
@@ -5502,74 +5527,6 @@ url | String | 支付页跳转地址
 参数名 | 类型 | 含义 
 ---- | ---- | ----
 orderInfo | String | 百度支付order info
-
-### 4.2.2 线下支付（线下扫码/刷卡）
-
-URL:   */2/rest/offline/bill*
-Method: *POST*
-请求参数格式: *JSON: Map*
-
-- 以下为公共参数：
-
-参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
-----  | ---- | ---- | ---- | ---- | ----
-app_id | String | BeeCloud平台的AppID | App在BeeCloud平台的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
-timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
-app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
-channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX\_NATIVE、WX_SCAN、ALI\_OFFLINE\_QRCODE、ALI_SCAN、SCAN、BC\_ALI\_SCAN,BC\_WX\_SCAN(详见附注）| 是
-total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 | 是
-bill_no | String | 商户订单号 | 8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 | 是
-title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 | 是
-auth_code | String | 用户授权码| 当商户用扫码枪扫用户的条形码时得到的字符串 | 23891113455872 | 当channel参数为BC\_ALI\_SCAN,BC\_WX\_SCAN,WX_SCAN或ALI_SCAN 时为必填
-notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
-optional | Map | 附加数据 | 用户自定义的参数，将会在Webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} | 否
-analysis | Map | 分析数据 | 用于统计分析的数据，将会在控制台的统计分析报表中展示，**<mark>用户自愿上传</mark>** | 包括以下基本字段：`os_name(系统名称，如"iOS"，"Android")` `os_version(系统版本，如"5.1")` `model(手机型号，如"iPhone 6")` `app_name(应用名称)` `app_version(应用版本号)` `device_id(设备ID)` `category(类别，用户可自定义，如游戏分发渠道，门店ID等)` `browser_name(浏览器名称)` `browser_version(浏览器版本)` | 否
-
-> 注1：channel的参数值含义：  
-WX\_NATIVE: 微信二维码支付   
-ALI\_OFFLINE\_QRCODE: 支付宝二维码支付  
-WX\_SCAN: 微信条形码支付  
-ALI\_SCAN: 支付宝条形码支付  
-SCAN: 支付宝、微信统一条形码支付    
-BC\_ALI\_SCAN: BC版支付宝条形码支付    
-BC\_WX\_SCAN: BC版支付宝条形码支付  
-
-
-- 以下是支付宝条码(ALI_SCAN)的选填参数：
-
-参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
-----  | ---- | ---- | ---- | ---- | ---
-terminal_id | string | 机具终端编号 | 商户机具终端编号 最长32位 | NJ\_T\_001 | 若机具商接入，terminal\_id(机具终端编号)必填，store\_id(商户门店编号)选填
-store\_id | string | 商户门店编号 | 商户门店编号 最长32位 | NJ\_001 | 若系统商接入，store\_id（商户的门店编号）必填，terminal\_id(机具终端编号)选填
-
-返回类型: *JSON: Map*
-返回参数:
-
-- 公共返回参数
-
-参数名 | 类型 | 含义 
----- | ---- | ----
-result_code | Integer | 返回码，0为正常
-result_msg  | String | 返回信息， OK为正常
-err_detail  | String | 具体错误信息
-
-- 公共返回参数取值列表及其含义
-
-result_code | result_msg             | 含义
-----        | ----                     | ----
-0           | OK                     | 调用成功
-1           | APP\_INVALID           | 根据app\_id找不到对应的APP或者app\_sign不正确
-2           | PAY\_FACTOR_NOT\_SET   | 支付要素在后台没有设置
-3           | CHANNEL\_INVALID       | channel参数不合法
-4           | MISS\_PARAM            | 缺少必填参数
-5           | PARAM\_INVALID         | 参数不合法
-6           | CERT\_FILE\_ERROR      | 证书错误
-7           | CHANNEL\_ERROR         | 渠道内部错误
-14          | RUNTIME\_ERROR         | 运行时错误
-
-> **当result_code不为0时，如需详细信息，请查看err\_detail字段**
-
-以下字段在result_code为0时有返回
 
 - ALI\_SCAN | WX\_SCAN | BC\_ALI\_SCAN|BC\_WX\_SCAN
 
