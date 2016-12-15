@@ -148,6 +148,9 @@ BeeCloud.setAppIdAndSecret("appId", "appSecret");
 ```
 
 ```swift
+//注意：sdk的demo中包含apple pay的例子，不能直接在模拟器上运行，请在真机上运行，
+//如果要在模拟器上运行，请删除项目中（非物理文件夹）`BCPaySDK`文件夹下面`Channel`文件夹下的`ApplePay`文件夹即可
+
 //初始化分为生产模式(LiveMode)、沙箱环境(SandboxMode)；沙箱测试模式下不产生真实交易
 //开启生产环境
 [BeeCloud initWithAppID:@"BeeCloud AppId" andAppSecret:@"BeeCloud App Secret"];
@@ -3606,21 +3609,15 @@ catch (Exception excption)
 ```
 
 ```java
-BCRefund param = new BCRefund(billNo, refundNo, 1);
-param.setOptional(optional);
-param.setNeedApproval(prefund.equals("true")?true:false);
+BCRefund param = new BCRefund(订单号, 退款单号, 退款金额);
+param.setOptional(optional);//optional 可选业务参数
 try {
     BCRefund refund = BCPay.startBCRefund(param);
     if (refund.getAliRefundUrl() != null) {
         response.sendRedirect(refund.getAliRefundUrl());
     } else {
-        if (refund.isNeedApproval() != null && refund.isNeedApproval()) {
-            out.println("预退款成功！");
-            out.println(refund.getObjectId());
-        } else {
-            out.println("退款成功！易宝、百度、快钱渠道还需要定期查询退款结果！");
-            out.println(refund.getObjectId());
-        }
+        out.println("退款成功！易宝、百度、快钱渠道还需要定期查询退款结果！");
+        out.println(refund.getObjectId());
     }
 } catch (BCException e) {
     out.println(e.getMessage());
