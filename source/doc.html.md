@@ -2847,7 +2847,10 @@ account_name|String|打款方账号名称|打款方账号名全称 | 苏州比�
 3. 将订单存入自己系统数据库中，标记订单为未成功
 4. 调用BeeCloud SDK中的支付接口，请求微信
 5. 返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
-6. 打款成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为打款成功
+6. 微信打款没有webhook，以同步返回为准
+<aside class="notice">
+微信打款单号为10位数字 
+</aside>
 <aside class="success">
 支持的渠道包括：`ALI_TRANSFER`  
 </aside>
@@ -2956,7 +2959,7 @@ app.post('/api/transfer', (req, res, next) => {
 参数名 | 类型 | 含义 | 描述 | 例子 | 必填
 ----  | ---- | ---- | ---- | ---- | ----
 channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX\_TRANSFER | 是
-transfer_no | String | 打款单号 | 微信企业打款为8-32位数字字母组合 | udjfiienx2334/8372839123 | 是
+transfer_no | String | 打款单号 | 10位数字 | 8372839123 | 是
 total_fee | Int | 打款金额 | 此次打款的金额,单位分,正整数(微信打款>=1元) | 100 | 是
 desc | String | 打款说明 | 此次打款的说明 | 赔偿 | 是
 channel_user\_id | String | 用户id | 支付渠道方内收款人的标示, 微信为openid | xx_sjiwajeirhwefhsahfwhru |是
