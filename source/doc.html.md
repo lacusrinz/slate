@@ -945,6 +945,7 @@ catch (Exception excption)
 ```
 
 ```java
+BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
 bcOrder.setReturnUrl(returnUrl);
 try {
     bcOrder = BCPay.startBCPay(bcOrder);
@@ -1077,6 +1078,7 @@ catch (Exception excption)
 ```
 
 ```java
+BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
 try {
     bcOrder.setNotifyUrl("https:///apidynamic.beecloud.cn/test");
     bcOrder = BCPay.startBCPay(bcOrder);
@@ -1218,6 +1220,7 @@ catch (Exception excption)
 ```
 
 ```java
+BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
 bcOrder.setReturnUrl(unReturnUrl);
 try {
     bcOrder = BCPay.startBCPay(bcOrder);
@@ -1333,6 +1336,7 @@ catch (Exception excption)
 ```
 
 ```java
+BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
 bcOrder.setReturnUrl(returnUrl);
 try {
     bcOrder = BCPay.startBCPay(bcOrder);
@@ -1471,6 +1475,7 @@ catch (Exception excption)
 ```
 
 ```java
+BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
 try {
     bcOrder.setReturnUrl(bcGatewayReturnUrl);
     bcOrder.setGatewayBank('银行code');
@@ -1636,6 +1641,7 @@ Bool isSuccess = BCOfflineBillStatus(订单号, null);
 
 ```java
 //收款部分
+BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
 try {
     bcOrder.setTotalFee(1);
     bcOrder = BCPay.startBCPay(bcOrder);
@@ -1836,6 +1842,7 @@ Bool isSuccess = BCOfflineBillStatus(订单号, null);
 
 ```java
 //收款部分
+BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
 try {
     bcOrder.setTotalFee(1);
     bcOrder = BCPay.startBCPay(bcOrder);
@@ -2014,8 +2021,9 @@ Bool isSuccess = BCOfflineBillStatus(订单号, null);
 
 ```java
 //收款部分
+BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
 try {
-    bcOrder.setAuthCode("130145749397413855");
+    bcOrder.setAuthCode("130145749397413855");//authcode就是设备获得的用户二维码的编码
     bcOrder = BCPay.startBCOfflinePay(bcOrder);
 } catch (BCException e) {
     log.error(e.getMessage(), e);
@@ -2197,8 +2205,9 @@ Bool isSuccess = BCOfflineBillStatus(订单号, null);
 
 ```java
 //收款部分
+BCOrder bcOrder = new BCOrder('渠道code', '金额', '订单编号', '订单标题');//设定订单信息
 try {
-    bcOrder.setAuthCode("130145749397413855");
+    bcOrder.setAuthCode("130145749397413855");//authcode就是设备获得的用户二维码的编码
     bcOrder = BCPay.startBCOfflinePay(bcOrder);
 } catch (BCException e) {
     log.error(e.getMessage(), e);
@@ -4615,7 +4624,7 @@ Webhook是BeeCloud获得渠道的确认信息后，立刻向客户服务器发�
 如果客户需要接收此类消息来实现业务逻辑，需要:
 
 1. 开通公网可以访问的IP地址(或域名）和端口（如果需要对传输加密，请使用支持HTTPS的URL地址，BeeCloud不要求HTTPS根证书认证）
-2. 在 **控制台->选择应用->应用设置->Webhook参数设置** 中设置接收端URL，不同应用可设置不同URL，同一应用能且仅能设置一个测试URL，一个生产URL
+2. 在 **控制台->选择应用->应用设置->Webhook参数设置** 中设置接收端URL，不同应用可设置不同URL，同一应用能且仅能设置一个测试URL，一个生产URL，另外在**控制台->应用设置->基本信息设置**中获取"Master Secret"
 2. 处理POST请求报文，实现业务逻辑
 
 <aside class="notify">
@@ -4639,7 +4648,14 @@ BeeCloud将在2秒，4秒，8秒，...，2^17秒（约36小时）时刻重发；
 
 ### 3.3.1 验证数字签名
 
-目的在于验证Webhook是由BeeCloud发起的，防止黑客向此Webhook接口发送伪造的订单信息。验证签名需要验证传入的 **sign** 是否与 **App ID + App Secret + timestamp** 的 MD5 生成的签名 (32字符十六进制) 是否相等，**App ID** 与 **App Secret** 存储在客户服务器上，**timestamp** 是Webhook传入的。
+目的在于验证Webhook是由BeeCloud发起的，防止黑客向此Webhook接口发送伪造的订单信息。Beecloud使用MD5方式进行webhook加密，用户需要按照如下方法对参数进行数字签名验证。具体信息如下：  
+
+验证方法 | MD5  
+---- | ----
+BeeCloud签名字段 | **signature**  
+验签内容 | app_id + transaction\_id + transaction\_type + channel\_type + transaction\_fee + master\_secret
+
+用户必须按照上表中“验签内容”中罗列的参数顺序，将参数连接成字符串，然后进行MD5数字签名(32字符十六进制)。比较所得结果与`signature`字段值是否相等。其中`master_secret`为注册后从BeeCloud获取的密钥。**注意，`signature`中的字母全部为小写**。
 
 ### 3.3.2 过滤重复的Webhook
 
@@ -4669,7 +4685,7 @@ HTTP Content-type : application/json
 
   Key             | Type          | Example
 -------------     | ------------- | -------------
-  sign            | String        | 32位小写
+  signature       | String        | 32位小写
   timestamp       | Long          | 1426817510111
   channel_type     | String        | 'WX' or 'ALI' or 'UN' or 'KUAIQIAN' or 'JD' or 'BD' or 'YEE' or 'PAYPAL' or 'BC'
   sub\_channel\_type | String        | 'WX\_APP' or 'WX\_NATIVE' or 'WX\_JSAPI' or 'WX\_SCAN' or 'ALI\_APP' or 'ALI\_SCAN' or 'ALI\_WEB' or 'ALI\_QRCODE' or 'ALI\_OFFLINE\_QRCODE' or 'ALI\_WAP' or 'UN\_APP' or 'UN\_WEB' or 'PAYPAL\_SANDBOX' or 'PAYPAL\_LIVE' or 'JD\_WAP' or 'JD\_WEB' or 'YEE\_WAP' or 'YEE\_WEB' or 'YEE\_NOBANKCARD' or 'KUAIQIAN\_WAP' or 'KUAIQIAN\_WEB' or 'BD\_APP' or 'BD\_WEB' or 'BD\_WAP' or 'BC\_TRANSFER' or 'ALI_TRANSFER'  
@@ -4684,8 +4700,8 @@ HTTP Content-type : application/json
 
 key  | value
 ---- | -----
-sign | 服务器端通过计算 **App ID + App Secret + timestamp** 的MD5生成的签名(32字符十六进制),请在接受数据时自行按照此方式验证sign的正确性，不正确不返回success即可
-timestamp | 服务端的时间（毫秒），用以验证sign, MD5计算请参考sign的解释
+signature | 服务器端通过计算 **app\_id + transaction\_id + transaction\_type + channel\_type + transaction\_fee + master\_secret** 的MD5生成的签名(32字符十六进制),请在接受数据时自行按照此方式验证signature的正确性，不正确不返回success即可. 其中master\_secret为用户创建Beecloud App时获取的参数。
+timestamp | 服务端的时间（毫秒）
 channel_type| WX/ALI/UN/KUAIQIAN/JD/BD/YEE/PAYPAL   分别代表微信/支付宝/银联/快钱/京东/百度/易宝/PAYPAL
 sub_channel\_type|  代表以上各个渠道的子渠道，参看字段说明
 transaction_type| PAY/REFUND  分别代表支付和退款的结果确认
@@ -5768,6 +5784,7 @@ sub_channel         | String       | 子渠道类型 WX_APP、WX_NATIVE、WX_JSA
 title         | String       | 订单标题
 spay\_result  | Bool         | 订单是否成功
 create_time | Long         | 订单创建时间, 毫秒时间戳, 13位
+success_time | Long        | 订单支付成功时间，毫秒时间长，13位 
 optional | String | 附加数据,用户自定义的参数，将会在webhook通知中原样返回，该字段是JSON格式的字符串 {"key1":"value1","key2":"value2",...}
 message_detail | String         | 渠道详细信息， 当need_detail传入true时返回
 revert_result  | Bool         | 订单是否已经撤销
