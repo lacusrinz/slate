@@ -20,16 +20,12 @@ language_tabs:
 
 <!-- search: true -->
 ---
-
-# 1. SDK开发
-
-## 1.1 概览
+# 0. 开通渠道
 
 BeeCloud支持线上线下各种场景的支付解决方案，本文档以场景的形式展示如何使用BeeCloud开发，完成支付技术的接入。
 
-### 1.1.1 渠道的开通和参数配置
 
-#### 1.1.1.1 开通渠道
+## 0.1 开通渠道
 
 **官方渠道**申请指导：  
 微信APP的申请： [这里](http://beecloud.cn/doc/payapply/?index=0)  
@@ -39,15 +35,18 @@ BeeCloud支持线上线下各种场景的支付解决方案，本文档以场景
 BeeCloud提供低费率的特惠通道（包括：支付宝/微信/银联），请联系我们商务(15011103441 刘经理)了解更多详情
 </aside>
 
-#### 1.1.1.2 渠道参数配置
+## 0.2 渠道参数配置
 
 微信APP参数配置： [这里](http://beecloud.cn/doc/payapply/?index=1)  
 微信公众号参数配置： [这里](http://beecloud.cn/doc/payapply/?index=3)   
 支付宝APP/PC网页/移动网页参数配置： [这里](http://beecloud.cn/doc/payapply/?index=5)   
 支付宝RSA秘钥配置： [这里](http://beecloud.cn/doc/payapply/?index=14)   
 
+# 1. SDK开发
 
-### 1.1.2 SDK安装
+## 1.1 SDK安装和注册
+
+### 1.1.1 SDK安装
 
 SDK下载地址 [这里](http://beecloud.cn/download/)
 <aside class="notice">
@@ -55,7 +54,7 @@ SDK下载地址 [这里](http://beecloud.cn/download/)
 </aside>
 
 
-### 1.1.3 在代码中注册BeeCloud
+### 1.1.2 在代码中注册BeeCloud
 
 1. 注册开发者：猛击[这里](http://www.beecloud.cn/register)注册成为BeeCloud开发者， 并完成企业认证
 <aside class="notice">
@@ -578,7 +577,20 @@ app.post('/api/bill', (req, res, next) => {
 })
 ```
 
-#### 1.2.2.4 附： 支付宝支付其他可选参数：
+#### 1.2.2.4 附： 
+
+支付宝支付**必填**参数：
+
+参数名 | 类型 | 含义 | 描述 | 示例 
+----  | ---- | ---- | ---- | ---- 
+channel| String | 渠道类型 | 渠道code | ALI_WEB
+total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 
+bill_no | String | 商户订单号 |8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 
+title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 
+return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，**<mark>中间请勿有#,?等字符</mark>** | http://beecloud.cn/returnUrl.jsp 
+
+
+支付宝支付其他**可选**参数：
 
 参数名 | 类型 | 含义 | 描述 | 示例 
 ----  | ---- | ---- | ---- | ---- 
@@ -1176,10 +1188,22 @@ app.post('/api/bill', (req, res, next) => {
 })
 ```
 
-#### 1.2.3.4 附： 微信支付其他可选参数：
+#### 1.2.3.4 附： 
+
+微信支付**必填**参数：
 
 参数名 | 类型 | 含义 | 描述 | 示例 
 ----  | ---- | ---- | ---- | ---- 
+channel| String | 渠道类型 | 渠道code | WX_NATIVE
+total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 
+bill_no | String | 商户订单号 |8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 
+title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 
+
+微信支付其他**可选**参数：
+
+参数名 | 类型 | 含义 | 描述 | 示例 
+----  | ---- | ---- | ---- | ---- 
+return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，**<mark>中间请勿有#,?等字符，只有微信移动网页支付需要这个参数</mark>**，| http://beecloud.cn/returnUrl.jsp 
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
 notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
@@ -1418,7 +1442,19 @@ app.post('/api/bill', (req, res, next) => { //支付
 })
 ```
 
-#### 1.2.4.3 附： 银联支付其他可选参数：
+#### 1.2.4.3 附： 
+
+银联支付**必填**参数：
+
+参数名 | 类型 | 含义 | 描述 | 示例 
+----  | ---- | ---- | ---- | ---- 
+channel| String | 渠道类型 | 渠道code | UN_WEB
+total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 
+bill_no | String | 商户订单号 |8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 
+title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 
+return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，**<mark>中间请勿有#,?等字符</mark>** | http://beecloud.cn/returnUrl.jsp 
+
+银联支付其他**可选**参数：
 
 参数名 | 类型 | 含义 | 描述 | 示例 
 ----  | ---- | ---- | ---- | ---- 
@@ -1427,7 +1463,7 @@ notify_url | String | 商户自定义回调地址 | 商户可通过此参数设�
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
 
 
-### 1.2.5 网页上实现银行网关收款
+### 1.2.5 网页上实现第三方网关收款
 
 <aside class="notice">
 银行网关是指直接进入选定的银行接口进行支付
@@ -1457,7 +1493,7 @@ bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位�
 </aside>
 
 
-> 网关收款代码示例：
+> 第三方网关收款代码示例：
 
 ```csharp
 BCBill bill = new BCBill('渠道code', '金额', '订单号', '订单标题');
@@ -1559,8 +1595,129 @@ optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通�
 notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360
 
+### 1.2.6 网页上实现第三方快捷收款
 
-## 1.3. 线下通过二维码收款
+<aside class="notice">
+快捷支付是指银联的快捷接口（不针对单独银行，直接输入卡号）进行支付
+</aside>
+
+1. 用户发起付款请求
+2. 系统生成付款订单，包括订单号，订单标题，金额等信息
+3. 将订单存入自己系统数据库中，标记订单为未支付
+4. 调用BeeCloud SDK中的支付接口，
+5. 快捷接口返回一个html
+6. 通过将html输出到页面进而打开收银台页面，用户输入银行卡号完成付款
+7. 支付完成，用户跳转到设置的return url地址
+8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
+<aside class="notice">
+参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
+<aside class="success">
+支持的渠道包括：`BC_EXPRESS` 
+</aside>
+
+
+> 第三方快捷收款代码示例：
+
+```csharp
+BCBill bill = new BCBill('渠道code', '金额', '订单号', '订单标题');
+bill.returnUrl = "http://www.baidu.com";
+try
+{
+    BCBill resultBill = BCPay.BCPayByChannel(bill);
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + resultBill.html + "</span><br/>");
+}
+catch (Exception excption)
+{
+    Response.Write("<span style='color:#00CD00;font-size:20px'>" + excption.Message + "</span><br/>");
+}
+```
+
+```java
+BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
+try {
+    bcOrder.setReturnUrl(bcGatewayReturnUrl);
+    bcOrder = BCPay.startBCPay(bcOrder);
+    out.println(bcOrder.getHtml());
+} catch (BCException e) {
+    log.error(e.getMessage(), e);
+    out.println(e.getMessage());
+}
+```
+
+```php
+try {
+    $data = array(
+        'timestamp' => time() * 1000,
+        'channel' => 'BC_GATEWAY', //渠道类型
+        'title' => '网关支付测试',   //订单标题
+        'bill_no' => "bcdemo" . time(),    //订单编号
+        'total_fee' => 1 //订单金额(int 类型) ,单位分
+    );
+    $result = \beecloud\rest\api::bill($data);
+    //不使用namespace的用户
+    //$result = BCRESTApi::bill($data);
+    if(isset($result->url)){
+        header("Location:$result->url");
+    }else if(isset($result->html)) {
+        echo $result->html;
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
+```
+
+```ruby
+
+```
+
+```python
+req_params = BCPayReqParams()
+req_params.channel = 'BC_GATEWAY'
+req_params.title = u'支付测试'
+# 分为单位
+req_params.total_fee = 1
+req_params.bill_no = 'bill number'
+# 支付完成后的跳转页面
+req_params.return_url = 'http://your.return.url.cn/'
+result = bc_pay.pay(req_params)
+# 如果result.result_code为0表示请求成功
+# 然后对返回参数url重定向
+```
+
+```javascript
+//前端传参
+let data = {}, _this = this;
+    data.channel = 'BC_GATEWAY';//根据不同场景选择不同的支付方式 
+    data.timestamp = new Date().valueOf();//时间戳，毫秒数 
+    data.total_fee = 1;//total_fee(int 类型) 单位分
+    data.bill_no = `bcdemo${data.timestamp}`;//8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复
+    data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
+    data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
+    data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
+                
+
+//后端
+const BCRESTAPI = require('beecloud-node-sdk');
+const API = new BCRESTAPI();
+
+app.post('/api/bill', (req, res, next) => { //支付
+    API.bill(req.body).then((response) => {
+        res.send(response);
+    })
+})
+```
+
+附： 网关收款其他可选参数：
+
+参数名 | 类型 | 含义 | 描述 | 示例 
+----  | ---- | ---- | ---- | ---- 
+optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360
+
+
+## 1.3. 线下收款
 
 ### 1.3.1 流程概述
 
@@ -3583,15 +3740,11 @@ BCQuery.getInstance().queryRefundByIDAsync(
 2. 系统生成退款订单，包括退款单号，需要退款的订单号，金额等信息
 3. 将退款单存入自己系统数据库中，标记订单为未退款
 4. 调用BeeCloud SDK中的退款接口，根据用户订单的渠道，调用相应的接口
-5. 微信，银联在调用退款接口后直接进行退款，支付宝需要打开支付宝的退款页，输入密码完成退款 **（支付宝不支持无秘退款）**
+5. 微信，银联在调用退款接口后直接进行退款，支付宝需要打开支付宝的退款页，输入密码完成退款 **（支付宝即时到帐不支持无秘退款，支付宝2017年新版移动网页，APP支付支持无秘退款）**
 6. 退款成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为退款成功
 
 <aside class="warning">
 退款只能从服务器端发起，会用到`Master Secret`进行加密，切勿泄露`Master Secret`  
-</aside>
-
-<aside class="warning">
-目前BC_渠道的订单暂时不支持退款 
 </aside>
 
 <aside class="notice">
@@ -3599,7 +3752,8 @@ BCQuery.getInstance().queryRefundByIDAsync(
 </aside>
 
 <aside class="success">
-支持多次退款，只需有余额可以退
+（绝大多数渠道）支持多次退款，只需有余额就可以退。<p>  
+如果有些渠道不支持部分退款，或者只能退一次，在BeeCloud管理平台的订单详情中有显示
 </aside>
 
 > 退款代码示例：
@@ -3744,7 +3898,7 @@ PC端如下：
 <aside class="success">
 可以实现:
 </aside>
-1. 秒支付button支持的渠道**支付宝网页/移动网页支付**，**公众号内微信支付**，**微信扫码支付**，**银联网页/移动网页支付**，**京东支付**，**百度支付**，**易宝支付**
+1. 秒支付button支持的渠道**支付宝网页/移动网页支付**，**公众号内微信支付**，**微信扫码支付**，**银联网页/移动网页支付**
 2. 不需要自己写样式
 3. 不需要自己做移动适配
 4. 如果只有一个支付渠道，可以直接跳转付款页不弹出渠道选择框
@@ -3753,7 +3907,8 @@ PC端如下：
 不能满足:
 </aside>
 1. 不能定制UI
-2. 一些进阶的参数不能在秒支付button使用，比如设置订单的超时时间等
+2. 不能在新页面打开支付页，只能从当前页面跳转  
+3. 一些进阶的参数不能在秒支付button使用，比如设置订单的超时时间等
 
 ## 2.2 使用前准备
 
@@ -5323,6 +5478,8 @@ https://api.beecloud.cn
 secret是一个非常重要的数据，请您必须小心谨慎的确保此数据保存在足够安全的地方。您从BeeCloud官方获得此数据的同时，即表明您保证不会被用于非法用途和不会在没有得到您授权的情况下被盗用，一旦因此数据保管不善而导致的经济损失及法律责任，均由您独自承担。
 </aside>
 
+### 4.2.1 支付（线上）
+
 URL:   */2/rest/bill*
 
 Method: *POST*
@@ -5338,7 +5495,7 @@ Method: *POST*
 app_id | String | BeeCloud平台的AppID | App在BeeCloud平台的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
 timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
 app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
-channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_OFFLINE\_QRCODE、ALI\_WAP、UN\_APP、UN\_WEB、UN\_WAP、PAYPAL\_SANDBOX、PAYPAL\_LIVE、JD\_WAP、JD\_WEB、YEE\_WAP、YEE\_WEB、YEE\_NOBANKCARD、KUAIQIAN\_WAP、KUAIQIAN\_WEB、BD\_APP、BD\_WEB、BD\_WAP、BC\_GATEWAY、BC\_EXPRESS、BC\_APP、BC\_NATIVE、BC\_WX\_WAP、BC\_WX\_JSAPI、BC\_ALI\_QRCODE（详见附注）| 是
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX\_APP、WX\_NATIVE、WX\_JSAPI、ALI\_APP、ALI\_WEB、ALI\_QRCODE、ALI\_WAP、UN\_APP、UN\_WEB、UN\_WAP、BC\_GATEWAY、BC\_EXPRESS、BC\_NATIVE、BC\_WX\_WAP、BC\_WX\_JSAPI、BC\_ALI\_QRCODE、BC_ALI_APP、BC_ALI_WEB、BC_ALI_WAP| 是
 total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 | 是
 bill_no | String | 商户订单号 | 8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 | 是
 title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 | 是
@@ -5357,39 +5514,20 @@ WX\_JSAPI: 微信公众号支付
 ALI\_APP: 支付宝手机原生APP支付  
 ALI\_WEB: 支付宝PC网页支付  
 ALI\_QRCODE: 支付宝内嵌二维码支付  
-ALI\_OFFLINE_QRCODE: 支付宝线下二维码支付  
 ALI\_WAP: 支付宝移动网页支付  
 UN\_APP: 银联手机原生APP支付  
 UN\_WEB: 银联PC网页支付  
 UN\_WAP: 银联移动网页支付  
-JD\_WAP: 京东移动网页支付   
-JD\_WEB: 京东PC网页支付  
-YEE\_WAP: 易宝移动网页支付  
-YEE\_WEB: 易宝PC网页支付  
-YEE\_NOBANKCARDB: 易宝充值卡支付
-KUAIQIAN\_WAP: 快钱移动网页支付  
-KUAIQIAN\_WEB: 快钱PC网页支付  
-PAYPAL\_LIVE: PAYPAL生产环境支付   
-PAYPAL\_SANDBOX: PAYPAL沙箱环境支付   
-BD\_APP: 百度手机原生APP支付   
-BD\_WAP: 百度移动网页支付   
-BD\_WEB: 百度PC网页支付   
-BC\_GATEWAY: BC版网关支付  
-BC\_EXPRESS: BC版快捷支付  
-BC\_APP: BC版手机APP支付  
+BC\_GATEWAY: 第三方网关支付  
+BC\_EXPRESS: 第三方快捷支付  
 BC\_NATIVE: BC版微信二维码支付  
 BC\_WX\_WAP: BC版微信手机WAP支付  
 BC\_WX\_JSAPI: BC版微信公众号支付  
 BC\_ALI\_QRCODE: BC版支付宝线下扫码支付  
 WX\_NATIVE: 微信二维码支付   
-ALI\_OFFLINE\_QRCODE: 支付宝二维码支付  
-WX\_SCAN: 微信条形码支付  
-ALI\_SCAN: 支付宝条形码支付  
-SCAN: 支付宝、微信统一条形码支付    
-BC\_ALI\_SCAN: BC版支付宝条形码支付    
-BC\_WX\_SCAN: BC版支付宝条形码支付 
 
-- 以下是`银联快捷（恒丰通道）(BC_EXPRESS)`的必填参数
+
+- 以下是`银联快捷（大额通道）(BC_EXPRESS)`的必填参数
 
 参数名 | 类型 | 含义 | 例子
 ---- | ---- | ---- | ----
@@ -5480,7 +5618,7 @@ timestamp | String | 当前时间戳，单位是毫秒，13位
 pay_sign  | String | 签名值
 prepay_id  | String | 微信预支付id
 
-- WX\_NATIVE、BC\_NATIVE、BC\_ALI\_QRCODE、ALI\_OFFLINE\_QRCODE
+- WX\_NATIVE、BC\_NATIVE、BC\_ALI\_QRCODE
 
 参数名 | 类型 | 含义 
 ---- | ---- | ----
@@ -5535,23 +5673,81 @@ tn | String | 银联支付ticket number
 ---- | ---- | ----
 html | String | 银联跳转form，是一段HTML代码，自动提交
 
-- UN\_WEB、UN\_WAP、JD\_WAP、JD\_WEB、KUAIQIAN\_WAP、KUAIQIAN\_WEB
+- UN\_WEB、UN\_WAP
 
 参数名 | 类型 | 含义 
 ---- | ---- | ----
 html | String | 支付页自动提交form表单内容
 
-- YEE\_WAP、YEE\_WEB、BD\_WAP、BD\_WEB
+- WX\_NATIVE 
 
 参数名 | 类型 | 含义 
 ---- | ---- | ----
-url | String | 支付页跳转地址
+code_url | String | 二维码地址
 
-- BD\_APP
+
+### 4.2.2 支付（线下）
+
+URL:   */2/rest/offline/bill*
+Method: *POST*
+请求参数格式: *JSON: Map*
+
+请求参数详情:
+- 以下为公共参数：
+
+参数名 | 类型 | 含义 | 描述 | 例子 | 是否必填
+----  | ---- | ---- | ---- | ---- | ----
+app_id | String | BeeCloud平台的AppID | App在BeeCloud平台的唯一标识 | 0950c062-5e41-44e3-8f52-f89d8cf2b6eb | 是
+timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
+app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+app\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
+channel| String | 渠道类型 | 根据不同场景选择不同的支付方式 | WX\_NATIVE、WX_SCAN、ALI\_OFFLINE\_QRCODE、ALI_SCAN、SCAN、BC\_ALI\_SCAN,BC\_WX\_SCAN(详见附注）| 是
+total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 | 是
+bill_no | String | 商户订单号 | 8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 | 是
+title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 | 是
+auth_code | String | 用户授权码| 当商户用扫码枪扫用户的条形码时得到的字符串 | 23891113455872 | 当channel参数为BC\_ALI\_SCAN,BC\_WX\_SCAN,BC\_SCAN,WX_SCAN或ALI_SCAN 时为必填
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+optional | Map | 附加数据 | 用户自定义的参数，将会在Webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} | 否
+store_id | string | 门店号| 门店号 | 卡门店号 | 否
+
+> 注1：channel的参数值含义：  
+WX\_NATIVE: 微信二维码支付   
+ALI\_OFFLINE\_QRCODE: 支付宝二维码支付  
+WX\_SCAN: 微信条形码支付  
+ALI\_SCAN: 支付宝条形码支付  
+SCAN: 支付宝、微信统一条形码支付
+BC\_ALI\_SCAN: BC版支付宝条形码支付  
+BC\_WX\_SCAN: BC版支付宝条形码支付
+BC\_SCAN: 支付宝、微信统一条形码支付
+
+
+返回类型: *JSON: Map*
+返回参数:
+
+- **公共返回参数**
 
 参数名 | 类型 | 含义 
 ---- | ---- | ----
-orderInfo | String | 百度支付order info
+result_code | Integer | 返回码，0为正常
+result_msg  | String | 返回信息， OK为正常
+err_detail  | String | 具体错误信息
+
+- **公共返回参数取值列表及其含义**
+
+result_code | result_msg             | 含义
+----        | ----                     | ----
+0           | OK                     | 调用成功
+1           | APP\_INVALID           | 根据app\_id找不到对应的APP或者app\_sign不正确
+2           | PAY\_FACTOR_NOT\_SET   | 支付要素在后台没有设置
+3           | CHANNEL\_INVALID       | channel参数不合法
+4           | MISS\_PARAM            | 缺少必填参数
+5           | PARAM\_INVALID         | 参数不合法
+6           | CERT\_FILE\_ERROR      | 证书错误
+7           | CHANNEL\_ERROR         | 渠道内部错误
+14          | RUNTIME\_ERROR         | 运行时错误
+
+> **当result_code不为0时，如需详细信息，请查看err\_detail字段**
+
+**<mark>以下字段在result_code为0时有返回</mark>**  
 
 - ALI\_SCAN | WX\_SCAN | BC\_ALI\_SCAN|BC\_WX\_SCAN
 
@@ -5574,11 +5770,9 @@ channel_type | String | 具体条形码支付类型，ALI\_SCAN或者WX\_SCAN
 
 ## 4.3 退款
 
-### 4.3.1 退款/预退款（线上）
+### 4.3.1 退款（线上）
 
 退款接口仅支持对已经支付成功的订单进行退款。 退款金额refund\_fee必须小于或者等于原始支付订单的total\_fee，如果是小于，则表示部分退款.
-
-退款接口包含预退款功能，当need_approval字段的值为true时，该接口开启预退款功能，预退款仅创建退款记录，并不真正发起退款，需后续调用审核接口，审核同意或者否决，才真正发起退款或者拒绝预退款。
 
 URL: */2/rest/refund*
 Method: *POST*
@@ -5599,7 +5793,6 @@ bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 2015061
 refund_fee | Integer | 退款金额 | 必须为正整数，单位为分，必须小于或等于对应的已支付订单的total_fee | 1 | 是
 notify_url | String | 商户自定义退款回调地址 | 商户可通过此参数设定退款回调地址，此地址会覆盖用户在控制台设置的退款回调地址。必须以`http://`或`https://`开头 | http://beecloud.cn/notifyUrl.jsp | 否
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} | 否
-need_approval| Bool | 是否为预退款 | 预退款need_approval值传true,直接退款不传此参数或者传false | true | 否
 refund_account | Integer | 退款资金来源 | 1:可用余额退款 0:未结算资金退款（默认使用未结算资金退款） | 1 | 否
 
 返回类型: *JSON: Map*
@@ -5631,53 +5824,6 @@ result\_code | result\_msg                | 含义
 ---- | ---- | ----
 url | String | 支付宝退款地址，需用户在支付宝平台上手动输入支付密码处理
 
-
-
-### 4.3.2 预退款批量审核
-
-批量审核接口仅支持预退款，批量审核分为批量驳回和批量同意。
-
-URL: */2/rest/refund*
-Method: *PUT*
-
-请求参数格式: *JSON: Map*
-请求参数详情:
-
-- 请求参数
-
-参数名 | 类型 | 含义   | 描述 | 例子 | 是否必填 |
----- | ---- | ---- | ---- | ---- | ----
-app_id | String | BeeCloud应用APPID | BeeCloud的唯一标识 | 0950c062\-5e41\-44e3\-8f52\-f89d8cf2b6eb | 是 
-timestamp | Long | 签名生成时间 | 时间戳，毫秒数 | 1435890533866 | 是
-app_sign | String | 加密签名 | 算法: md5(app\_id+timestamp+master\_secret)，32位16进制格式,不区分大小写 | b927899dda6f9a04afc57f21ddf69d69 | 是
-channel| String | 渠道类型 | 根据不同渠道选不同的值 | WX ALI UN KUAIQIAN BD JD YEE | 是
-ids | List<String> | 退款记录id列表 | 批量审核的退款记录的唯一标识符集合 | ["d9690a6e-ae99-44b7-9904-bd9d43fcc21b", "6f263aa6-111d-4c95-b51e-001b3f7e6ddf", "  7d1f69e4-3ff2-4b7d-b764-eb018620e00d"] | 是
-agree| Bool | 同意或者驳回 | 批量驳回传false，批量同意传true | true | 是
-deny_reason| String | 驳回理由 | 批量驳回原因 | "审核不通过" | 否
-
-返回类型: *JSON: Map*
-返回参数:
-
-- 公共返回参数
-
-参数名 | 类型 | 含义 
----- | ---- | ----
-result\_code | Integer | 返回码，0为正常
-result\_msg  | String | 返回信息，OK为正常
-err\_detail  | String | 具体错误信息
-
-**当agree为true时，以下字段在result_code为0时有返回**
- 
-参数名 | 类型 | 含义 
----- | ---- | ----
-result_map | Map<String, String>; |批量同意单笔结果集合，key:单笔记录id; value:此笔记录结果。 当退款处理成功时，value值为"OK"；当退款处理失败时， value值为具体的错误信息。
-
-
-**当channel为`ALI`时，以下字段在agree为true时有返回**
- 
-参数名 | 类型 | 含义 
----- | ---- | ----
-url | String | 支付宝退款地址，需用户在支付宝平台上手动输入支付密码处理
 
 ### 4.3.3 退款（线下）
 
@@ -6097,3 +6243,4 @@ result\_code | Integer | 返回码，0为正常
 result\_msg  | String | 返回信息， OK为正常
 err\_detail  | String | 具体错误信息
 pay_result | Bool | 订单是否成功
+
