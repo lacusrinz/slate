@@ -1,6 +1,6 @@
 Doc for BeeCloud
 
-edit /source/index.html.md
+edit /source/doc.html.md
 
 install
 
