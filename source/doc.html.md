@@ -1,5 +1,5 @@
 ---
-title: BeeCloud 技术文档
+title: 聚合支付 技术文档
 
 language_tabs:
   - java: Java
@@ -22,25 +22,25 @@ language_tabs:
 ---
 # 0. 开通渠道
 
-BeeCloud支持线上线下各种场景的支付解决方案，本文档以场景的形式展示如何使用BeeCloud开发，完成支付技术的接入。
+聚合支付支持线上线下各种场景的支付解决方案，本文档以场景的形式展示如何使用聚合支付开发，完成支付技术的接入。
 
 
 ## 0.1 开通渠道
 
 **官方渠道**申请指导：  
-微信APP的申请： [这里](http://beecloud.cn/doc/payapply/?index=0)  
-微信公众号的申请： [这里](http://beecloud.cn/doc/payapply/?index=2)  
-支付宝APP/PC网页/移动网页的申请： [这里](http://beecloud.cn/doc/payapply/?index=4)
+微信APP的申请： [这里](http://payplatform.juhe.cn/doc/payapply/?index=0)  
+微信公众号的申请： [这里](http://payplatform.juhe.cn/doc/payapply/?index=2)  
+支付宝APP/PC网页/移动网页的申请： [这里](http://payplatform.juhe.cn/doc/payapply/?index=4)
 <aside class="notice">
-BeeCloud提供低费率的特惠通道（包括：支付宝/微信/银联），请联系我们商务(15011103441 刘经理)了解更多详情
+聚合支付提供低费率的特惠通道（包括：支付宝/微信/银联），请联系我们商务(15950049812 张经理)了解更多详情
 </aside>
 
 ## 0.2 渠道参数配置
 
-微信APP参数配置： [这里](http://beecloud.cn/doc/payapply/?index=1)  
-微信公众号参数配置： [这里](http://beecloud.cn/doc/payapply/?index=3)   
-支付宝APP/PC网页/移动网页参数配置： [这里](http://beecloud.cn/doc/payapply/?index=5)   
-支付宝RSA秘钥配置： [这里](http://beecloud.cn/doc/payapply/?index=14)   
+微信APP参数配置： [这里](http://payplatform.juhe.cn/doc/payapply/?index=1)  
+微信公众号参数配置： [这里](http://payplatform.juhe.cn/doc/payapply/?index=3)   
+支付宝APP/PC网页/移动网页参数配置： [这里](http://payplatform.juhe.cn/doc/payapply/?index=5)   
+支付宝RSA秘钥配置： [这里](http://payplatform.juhe.cn/doc/payapply/?index=14)   
 
 # 1. SDK开发
 
@@ -48,66 +48,66 @@ BeeCloud提供低费率的特惠通道（包括：支付宝/微信/银联），�
 
 ### 1.1.1 SDK安装
 
-SDK下载地址 [这里](http://beecloud.cn/download/)
+SDK下载地址 [这里](http://payplatform.juhe.cn/download/)
 <aside class="notice">
 各个SDK的安装请参考SDK的readme文件
 </aside>
 
 
-### 1.1.2 在代码中注册BeeCloud
+### 1.1.2 在代码中注册聚合支付
 
-1. 注册开发者：猛击[这里](http://www.beecloud.cn/register)注册成为BeeCloud开发者， 并完成企业认证
+1. 注册开发者：猛击[这里](http://payplatform.juhe.cn/register)注册成为聚合支付开发者， 并完成企业认证
 <aside class="notice">
-BeeCloud只面向企业用户，所以企业认证是必须的。
+聚合支付只面向企业用户，所以企业认证是必须的。
 </aside>
-2. 注册应用：使用注册的账号登陆[控制台](http://www.beecloud.cn/dashboard/)后，点击"创建新的支付应用"创建新应用
+2. 注册应用：使用注册的账号登陆[控制台](http://payplatform.juhe.cn/dashboard/)后，点击"创建新的支付应用"创建新应用
 3. 在新创建的支付应用下 应用设置下 基本信息设置中 获取 `APP ID`， `APP Secret`， `Master Secret`， `Test Secret`，其中`Test Secret`在控制台的test模式下获取。
 4. 在代码中注册 
 
 <aside class="warning">
-secret是一个非常重要的数据，请您必须小心谨慎的确保此数据保存在足够安全的地方。您从BeeCloud官方获得此数据的同时，即表明您保证不会被用于非法用途和不会在没有得到您授权的情况下被盗用，一旦因此数据保管不善而导致的经济损失及法律责任，均由您独自承担。
+secret是一个非常重要的数据，请您必须小心谨慎的确保此数据保存在足够安全的地方。您从聚合支付官方获得此数据的同时，即表明您保证不会被用于非法用途和不会在没有得到您授权的情况下被盗用，一旦因此数据保管不善而导致的经济损失及法律责任，均由您独自承担。
 </aside>
 
 > 注册使用如下代码:
 
 ```java
 //LIVE模式使用方法
-BeeCloud.registerApp(appId, testSecret, appSecret, masterSecret);  
+JuhePay.registerApp(appId, testSecret, appSecret, masterSecret);  
 //LIVE模式中的testSecret可为null  
 //默认开启LIVE模式
 
 //测试模式使用方法
-BeeCloud.registerApp(appId, testSecret, **appSecret**, **masterSecret**);   
+JuhePay.registerApp(appId, testSecret, **appSecret**, **masterSecret**);   
 //测试模式中的appSecret、masterSecret可为null  
 //设置sandbox属性为true，开启测试模式  
-BeeCloud.setSandbox(true);
+JuhePay.setSandbox(true);
   
 ```
 
 ```php 
-\beecloud\rest\api::registerApp('app id', 'app secret', 'master secret', 'test secret');
+\juhepay\rest\api::registerApp('app id', 'app secret', 'master secret', 'test secret');
 //不使用namespace的用户
 BCRESTApi::registerApp('app id', 'app secret', 'master secret', 'test secret') 
 
-//LIVE模式使用方法（也可不设置，默认为为LIVE模式）
-\beecloud\rest\api::setSandbox(false);
+//LIVE模式使用方法（也可不设置，默认为LIVE模式）
+\juhepay\rest\api::setSandbox(false);
 //不使用namespace的用户
 BCRESTApi::setSandbox(false);
 
 //测试模式使用方法  
-\beecloud\rest\api::setSandbox(true);
+\juhepay\rest\api::setSandbox(true);
 //不使用namespace的用户
 BCRESTApi::setSandbox(true);
 ```
 
 ```csharp
 //请注意各个参数一一对应
-BeeCloud.BeeCloud.registerApp(appID, appSecret, masterSecret, testSecret);
+JuhePay.JuhePay.registerApp(appID, appSecret, masterSecret, testSecret);
 
 //设置生产模式，真实货币交易（也可不设置，默认为上线模式）
-BeeCloud.BeeCloud.setTestMode(false);
+JuhePay.JuhePay.setTestMode(false);
 //设置当前为测试模式
-BeeCloud.BeeCloud.setTestMode(true);
+JuhePay.JuhePay.setTestMode(true);
 ```
 
 ```ruby
@@ -139,11 +139,11 @@ API.setSandbox(true);//开启测试模式 不设置就是不开启
 ```
 
 ```xml
-BeeCloud.setAppIdAndSecret("appId", "appSecret");
+JuhePay.setAppIdAndSecret("appId", "appSecret");
 
 // 如果需要开启测试模式
-// BeeCloud.setSandbox(true);
-// BeeCloud.setAppIdAndSecret("appId", "testSecret");
+// JuhePay.setSandbox(true);
+// JuhePay.setAppIdAndSecret("appId", "testSecret");
 ```
 
 ```swift
@@ -152,37 +152,37 @@ BeeCloud.setAppIdAndSecret("appId", "appSecret");
 
 //初始化分为生产模式(LiveMode)、沙箱环境(SandboxMode)；沙箱测试模式下不产生真实交易
 //开启生产环境
-[BeeCloud initWithAppID:@"BeeCloud AppId" andAppSecret:@"BeeCloud App Secret"];
+[JuhePay initWithAppID:@"JuhePay AppId" andAppSecret:@"JuhePay App Secret"];
   
 
 //开启沙箱测试环境
-[BeeCloud initWithAppID:@"BeeCloud AppId" andAppSecret:@"BeeCloud Test Secret"];
-[BeeCloud setSandboxMode:YES];
+[JuhePay initWithAppID:@"JuhePay AppId" andAppSecret:@"JuhePay Test Secret"];
+[JuhePay setSandboxMode:YES];
 或者
-[BeeCloud initWithAppID:@"BeeCloud AppId" andAppSecret:@"BeeCloud Test Secret" sandbox:YES];
+[JuhePay initWithAppID:@"JuhePay AppId" andAppSecret:@"JuhePay Test Secret" sandbox:YES];
 
 
 //查看当前模式
 // 返回YES代表沙箱测试模式；NO代表生产模式
-[BeeCloud getCurrentMode];
+[JuhePay getCurrentMode];
 
 
 //初始化官方微信支付  
 //如果您使用了微信支付，需要用微信开放平台Appid初始化。  
-[BeeCloud initWeChatPay:@"微信开放平台appid"];
+[JuhePay initWeChatPay:@"微信开放平台appid"];
 
 
 //handleOpenUrl
 //为保证从支付宝，微信返回本应用，须绑定openUrl. 用于iOS9之前版本
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    if (![BeeCloud handleOpenUrl:url]) {
+    if (![JuhePay handleOpenUrl:url]) {
         //handle其他类型的url
     }
     return YES;
 }
 //iOS9之后apple官方建议使用此方法
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
-    if (![BeeCloud handleOpenUrl:url]) {
+    if (![JuhePay handleOpenUrl:url]) {
         //handle其他类型的url
     }
     return YES;
@@ -197,7 +197,7 @@ BeeCloud.setAppIdAndSecret("appId", "appSecret");
 
 步骤①：**（从网页服务器端）发送订单信息**  
 
-步骤②：**收到BeeCloud返回的渠道支付地址（比如支付宝的收银台）**  
+步骤②：**收到聚合支付返回的渠道支付地址（比如支付宝的收银台）**  
 
 步骤③：**将支付地址展示给用户进行支付**  
 
@@ -207,7 +207,7 @@ BeeCloud.setAppIdAndSecret("appId", "appSecret");
 
 步骤⑤：**（在商户后端服务端）处理异步回调结果(Webhook)**
  
-付款完成之后，根据客户在BeeCloud后台的设置，BeeCloud会向客户服务端发送一个Webhook请求，里面包括了数字签名，订单号，订单金额等一系列信息。客户需要在服务端依据规则要验证**数字签名是否正确，购买的产品与订单金额是否匹配，这两个验证缺一不可**。验证结束后即可开始走支付完成后的逻辑。
+付款完成之后，根据客户在聚合支付后台的设置，聚合支付会向客户服务端发送一个Webhook请求，里面包括了数字签名，订单号，订单金额等一系列信息。客户需要在服务端依据规则要验证**数字签名是否正确，购买的产品与订单金额是否匹配，这两个验证缺一不可**。验证结束后即可开始走支付完成后的逻辑。
 
 
 ### 1.2.2 网页上实现支付宝收款
@@ -217,7 +217,7 @@ BeeCloud.setAppIdAndSecret("appId", "appSecret");
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，请求支付宝
+4. 调用聚合支付 SDK中的支付接口，请求支付宝
 5. 支付宝返回一个url或者html
 6. 通过跳转到url或者将html输出到页面进而打开支付宝收银台页面，用户登录支付宝付款
 7. 支付完成，用户跳转到设置的return url地址
@@ -272,10 +272,10 @@ try {
         'title' => '支付宝及时到账支付测试',   //订单标题
         'bill_no' => "bcdemo" . time(),    //订单编号
         'total_fee' => 1, //订单金额(int 类型) ,单位分
-        'return_url' => 'https://beecloud.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
+        'return_url' => 'https://juhe.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
         'bill_timeout' => 360, //京东(JD*)不支持该参数
     );
-    $result = \beecloud\rest\api::bill($data);
+    $result = \juhepay\rest\api::bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::bill($data);
     if(isset($result->url)){
@@ -316,10 +316,10 @@ let data = {}, _this = this;
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
     data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
-    data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
+    data.return_url = "https://juhe.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => {
@@ -334,7 +334,7 @@ app.post('/api/bill', (req, res, next) => {
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，请求支付宝
+4. 调用聚合支付 SDK中的支付接口，请求支付宝
 5. 支付宝返回一个url或者html
 6. 通过跳转到url或者将html输出到页面进而打开支付宝二维码的页面，用户扫码付款
 7. 支付完成，用户跳转到设置的return url地址
@@ -396,10 +396,10 @@ try {
         //1： 订单码-前置模式, 对应 iframe 宽度不能小于 300px, 高度不能小于 600px
         //3： 订单码-迷你前置模式, 对应 iframe 宽度不能小于 75px, 高度不能小于 75px
         'qr_pay_mode' => "0",
-        'return_url' => 'https://beecloud.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
+        'return_url' => 'https://juhe.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
         'bill_timeout' => 360, //京东(JD*)不支持该参数
     );
-    $result = \beecloud\rest\api::bill($data);
+    $result = \juhepay\rest\api::bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::bill($data);
     if(isset($result->url)){
@@ -440,10 +440,10 @@ let data = {}, _this = this;
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
     data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
-    data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
+    data.return_url = "https://juhe.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhe-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { 
@@ -458,7 +458,7 @@ app.post('/api/bill', (req, res, next) => {
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，请求支付宝
+4. 调用聚合支付 SDK中的支付接口，请求支付宝
 5. 支付宝返回一个url或者html
 6. 通过跳转到url或者将html输出到页面进而打开支付宝手机收银台页面，实现收款
 7. 支付完成，用户跳转到设置的return url地址
@@ -467,7 +467,7 @@ app.post('/api/bill', (req, res, next) => {
 参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
 </aside>
 <aside class="notice">
-移动网页有特殊参数 use_app，默认掉起支付宝APP实现原生支付，可以关闭
+移动网页有特殊参数 use_app，默认调起支付宝APP实现原生支付，可以关闭
 </aside>
 <aside class="success">
 支持的渠道包括：`ALI_WAP`
@@ -519,10 +519,10 @@ try {
         'total_fee' => 1, //订单金额(int 类型) ,单位分
         //use_app非必填参数,boolean型,是否使用APP支付,true使用,否则不使用
         //'use_app' => true;
-        'return_url' => 'https://beecloud.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
+        'return_url' => 'https://juhe.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
         'bill_timeout' => 360, //京东(JD*)不支持该参数
     );
-    $result = \beecloud\rest\api::bill($data);
+    $result = \juhepay\rest\api::bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::bill($data);
     if(isset($result->url)){
@@ -563,11 +563,11 @@ let data = {}, _this = this;
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
     data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
-    data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
+    data.return_url = "https://juhe.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
     data.use_app = true;//是否尝试掉起支付宝APP原生支付
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => {
@@ -587,7 +587,7 @@ channel| String | 渠道类型 | 渠道code | ALI_WEB
 total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 
 bill_no | String | 商户订单号 |8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 
 title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 
-return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，**<mark>中间请勿有#,?等字符</mark>** | http://beecloud.cn/returnUrl.jsp 
+return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，**<mark>中间请勿有#,?等字符</mark>** | http://juhe.cn/returnUrl.jsp 
 
 
 支付宝支付其他**可选**参数：
@@ -595,7 +595,7 @@ return_url | String | 同步返回页面| 支付渠道处理完请求后,当前�
 参数名 | 类型 | 含义 | 描述 | 示例 
 ----  | ---- | ---- | ---- | ---- 
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
-notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
 analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip
 
@@ -603,14 +603,14 @@ analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分
 
 #### 1.2.3.1 微信公众号内网页收款
 
-0. 微信公众号配置参数：[文档](http://beecloud.cn/doc/payapply/?index=3)
+0. 微信公众号配置参数：[文档](http://payplatform.cn/doc/payapply/?index=3)
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 <aside class="warning">
 公众号支付需要用到微信特殊参数openid，如何获取openid可以通过百度，有大量的教程
 </aside>
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，请求微信
+4. 调用聚合支付 SDK中的支付接口，请求微信
 5. 返回必要的参数，然后将这些参数传入到微信的js方法中
 <aside class="warning">
 这些js方法只有在微信内的浏览器才会被识别，所以只能在微信内使用
@@ -628,7 +628,7 @@ analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分
 > 微信公众号内网页收款代码示例：
 
 ```csharp
-//服务端部分，服务端将从beecloud获取的参数传递给js，去调用微信的方法实现支付
+//服务端部分，服务端将从聚合支付获取的参数传递给js，去调用微信的方法实现支付
 BCBill bill = new BCBill('渠道code', '金额', '订单号', '订单标题');
 bill.openId = jsApiPay.openid;
 try
@@ -700,7 +700,7 @@ catch (Exception excption)
 Properties prop = loadProperty();
 String wxJSAPIAppId = prop.get("wxJSAPIAppId").toString();
 String wxJSAPISecret = prop.get("wxJSAPISecret").toString();
-String wxJSAPIRedirectUrl = "http://javademo.beecloud.cn/demo/pay_example/pay.jsp?paytype=" + channel;
+String wxJSAPIRedirectUrl = "http://javademo.payplatform.juhe.cn/demo/pay_example/pay.jsp?paytype=" + channel;
 String encodedWSJSAPIRedirectUrl = URLEncoder.encode(wxJSAPIRedirectUrl);
 if (request.getParameter("code") == null || request.getParameter("code").toString().equals("")) {
     String redirectUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + wxJSAPIAppId + "&redirect_uri=" + encodedWSJSAPIRedirectUrl + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
@@ -781,7 +781,7 @@ if (request.getParameter("code") == null || request.getParameter("code").toStrin
  *
  * 注意:
  *      请修改lib/WxPayPubHelper/WxPay.pub.config.php配置文件中的参数:
- *      1.APPID, APPSECRET请修改为商户自己的微信参数(MCHID, KEY在beecloud平台创建的应用中配置);
+ *      1.APPID, APPSECRET请修改为商户自己的微信参数(MCHID, KEY在聚合支付平台创建的应用中配置);
  *      2.JS_API_CALL_URL针对当前的demo,应该是http(s)://<your domain>/<your path>/pay.bill.php?type=WX_JSAPI,可根据具体情况进行配置调整;
  *      3.请检查方法createOauthUrlForCode是否对回调链接地址(redirect_uri)进行urlencode处理,如果没有请自行添加
  *      3.特别要强调的是JS_API_CALL_URL的访问域名必须与微信公众平台配置的授权回调页面域名一致.
@@ -813,7 +813,7 @@ try {
         'bill_no' => "bcdemo" . time(),    //订单编号
         'total_fee' => 1 //订单金额(int 类型) ,单位分
     );
-     $result = \beecloud\rest\api::bill($data);
+     $result = \juhepay\rest\api::bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::bill($data);
     if ($result->result_code != 0) {
@@ -913,7 +913,7 @@ let data = {}, _this = this;
     data.openid = '0950c062-5e41-xxxxxxxxxxx';//openid
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -928,7 +928,7 @@ app.post('/api/bill', (req, res, next) => { //支付
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，请求微信
+4. 调用聚合支付 SDK中的支付接口，请求微信
 5. 微信返回一个url或者html 
 6. 通过跳转到url或者将html输出到页面进而打开微信的跳转中转页页面，打开微信APP实现收款
 7. 支付完成，用户跳转到设置的return url地址
@@ -978,7 +978,7 @@ try {
         'bill_no' => "bcdemo" . time(),    //订单编号
         'total_fee' => 1 //订单金额(int 类型) ,单位分
     );
-    $result = \beecloud\rest\api::bill($data);
+    $result = \juhepay\rest\api::bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::bill($data);
     if(isset($result->url)){
@@ -1025,7 +1025,7 @@ let data = {}, _this = this;
     data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { 
@@ -1040,7 +1040,7 @@ app.post('/api/bill', (req, res, next) => {
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，请求微信
+4. 调用聚合支付 SDK中的支付接口，请求微信
 5. 微信返回收款二维码的值
 <aside class="warning">
 微信没有自己的网页，所以直接返回了二维码的内容，需要用户自己生成二维码
@@ -1093,7 +1093,7 @@ catch (Exception excption)
 ```java
 BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
 try {
-    bcOrder.setNotifyUrl("https:///apidynamic.beecloud.cn/test");
+    bcOrder.setNotifyUrl("https:///apidynamic.payplatform.juhe.cn/test");
     bcOrder = BCPay.startBCPay(bcOrder);
     //将bcOrder.getCodeUrl()是二维码的值，用生成二维码的方法生成二维码即可
 } catch (BCException e) {
@@ -1112,7 +1112,7 @@ try {
         'bill_no' => "bcdemo" . time(),    //订单编号
         'total_fee' => 1 //订单金额(int 类型) ,单位分
     );
-    $result = \beecloud\rest\api::bill($data);
+    $result = \juhepay\rest\api::bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::bill($data);
     if ($result->result_code != 0) {
@@ -1179,7 +1179,7 @@ let data = {}, _this = this;
     data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => {  
@@ -1204,9 +1204,9 @@ title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持1
 
 参数名 | 类型 | 含义 | 描述 | 示例 
 ----  | ---- | ---- | ---- | ---- 
-return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，**<mark>中间请勿有#,?等字符，只有微信移动网页支付需要这个参数</mark>**，| http://beecloud.cn/returnUrl.jsp 
+return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，**<mark>中间请勿有#,?等字符，只有微信移动网页支付需要这个参数</mark>**，| http://juhe.cn/returnUrl.jsp 
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
-notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
 analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip
 
@@ -1217,7 +1217,7 @@ analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，请求银联
+4. 调用聚合支付 SDK中的支付接口，请求银联
 5. 银联返回一个html
 6. 通过将html输出到页面进而打开银联收银台页面，用户输入银行卡号完成付款
 7. 支付完成，用户跳转到设置的return url地址
@@ -1265,10 +1265,10 @@ try {
         'title' => '银联PC网页支付测试',   //订单标题
         'bill_no' => "bcdemo" . time(),    //订单编号
         'total_fee' => 1, //订单金额(int 类型) ,单位分
-        'return_url' => 'https://beecloud.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
+        'return_url' => 'https://juhe.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
         'bill_timeout' => 360, //京东(JD*)不支持该参数
     );
-    $result = \beecloud\rest\api::bill($data);
+    $result = \juhepay\rest\api::bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::bill($data);
     if(isset($result->url)){
@@ -1314,11 +1314,11 @@ let data = {}, _this = this;
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
     data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
-    data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
+    data.return_url = "https://juhe.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
                 
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -1333,7 +1333,7 @@ app.post('/api/bill', (req, res, next) => { //支付
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，请求银联
+4. 调用聚合支付 SDK中的支付接口，请求银联
 5. 银联返回一个html
 6. 通过将html输出到页面进而打开银联收银台页面，用户输入银行卡号完成付款
 7. 支付完成，用户跳转到设置的return url地址
@@ -1381,10 +1381,10 @@ try {
         'title' => '银联移动网页支付测试',   //订单标题
         'bill_no' => "bcdemo" . time(),    //订单编号
         'total_fee' => 1, //订单金额(int 类型) ,单位分
-        'return_url' => 'https://beecloud.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
+        'return_url' => 'https://juhe.cn', //渠道类型:ALI_WEB、ALI_QRCODE、UN_WEB、JD_WAP、JD_WEB时为必填
         'bill_timeout' => 360, //京东(JD*)不支持该参数
     );
-    $result = \beecloud\rest\api::bill($data);
+    $result = \juhepay\rest\api::bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::bill($data);
     if(isset($result->url)){
@@ -1430,11 +1430,11 @@ let data = {}, _this = this;
     data.title = `node${data.channel}test`;//title UTF8编码格式，32个字节内，最长支持16个汉字
     data.optional = {tag: 'msgtoreturn'};//用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据
     data.bill_timeout = 360;//选填必须为非零正整数，单位为秒，建议最短失效时间间隔必须大于360秒，京东(JD*)不支持该参数。 
-    data.return_url = "https://beecloud.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
+    data.return_url = "https://juhe.cn";//当channel参数为 ALI_WEB 或 ALI_QRCODE 或 UN_WEB 或 JD_WAP 或 JD_WEB时为必填
                 
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -1454,14 +1454,14 @@ channel| String | 渠道类型 | 渠道code | UN_WEB
 total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 
 bill_no | String | 商户订单号 |8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 
 title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 
-return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，**<mark>中间请勿有#,?等字符</mark>** | http://beecloud.cn/returnUrl.jsp 
+return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，**<mark>中间请勿有#,?等字符</mark>** | http://juhe.cn/returnUrl.jsp 
 
 银联支付其他**可选**参数：
 
 参数名 | 类型 | 含义 | 描述 | 示例 
 ----  | ---- | ---- | ---- | ---- 
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
-notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
 analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip
 
@@ -1475,7 +1475,7 @@ analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，根据用户选择的银行，调用相应的银行接口
+4. 调用聚合支付 SDK中的支付接口，根据用户选择的银行，调用相应的银行接口
 5. 银行返回一个html
 6. 通过将html输出到页面进而打开收银台页面，用户输入银行卡号完成付款
 7. 支付完成，用户跳转到设置的return url地址
@@ -1536,7 +1536,7 @@ try {
         'total_fee' => 1, //订单金额(int 类型) ,单位分
         'bank' => 'BOC'
     );
-    $result = \beecloud\rest\api::bill($data);
+    $result = \juhepay\rest\api::bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::bill($data);
     if(isset($result->url)){
@@ -1580,7 +1580,7 @@ let data = {}, _this = this;
                 
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -1595,7 +1595,7 @@ app.post('/api/bill', (req, res, next) => { //支付
 参数名 | 类型 | 含义 | 描述 | 示例 
 ----  | ---- | ---- | ---- | ---- 
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
-notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360
 analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip
 
@@ -1608,7 +1608,7 @@ analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额, 银行卡号等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，
+4. 调用聚合支付 SDK中的支付接口，
 5. 快捷接口返回一个html
 6. 通过将html输出到页面进而打开收银台页面，用户输入银行卡号完成付款
 7. 支付完成，用户跳转到设置的return url地址
@@ -1663,7 +1663,7 @@ try {
         'total_fee' => 1, //订单金额(int 类型) ,单位分
         'card_no' => '6222691921993841111'   //银行卡号
     );
-    $result = \beecloud\rest\api::bill($data);
+    $result = \juhepay\rest\api::bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::bill($data);
     if(isset($result->url)){
@@ -1707,7 +1707,7 @@ let data = {}, _this = this;
                 
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -1722,7 +1722,7 @@ app.post('/api/bill', (req, res, next) => { //支付
 参数名 | 类型 | 含义 | 描述 | 示例 
 ----  | ---- | ---- | ---- | ---- 
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
-notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360
 analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip
 
@@ -1735,9 +1735,9 @@ analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分
 
 #### 1.3.1.1 用户扫商户的二维码称为扫码支付
 
-步骤①：**商家根据用户购买商品确定金额，向BeeCloud请求**  
+步骤①：**商家根据用户购买商品确定金额，向聚合支付请求**  
 
-步骤②：**收到BeeCloud返回的二维码信息**  
+步骤②：**收到聚合支付返回的二维码信息**  
 
 步骤③：**将二维码展示给用户进行支付**  
 
@@ -1745,7 +1745,7 @@ analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分
 
 #### 1.3.1.2 商户扫用户的二维码称为刷卡收款
 
-步骤①：**商家根据用户购买商品确定金额，并且通过扫码枪等工具获取用户付款二维码的内容，向BeeCloud请求**  
+步骤①：**商家根据用户购买商品确定金额，并且通过扫码枪等工具获取用户付款二维码的内容，向聚合支付请求**  
 
 步骤②：**用户支付完成后通过查询订单状态完成收款**  
 
@@ -1755,7 +1755,7 @@ analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分
 1. 商户发起收款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，请求支付宝
+4. 调用聚合支付 SDK中的支付接口，请求支付宝
 5. 支付宝返回一个二维码的值
 6. 将二维码的值生成二维码图片展示给用户完成扫码支付
 7. 调用status查询接口查看支付是否成功(可以循环查询直到取消或者查询到成功)
@@ -1831,7 +1831,7 @@ try {
         'bill_no' => "bcdemo" . time(),    //订单编号
         'total_fee' => 1 //订单金额(int 类型) ,单位分
     );
-    $result = \beecloud\rest\api::offline_bill($data);
+    $result = \juhepay\rest\api::offline_bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::offline_bill($data);
     if ($result->result_code != 0) {
@@ -1935,7 +1935,7 @@ let data = {}, _this = this;
                 
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -1955,7 +1955,7 @@ API.getOfflineStatus({
 1. 商户发起收款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，请求微信
+4. 调用聚合支付 SDK中的支付接口，请求微信
 5. 微信返回一个二维码的值
 6. 将二维码的值生成二维码图片展示给用户完成扫码支付
 7. 调用status查询接口查看支付是否成功(可以循环查询直到取消或者查询到成功)
@@ -2032,7 +2032,7 @@ try {
         'bill_no' => "bcdemo" . time(),    //订单编号
         'total_fee' => 1 //订单金额(int 类型) ,单位分
     );
-    $result = \beecloud\rest\api::bill($data);
+    $result = \juhepay\rest\api::bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::bill($data);
     if ($result->result_code != 0) {
@@ -2065,7 +2065,7 @@ try {
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>BeeCloud微信扫码示例</title>
+    <title>聚合支付微信扫码示例</title>
 </head>
 <body>
 <div align="center" id="qrcode" ></div>
@@ -2135,7 +2135,7 @@ let data = {}, _this = this;
                 
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -2155,7 +2155,7 @@ API.getOfflineStatus({
 1. 商户发起收款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 通过外部设备如扫码枪等获取用户的支付二维码内容，调用BeeCloud SDK中的支付接口，请求支付宝
+4. 通过外部设备如扫码枪等获取用户的支付二维码内容，调用聚合支付 SDK中的支付接口，请求支付宝
 5. 如果是免密支付，直接返回收款结果
 6. 如果用户需要输入密码，调用status查询接口查看支付是否成功(可以循环查询直到取消或者查询到成功)
 7. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
@@ -2211,7 +2211,7 @@ try {
         'total_fee' => 1, //订单金额(int 类型) ,单位分
         'auth_code' => '28886955594xxxxxxxx' //用户授权码, 当商户用扫码枪扫用户的条形码时得到的字符串
     );
-    $result = \beecloud\rest\api::offline_bill($data);
+    $result = \juhepay\rest\api::offline_bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::offline_bill($data);
     if ($result->result_code != 0) {
@@ -2318,7 +2318,7 @@ let data = {}, _this = this;
                 
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -2339,7 +2339,7 @@ API.getOfflineStatus({
 1. 商户发起收款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 通过外部设备如扫码枪等获取用户的支付二维码内容，调用BeeCloud SDK中的支付接口，请求微信
+4. 通过外部设备如扫码枪等获取用户的支付二维码内容，调用聚合支付 SDK中的支付接口，请求微信
 5. 如果是免密支付，直接返回收款结果
 6. 如果用户需要输入密码，调用status查询接口查看支付是否成功(可以循环查询直到取消或者查询到成功)
 7. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
@@ -2395,7 +2395,7 @@ try {
         'total_fee' => 1, //订单金额(int 类型) ,单位分
         'auth_code' => '28886955594xxxxxxxx' //用户授权码, 当商户用扫码枪扫用户的条形码时得到的字符串
     );
-    $result = \beecloud\rest\api::offline_bill($data);
+    $result = \juhepay\rest\api::offline_bill($data);
     //不使用namespace的用户
     //$result = BCRESTApi::offline_bill($data);
     if ($result->result_code != 0) {
@@ -2501,7 +2501,7 @@ let data = {}, _this = this;
                 
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bill', (req, res, next) => { //支付
@@ -2521,7 +2521,7 @@ API.getOfflineStatus({
 参数名 | 类型 | 含义 | 描述 | 示例 
 ----  | ---- | ---- | ---- | ---- 
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
-notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
 analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip
 
@@ -2542,16 +2542,16 @@ analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分
 
 付款完成或取消之后，会回到客户app中，在页面中展示支付结果（比如弹出框告诉用户"支付成功"或"支付失败")。同步回调结果只作为界面展示的依据，不能作为订单的最终支付结果，最终支付结果应以异步回调为准。
 
-步骤③：**（在客户服务端）处理异步回调结果（[Webhook](https://beecloud.cn/doc/?index=webhook)）**
+步骤③：**（在客户服务端）处理异步回调结果（[Webhook](https://juhe.cn/doc/?index=webhook)）**
  
-付款完成之后，根据客户在BeeCloud后台的设置，BeeCloud会向客户服务端发送一个Webhook请求，里面包括了数字签名，订单号，订单金额等一系列信息。客户需要在服务端依据规则要验证**数字签名是否正确，购买的产品与订单金额是否匹配，这两个验证缺一不可**。验证结束后即可开始走支付完成后的逻辑。
+付款完成之后，根据客户在聚合支付后台的设置，聚合支付会向客户服务端发送一个Webhook请求，里面包括了数字签名，订单号，订单金额等一系列信息。客户需要在服务端依据规则要验证**数字签名是否正确，购买的产品与订单金额是否匹配，这两个验证缺一不可**。验证结束后即可开始走支付完成后的逻辑。
 
 ### 1.4.2 在APP中使用支付宝收款
 
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，请求支付宝
+4. 调用聚合支付 SDK中的支付接口，请求支付宝
 5. 调起支付宝APP，用户进行支付，支付完成后跳回商户APP
 6. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
@@ -2579,7 +2579,7 @@ iOS的支付宝有特殊参数scheme，详情查看SDK readme文件配置部分
     payReq.scheme = @"payDemo"; //URL Scheme,在Info.plist中配置;
     payReq.billTimeOut = 300; //订单超时时间
     payReq.optional = dict;//商户业务扩展参数，会在webhook回调时返回
-    [BeeCloud sendBCReq:payReq];
+    [JuhePay sendBCReq:payReq];
 }
 ```
 
@@ -2605,7 +2605,7 @@ BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，请求微信
+4. 调用聚合支付 SDK中的支付接口，请求微信
 5. 调起微信APP，用户进行支付，支付完成后跳回商户APP
 6. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
@@ -2629,7 +2629,7 @@ BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
     payReq.billNo = billno; //商户自定义订单号
     payReq.billTimeOut = 300; //订单超时时间
     payReq.optional = dict;//商户业务扩展参数，会在webhook回调时返回
-    [BeeCloud sendBCReq:payReq];
+    [JuhePay sendBCReq:payReq];
 }
 ```
 
@@ -2656,7 +2656,7 @@ BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 1. 用户发起付款请求
 2. 系统生成付款订单，包括订单号，订单标题，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
-4. 调用BeeCloud SDK中的支付接口，请求银联
+4. 调用聚合支付 SDK中的支付接口，请求银联
 5. 调起银联插件，用户进行支付，支付完成后跳回商户APP
 <aside class="notice">
 参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
@@ -2682,7 +2682,7 @@ BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
     payReq.billTimeOut = 300; //订单超时时间
     payReq.viewController = self; //银联支付和Sandbox环境必填
     payReq.optional = dict;//商户业务扩展参数，会在webhook回调时返回
-    [BeeCloud sendBCReq:payReq];
+    [JuhePay sendBCReq:payReq];
 }
 ```
 
@@ -2712,22 +2712,22 @@ BCPay.getInstance(activity).reqPaymentAsync(payParam, new BCCallback() {...});
 打款只能从服务器端发起，会用到`Master Secret`进行加密，切勿泄露`Master Secret`
 </aside>
 
-### 1.5.2 BeeCloud打款到银行卡
+### 1.5.2 聚合支付打款到银行卡
 
 <aside class="notice">
-打款到银行卡需要首先在BeeCloud打款账户充值，企业打款余额可以用于打款 
+打款到银行卡需要首先在聚合支付打款账户充值，企业打款余额可以用于打款 
 </aside>
 1. 商户发起打款请求
 2. 系统生成打款订单，包括打款单号，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未成功
-4. 调用BeeCloud SDK中的支付接口，请求BeeCloud
-5. BeeCloud返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
+4. 调用聚合支付 SDK中的支付接口，请求聚合支付
+5. 聚合支付返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
 6. 打款成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为打款成功
 <aside class="success">
 支持的渠道包括：`BC_TRANSFER`  
 </aside>
 
-> BeeCloud打款到银行卡代码示例：
+> 聚合支付打款到银行卡代码示例：
 
 ```csharp
 //getBankFullNames方法可以获取所有支持的银行全称，将全称填写到BCTransferWithBackCard里的bank_fullname字段
@@ -2786,7 +2786,7 @@ try {
         /*
          *  如果未能确认银行的全称信息,可通过下面的接口获取并进行确认
          *  //P_DE:对私借记卡,P_CR:对私信用卡,C:对公账户
-         *  $banks = \beecloud\rest\api::bc_transfer_banks(array('type' => 'P_DE'));
+         *  $banks = \juhepay\rest\api::bc_transfer_banks(array('type' => 'P_DE'));
          *  if ($result->result_code != 0) {
          *      print_r($result);
          *      exit();
@@ -2801,7 +2801,7 @@ try {
         //选填mobile
         'mobile' => ""; //银行绑定的手机号
     );
-    $result = \beecloud\rest\api::bc_transfer($data);
+    $result = \juhepay\rest\api::bc_transfer($data);
     //不使用namespace的用户
     //$result = BCRESTApi::bc_transfer($data);
     if ($result->result_code != 0) {
@@ -2862,7 +2862,7 @@ result = bc_pay.bc_transfer(transfer_params)
     data.mobile = '13888888888';//银行绑定的手机号，当需要手机收到银行入账信息时，该值必填，前提是该手机在银行有短信通知业务，否则收不到银行信息 
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bcTransfer', (req, res, next) => { 
@@ -2872,7 +2872,7 @@ app.post('/api/bcTransfer', (req, res, next) => {
 })
 ```
 
-附： BeeCloud打款到银行卡参数列表
+附： 聚合支付打款到银行卡参数列表
 
 参数名 | 类型 | 含义 | 描述 | 例子 
 ----  | ---- | ---- | ---- | ---- 
@@ -2893,7 +2893,7 @@ optional | Map | 附加数据 | 用户自定义的参数，将会在Webhook通�
 1. 商户发起打款请求
 2. 系统生成打款订单，包括打款单号，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未成功
-4. 调用BeeCloud SDK中的支付接口，请求支付宝
+4. 调用聚合支付 SDK中的支付接口，请求支付宝
 5. 支付宝返回打款页面输入商户支付宝密码，完成打款
 6. 返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
 7. 打款成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为打款成功
@@ -2947,7 +2947,7 @@ try {
          'channel_user_name' => '', //收款人账户姓名
          'account_name' => '苏州比可网络科技有限公司' //注意此处需要和企业账号对应的全称
     );
-    $result = \beecloud\rest\api::transfers($data);
+    $result = \juhepay\rest\api::transfers($data);
     //不使用namespace的用户
     //$result = BCRESTApi::transfers($data);
     if ($result->result_code != 0) {
@@ -2995,7 +2995,7 @@ result = bc_pay.transfer(transfer_params)
     data.account_name = '苏州比可网络科技有限公司';//打款方账号名称,支付宝必填
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/transfer', (req, res, next) => { 
@@ -3022,7 +3022,7 @@ account_name|String|打款方账号名称|打款方账号名全称 | 苏州比�
 1. 商户发起打款请求
 2. 系统生成打款订单，包括打款单号，金额等信息
 3. 将订单存入自己系统数据库中，标记订单为未成功
-4. 调用BeeCloud SDK中的支付接口，请求微信
+4. 调用聚合支付 SDK中的支付接口，请求微信
 5. 返回打款发起状态（发起打款成功，发起打款失败，失败有失败原因）
 6. 微信打款没有webhook，以同步返回为准
 <aside class="notice">
@@ -3071,7 +3071,7 @@ try {
         'total_fee' => 1, //订单金额(int 类型) ,单位分
         'channel_user_id' => 'o3kKrjlROJ1qlDmFdlBQA95zxxx'   //微信openid
     );
-    $result = \beecloud\rest\api::transfer($data);
+    $result = \juhepay\rest\api::transfer($data);
     //不使用namespace的用户
     //$result = BCRESTApi::transfer($data);
     if ($result->result_code != 0) {
@@ -3115,13 +3115,13 @@ result = bc_pay.transfer(transfer_params)
     data.desc = '赔偿';//此次打款的说明  
     data.channel_user_id = 'someone@126.com';//支付渠道方内收款人的标示, 微信为openid, 支付宝为支付宝账户
     data.redpack_info = {
-                            send_name: 'beecloud',//红包发送者名称 32位 
-                            wishing: 'BeeCloud祝福开发者工作顺利!',//红包祝福语 128 位 
-                            act_name: 'BeeCloud开发者红包轰动'//红包活动名称 32位 
+                            send_name: 'juhe',//红包发送者名称 32位 
+                            wishing: '聚合支付祝福开发者工作顺利!',//红包祝福语 128 位 
+                            act_name: '聚合支付开发者红包轰动'//红包活动名称 32位 
                         };
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/transfer', (req, res, next) => { 
@@ -3145,7 +3145,7 @@ channel_user\_id | String | 用户id | 支付渠道方内收款人的标示, 微
 
 ### 1.6.1 概述
 
-商户在APP认证用户实名信息或者在打款钱验证用户卡号信息都需要用到身份实名验证接口，BeeCloud支持的验证方式分为二要素，三要素，四要素三种，商户可以根据自己需求选择，比如APP实名验证不需要验证银行卡信息，则只需要使用二要素验证，企业打款前需要验证银行卡和姓名，可以使用三要素或者四要素验证。
+商户在APP认证用户实名信息或者在打款钱验证用户卡号信息都需要用到身份实名验证接口，聚合支付支持的验证方式分为二要素，三要素，四要素三种，商户可以根据自己需求选择，比如APP实名验证不需要验证银行卡信息，则只需要使用二要素验证，企业打款前需要验证银行卡和姓名，可以使用三要素或者四要素验证。
 
 用户进行实名验证时，只需输入商家需要的参数，即可实时完成身份验证。 
 
@@ -3204,7 +3204,7 @@ try {
         'id_no' => '23082619860124xxxx',
         'mobile' => '1555551xxxx'
     );
-    $result = \beecloud\rest\Auths::auth($data);
+    $result = \juhepay\rest\Auths::auth($data);
     //不使用namespace的用户
     //$result = Auths::auth($data);
     if ($result->result_code != 0) {
@@ -3223,7 +3223,7 @@ try {
 ```
 
 ```python
-# 方法在beecloud.utils包中
+# 方法在juhepay.utils包中
 result = verify_card_factors(bc_app,  # BCApp实例
                              '身份证姓名',
                              '身份证号',
@@ -3248,7 +3248,7 @@ let data = {},_this = this;
 
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/auth', (req, res, next) => { 
@@ -3330,7 +3330,7 @@ try {
         'channel' => 'WX', //渠道类型
         'spay_result' => true,    //只列出了支付成功的订单
     );
-    $result = \beecloud\rest\api::bills($data);
+    $result = \juhepay\rest\api::bills($data);
     //不使用namespace的用户
     //$result = BCRESTApi::bills($data);
     if ($result->result_code != 0) {
@@ -3354,7 +3354,7 @@ query_params.channel = 'WX'
 # 限制只返回前50条订单
 query_params.limit = 50
 result = bc_query.query_bills(query_params)
-# 如果查询成功result.bills为beecloud.entity.BCBill的实例列表
+# 如果查询成功result.bills为juhepay.entity.BCBill的实例列表
 ```
 
 ```shell
@@ -3374,7 +3374,7 @@ let data = {}, _this = this;
 
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/bills', (req, res, next) => { 
@@ -3385,7 +3385,7 @@ app.post('/api/bills', (req, res, next) => {
 ```
 
 ```swift
-//通过构造`BCQueryBillsReq`的实例，使用[BeeCloud sendBCReq:req]方法发起支付查询。  
+//通过构造`BCQueryBillsReq`的实例，使用[JuhePay sendBCReq:req]方法发起支付查询。  
 //响应事件类型对象：BCQueryBillsResp
 //支付订单对象: BCQueryBillResult
 BCQueryBillsReq *req = [[BCQueryBillsReq alloc] init];
@@ -3397,7 +3397,7 @@ req.needMsgDetail = YES; //是否需要返回支付成功订单的渠道反馈�
 //req.endTime = @"2015-10-23 00:00";   //订单时间
 req.skip = 0;
 req.limit = 10;
-[BeeCloud sendBCReq:req];
+[JuhePay sendBCReq:req];
 ```
 
 ```xml
@@ -3457,7 +3457,7 @@ try {
         'timestamp' => time() * 1000,
         'id' => '430e1584-8c52-4b09-a4f0-950423ea007e', //订单唯一表识
     );
-    $result = \beecloud\rest\api::bill($data, get);
+    $result = \juhepay\rest\api::bill($data, get);
     //不使用namespace的用户
     //$result = BCRESTApi::bill($data, get);
     if ($result->result_code != 0) {
@@ -3476,7 +3476,7 @@ try {
 
 ```python
 result = bc_query.query_bill_by_id('bill id')
-# 如果查询成功result.pay为beecloud.entity.BCBill的实例
+# 如果查询成功result.pay为juhepay.entity.BCBill的实例
 ```
 
 ```shell
@@ -3491,7 +3491,7 @@ let data = {},_this = this;
         data.type = this.props.params.type;
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/queryById', (req, res, next) => { 
@@ -3572,7 +3572,7 @@ try {
         'timestamp' => time() * 1000,
         'channel' => 'ALI' //渠道类型
     );
-    $result = \beecloud\rest\api::refunds($data);
+    $result = \juhepay\rest\api::refunds($data);
     //不使用namespace的用户
     //$result = BCRESTApi::refunds($data);
     if ($result->result_code != 0) {
@@ -3594,7 +3594,7 @@ query_params = BCQueryReqParams()
 # 如果查询全部订单channel不设置即可
 query_params.channel = 'WX'
 result = bc_query.query_refunds(query_params)
-# 如果查询成功result.refunds为beecloud.entity.BCRefund的实例列表
+# 如果查询成功result.refunds为juhepay.entity.BCRefund的实例列表
 ```
 
 ```javascript
@@ -3610,7 +3610,7 @@ let data = {}, _this = this;
     data.skip = skip;
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/refunds', (req, res, next) => { 
@@ -3687,7 +3687,7 @@ try {
         'timestamp' => time() * 1000,
         'channel' => 'ALI' //退款订单唯一表识
     );
-    $result = \beecloud\rest\api::refund($data, 'get');
+    $result = \juhepay\rest\api::refund($data, 'get');
     //不使用namespace的用户
     //$result = BCRESTApi::refund($data, 'get');
     if ($result->result_code != 0) {
@@ -3706,7 +3706,7 @@ try {
 
 ```python
 result = bc_query.query_refund_by_id(refund_id)
-# 如果查询成功result.refund为beecloud.entity.BCRefund的实例
+# 如果查询成功result.refund为juhepay.entity.BCRefund的实例
 ```
 
 ```shell
@@ -3721,7 +3721,7 @@ let data = {},_this = this;
         data.type = 'refund';
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/queryById', (req, res, next) => { 
@@ -3750,7 +3750,7 @@ BCQuery.getInstance().queryRefundByIDAsync(
 1. 商户发起退款请求
 2. 系统生成退款订单，包括退款单号，需要退款的订单号，金额等信息
 3. 将退款单存入自己系统数据库中，标记订单为未退款
-4. 调用BeeCloud SDK中的退款接口，根据用户订单的渠道，调用相应的接口
+4. 调用聚合支付 SDK中的退款接口，根据用户订单的渠道，调用相应的接口
 5. 微信，银联在调用退款接口后直接进行退款，支付宝需要打开支付宝的退款页，输入密码完成退款 **（支付宝即时到帐不支持无秘退款，支付宝2017年新版移动网页，APP支付支持无秘退款）**
 6. 退款成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为退款成功
 
@@ -3813,12 +3813,12 @@ try {
         //need_approval选填,是否为预退款,预退款need_approval为true,直接退款不加此参数或者为false
         'need_approval' => true
     );
-    $result = \beecloud\rest\api::refund($data);
+    $result = \juhepay\rest\api::refund($data);
     //不使用namespace的用户
     //$result = BCRESTApi::refund($data);
     /*
      * 当渠道类型为ALI_OFFLINE_QRCODE, ALI_SCAN, WX_SCAN, WX_NATIVE,调用方法:
-     * \beecloud\rest\api::offline_refund($data);
+     * \juhepay\rest\api::offline_refund($data);
      * 不使用namespace的用户
      * BCRESTApi::offline_refund($data);
      */
@@ -3869,7 +3869,7 @@ data.refund_fee = parseInt(this.refs.fee.value);
 data.optional = {"key1":"value1","key2":"value2"};
 
 //后端
-const BCRESTAPI = require('beecloud-node-sdk');
+const BCRESTAPI = require('juhepay-node-sdk');
 const API = new BCRESTAPI();
 
 app.post('/api/refund', (req, res, next) => { 
@@ -3891,7 +3891,7 @@ refund_account | Integer | 微信退款资金来源 | 1:可用余额退款 0:未
 
 ## 2.1 概览
 
-秒收款基于BeeCloud SDK，是BeeCloud在SDK基础上专门开发出的一个轻量级版本。它只需要短短一句代码即可使用，并且内嵌了一套风格简约的支付页面和完成页面，同时适用于PC端和移动端。这个功能对于入门级开发者来说，不但降低了开发成本，还能够优化用户在支付流程当中的体验。
+秒收款基于聚合支付 SDK，是BeeCloud在SDK基础上专门开发出的一个轻量级版本。它只需要短短一句代码即可使用，并且内嵌了一套风格简约的支付页面和完成页面，同时适用于PC端和移动端。这个功能对于入门级开发者来说，不但降低了开发成本，还能够优化用户在支付流程当中的体验。
 
 ### 2.1.1 使用效果
 
@@ -3924,11 +3924,11 @@ PC端如下：
 
 ## 2.2 使用前准备
 
-1. BeeCloud[注册](http://beecloud.cn/register/)账号, 并完成企业认证
+1. BeeCloud[注册](http://payplatform.juhe.cn/register/)账号, 并完成企业认证
 
-2. BeeCloud中创建应用，填写支付渠道所需参数, 可以参考[官网帮助文档](http://beecloud.cn/doc/payapply)
+2. BeeCloud中创建应用，填写支付渠道所需参数, 可以参考[官网帮助文档](http://payplatform.juhe.cn/doc/payapply)
 
-3. 申请渠道参数，并配置BeeCLoud各个支付渠道的参数，此处请参考官网的[渠道参数帮助页](https://beecloud.cn/doc/payapply/?index=0)
+3. 申请渠道参数，并配置BeeCLoud各个支付渠道的参数，此处请参考官网的[渠道参数帮助页](https://payplatform.juhe.cn/doc/payapply/?index=0)
 <aside class="notify">
 BeeCloud中配置参数需要完成企业认证后才能填写!
 </aside>
@@ -4027,7 +4027,7 @@ String getMessageDigest(String s) {
 </div>
 </body>
 <!--添加控制台活的的script标签-->
-<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<script id='spay-script' type='text/javascript' src='https://jspay.juhe.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
 <body>
     <%
         String app_id = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
@@ -4055,7 +4055,7 @@ String getMessageDigest(String s) {
             "amount":"<%=amount%>",  //总价（分）
             "out_trade_no":"<%=out_trade_no%>", //自定义订单号
             "sign":"<%=sign%>", //商品信息hash值，含义和生成方式见下文
-            "return_url" : "http://payservice.beecloud.cn/spay/result.php", //支付成功后跳转的商户页面,可选，默认为http://payservice.beecloud.cn/spay/result.php
+            "return_url" : "http://payservice.juhe.cn/spay/result.php", //支付成功后跳转的商户页面,可选，默认为http://payservice.juhe.cn/spay/result.php
             "optional" : <%=optional%>//可选，自定义webhook的optional回调参数
         });
         /**
@@ -4091,7 +4091,7 @@ $sign = md5($app_id . $title . $amount . $out_trade_no . $app_secret);
 
 
 <!--2.添加控制台->APP->设置->秒支付button项获得的script标签-->
-<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<script id='spay-script' type='text/javascript' src='https://jspay.juhe.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
 <script>
     //3. 需要发起支付时(示例中绑定在一个按钮的click事件中),调用BC.click方法
     document.getElementById("test").onclick = function() {
@@ -4115,9 +4115,9 @@ $sign = md5($app_id . $title . $amount . $out_trade_no . $app_secret);
     function asyncPay() {
         if (typeof BC == "undefined") {
             if (document.addEventListener) { // 大部分浏览器
-                document.addEventListener('beecloud:onready', bcPay, false);
+                document.addEventListener('juhepay:onready', bcPay, false);
             } else if (document.attachEvent) { // 兼容IE 11之前的版本
-                document.attachEvent('beecloud:onready', bcPay);
+                document.attachEvent('juhepay:onready', bcPay);
             }
         } else {
             bcPay();
@@ -4140,7 +4140,7 @@ $sign = md5($app_id . $title . $amount . $out_trade_no . $app_secret);
 <body>
 <button id="test">test</button>
 <!--添加控制台获得的script标签-->
-<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<script id='spay-script' type='text/javascript' src='https://jspay.juhe.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
 <script>
     document.getElementById("test").onclick = function() {
         BC.err = function(data) {
@@ -4217,7 +4217,7 @@ if __name__ == "__main__":
 </div>
 </body>
 <!--添加控制台活的的script标签-->
-<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<script id='spay-script' type='text/javascript' src='https://jspay.juhe.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
 
 <script type="text/javascript">
     document.getElementById("test").onclick = function() {
@@ -4233,7 +4233,7 @@ if __name__ == "__main__":
             "amount":"1",  //总价（分）
             "out_trade_no":"<%=out_trade_no%>", //自定义订单号
             "sign":"<%=sign%>", //商品信息hash值，含义和生成方式见下文
-            "return_url" : "http://payservice.beecloud.cn/spay/result.php", //支付成功后跳转的商户页面,可选，默认为http://payservice.beecloud.cn/spay/result.php
+            "return_url" : "http://payservice.juhe.cn/spay/result.php", //支付成功后跳转的商户页面,可选，默认为http://payservice.juhe.cn/spay/result.php
             "optional" : ""//可选，自定义webhook的optional回调参数
         });
         /**
@@ -4275,7 +4275,7 @@ protected void Page_Load(object sender, EventArgs e)
       <p><center><button id="test" class="button">点击支付</button></center></p>
     </div>
 
-    <script id='spay-script' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+    <script id='spay-script' src='https://jspay.juhe.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
   <script>
     document.getElementById("test").onclick = function() {
         asyncPay();
@@ -4308,9 +4308,9 @@ protected void Page_Load(object sender, EventArgs e)
     function asyncPay() {
         if (typeof BC == "undefined"){
             if( document.addEventListener ){
-                document.addEventListener('beecloud:onready', bcPay, false);
+                document.addEventListener('juhepay:onready', bcPay, false);
             }else if (document.attachEvent){
-                document.attachEvent('beecloud:onready', bcPay);
+                document.attachEvent('juhepay:onready', bcPay);
             }
         }else{
             bcPay();
@@ -4400,7 +4400,7 @@ String getMessageDigest(String s) {
 </div>
 </body>
 <!--添加控制台活的的script标签-->
-<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<script id='spay-script' type='text/javascript' src='https://jspay.juhe.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
 <body>
     <%
         String app_id = "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719";
@@ -4461,7 +4461,7 @@ String getMessageDigest(String s) {
 <body>
 <button id="test">test</button>
 <!--添加控制台获得的script标签-->
-<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<script id='spay-script' type='text/javascript' src='https://jspay.juhe.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
 <script>
     document.getElementById("test").onclick = function() {
         BC.err = function(data) {
@@ -4545,7 +4545,7 @@ if __name__ == "__main__":
 </div>
 </body>
 <!--添加控制台活的的script标签-->
-<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<script id='spay-script' type='text/javascript' src='https://jspay.juhe.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
 
 <script type="text/javascript">
     document.getElementById("test").onclick = function() {
@@ -4609,7 +4609,7 @@ protected void Page_Load(object sender, EventArgs e)
       <p><center><button id="test" class="button">点击支付</button></center></p>
     </div>
 
-    <script id='spay-script' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+    <script id='spay-script' src='https://jspay.juhe.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
   <script>
     document.getElementById("test").onclick = function() {
         asyncPay();
@@ -4649,9 +4649,9 @@ protected void Page_Load(object sender, EventArgs e)
     function asyncPay() {
         if (typeof BC == "undefined"){
             if( document.addEventListener ){
-                document.addEventListener('beecloud:onready', bcPay, false);
+                document.addEventListener('juhepay:onready', bcPay, false);
             }else if (document.attachEvent){
-                document.attachEvent('beecloud:onready', bcPay);
+                document.attachEvent('juhepay:onready', bcPay);
             }
         }else{
             bcPay();
@@ -4725,7 +4725,7 @@ try {
 <body>
 <button id="test" style="position: absolute; left: 10px; top: 10px; z-index: 99999;">test</button>
 <div id="qr"></div>
-<script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
+<script id='spay-script' type='text/javascript' src='https://jspay.juhe.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
 <?php
 $data = array(
     "app_id" =>  "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719",
@@ -4762,9 +4762,9 @@ $data["optional"] = json_decode(json_encode(array("hello" => "1")));
     function asyncPay() {
         if (typeof BC == "undefined") {
             if (document.addEventListener) { // 大部分浏览器
-                document.addEventListener('beecloud:onready', bcPay, false);
+                document.addEventListener('juhepay:onready', bcPay, false);
             } else if (document.attachEvent) { // 兼容IE 11之前的版本
-                document.attachEvent('beecloud:onready', bcPay);
+                document.attachEvent('juhepay:onready', bcPay);
             }
         } else {
             bcPay();
@@ -5266,11 +5266,11 @@ optional| 附加参数，为一个JSON格式的Map，客户在发起购买或者
 "trade_pay_date":"Wed Jan 13 16:27:04 CST 2016",
 "merchant_no":"110119759002",
 "bank_code":"BOC",
-"return_params":"beecloud",
+"return_params":"juhepay",
 "notify_datetime":"20162713T162401444",
 "pay_tool":"TRAN",
 "trade_currency":"CNY",
-"category_code":"beecloud",
+"category_code":"juhepay",
 "buyer_info":{},
 "is_success":"Y",
 "card_type":"DE",
@@ -5423,7 +5423,7 @@ optional| 附加参数，为一个JSON格式的Map，客户在发起购买或者
 "message_detail":{
 "order_no":"C201609100757505729611425",
 "gmt_create":"2016-09-10 19:57:54",
-"seller_email":"admin@beecloud.cn",
+"seller_email":"admin@juhe.cn",
 "sign":"6dc3aa46c724c3f443bd5d8ac6cf67f5",
 "discount":"0.00",
 "body":"线上付款",
@@ -5486,7 +5486,7 @@ optional| 附加参数，为一个JSON格式的Map，客户在发起购买或者
 
 ## 4.1 API请求地址
 
-https://api.beecloud.cn
+https://payapi.juhe.cn
 
 ## 4.2 支付
 
@@ -5519,10 +5519,10 @@ bill_no | String | 商户订单号 | 8到32位数字和/或字母组合，请自
 title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 | 是
 buyer_id | String | 消费者ID | 商户为其用户分配的ID.可以是email、手机号、随机字符串等；最长64位；在商户自己系统内必须保证唯一。 | umwxkieI23Um | 否
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} | 否
-analysis | Map | 分析数据 | 用于统计分析的数据，将会在控制台的统计分析报表中展示，**<mark>用户自愿上传</mark>** | 包括以下基本字段："product","ip", 格式如下：{"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip | 否
-return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，**<mark>中间请勿有#,?等字符</mark>** | http://beecloud.cn/returnUrl.jsp | 当channel参数为 ALI\_WEB 或 ALI\_QRCODE 或  UN\_WEB 或 JD\_WAP 或 JD\_WEB时为必填
+analysis | Map | 分析数据 | 用于统计分析的数据，将会在控制台的统计分析报表中展示，**<mark>用户自愿上传</mark>** | 包括以下基本字段："product_map","ip" | 否
+return_url | String | 同步返回页面| 支付渠道处理完请求后,当前页面自动跳转到商户网站里指定页面的http路径，**<mark>中间请勿有#,?等字符</mark>** | http://juhe.cn/returnUrl.jsp | 当channel参数为 ALI\_WEB 或 ALI\_QRCODE 或  UN\_WEB 或 JD\_WAP 或 JD\_WEB时为必填
 limit_credit | Boolean | 禁用信用卡 | 禁用信用卡 | true/false | 否，**微信可用**
-notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 | 否, **<mark>京东(JD)不支持该参数。</mark>** 
 coupon\_id | string | 卡券id | 传入卡券id，下单时会自动扣除优惠金额再发起支付 | 卡券id | 选填
 
@@ -5562,7 +5562,7 @@ openid| String | 用户相对于微信公众号的唯一id | 0950c062-5e41-44e3-
 
 参数名 | 类型 | 含义 | 例子
 ---- | ---- | ---- | ----
-show_url| String | 商品展示地址以http://开头 | http://beecloud.cn
+show_url| String | 商品展示地址以http://开头 | http://juhe.cn
 
 - 以下是`支付宝移动网页支付(ALI_WAP)`的选填参数
 
@@ -5724,7 +5724,7 @@ total_fee | Integer | 订单总金额 | 必须是正整数，单位为分 | 1 | 
 bill_no | String | 商户订单号 | 8到32位数字和/或字母组合，请自行确保在商户系统中唯一，同一订单号不可重复提交，否则会造成订单重复 | 201506101035040000001 | 是
 title| String | 订单标题 | UTF8编码格式，32个字节内，最长支持16个汉字 | 白开水 | 是
 auth_code | String | 用户授权码| 当商户用扫码枪扫用户的条形码时得到的字符串 | 23891113455872 | 当channel参数为BC\_ALI\_SCAN,BC\_WX\_SCAN,BC\_SCAN,WX_SCAN或ALI_SCAN 时为必填
-notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://beecloud.cn/notifyUrl.jsp
+notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 buyer_id | String | 消费者ID | 商户为其用户分配的ID.可以是email、手机号、随机字符串等；最长64位；在商户自己系统内必须保证唯一。 | umwxkieI23Um | 否
 optional | Map | 附加数据 | 用户自定义的参数，将会在Webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} | 否
 analysis | Map | 分析数据 | 用于统计分析的数据，将会在控制台的统计分析报表中展示，**<mark>用户自愿上传</mark>** | 包括以下基本字段："product","ip", 格式如下：{"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip | 否
@@ -5813,7 +5813,7 @@ channel| String | 渠道类型 | 根据不同渠道选不同的值 | WX ALI UN K
 refund_no | String | 商户退款单号 | 格式为:退款日期(8位) + 流水号(3~24 位)。请自行确保在商户系统中唯一，且退款日期必须是发起退款的当天日期,同一退款单号不可重复提交，否则会造成退款单重复。流水号可以接受数字或英文字符，建议使用数字，但不可接受“000” | 201506101035040000001 | 是
 bill_no | String | 商户订单号 | 发起支付时填写的订单号 | 201506101035040000001 | 是 
 refund_fee | Integer | 退款金额 | 必须为正整数，单位为分，必须小于或等于对应的已支付订单的total_fee | 1 | 是
-notify_url | String | 商户自定义退款回调地址 | 商户可通过此参数设定退款回调地址，此地址会覆盖用户在控制台设置的退款回调地址。必须以`http://`或`https://`开头 | http://beecloud.cn/notifyUrl.jsp | 否
+notify_url | String | 商户自定义退款回调地址 | 商户可通过此参数设定退款回调地址，此地址会覆盖用户在控制台设置的退款回调地址。必须以`http://`或`https://`开头 | http://juhe.cn/notifyUrl.jsp | 否
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} | 否
 refund_account | Integer | 退款资金来源 | 1:可用余额退款 0:未结算资金退款（默认使用未结算资金退款） | 1 | 否
 
@@ -6279,7 +6279,7 @@ pay_result | Bool | 订单是否成功
 
 ### 4.5.1 单个用户注册接口
 
-URL: https://api.beecloud.cn/2/rest/user  
+URL: https://payapi.juhe.cn/2/rest/user  
 Method: POST  
 
 请求参数类型:JSON
@@ -6309,7 +6309,7 @@ err\_detail  | String | 具体错误信息
 
 ### 4.5.2 批量用户导入接口
 
-API: https://api.beecloud.cn/2/rest/users  
+API: https://payapi.juhe.cn/2/rest/users  
 Method: POST  
 
 请求参数类型:JSON
@@ -6318,7 +6318,7 @@ Method: POST
 
 参数名 | 类型 | 含义 | 示例 | 是否必填
 ----  | ---- | ---- | ---- | ----
-email | String | 用户账号 | test@beecloud.cn | 是
+email | String | 用户账号 | test@juhe.cn | 是
 app_id | String | 该账户下任意app_id，用于验签 | | 是
 timestamp | String | | |是
 app_sign | String | | | 是
@@ -6339,7 +6339,7 @@ err\_detail  | String | 具体错误信息
 
 ### 4.5.3 商户用户批量查询接口
 
-API: *https://api.beecloud.cn/2/rest/users*  
+API: *https://payapi.juhe.cn/2/rest/users*  
 Method: GET  
 
 请求参数类型:JSON
@@ -6377,7 +6377,7 @@ users | List | 获取到的用户信息列表
 
 该接口要求用户传入订单号与用户ID的对应关系，该接口会将历史数据中，属于该用户ID的订单数据进行标识。
 
-API: https://api.beecloud.cn/2/rest/history_bills  
+API: https://payapi.juhe.cn/2/rest/history_bills  
 Method: PUT  
 
 请求参数类型:JSON
