@@ -597,7 +597,7 @@ return_url | String | 同步返回页面| 支付渠道处理完请求后,当前�
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
 notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
-anaylsis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product_list":{},"ip":"value2"}
+analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip
 
 ### 1.2.3 网页上实现微信收款
 
@@ -1043,7 +1043,7 @@ app.post('/api/bill', (req, res, next) => {
 4. 调用聚合支付 SDK中的支付接口，请求微信
 5. 微信返回收款二维码的值
 <aside class="warning">
-微信没有自己的网页，所以直接返回了二维码的内容，需要用户自己生存二维码
+微信没有自己的网页，所以直接返回了二维码的内容，需要用户自己生成二维码
 </aside>
 6. 通过代码生成二维码展示到商家自己的页面上，用户扫码付款
 7. 支付完成，没有return_url可以使用
@@ -1208,7 +1208,7 @@ return_url | String | 同步返回页面| 支付渠道处理完请求后,当前�
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
 notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
-anaylsis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product_list":{},"ip":"value2"}
+analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip
 
 ### 1.2.4 网页上实现银联收款
 
@@ -1463,7 +1463,7 @@ return_url | String | 同步返回页面| 支付渠道处理完请求后,当前�
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
 notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
-anaylsis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product_list":{},"ip":"value2"}
+analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip
 
 
 ### 1.2.5 网页上实现第三方网关收款
@@ -1597,7 +1597,7 @@ app.post('/api/bill', (req, res, next) => { //支付
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
 notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360
-anaylsis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product_list":{},"ip":"value2"}
+analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip
 
 ### 1.2.6 网页上实现第三方快捷收款
 
@@ -1606,7 +1606,7 @@ anaylsis | Map | 附加数据 | 商户的用户信息，可用户客户信息分
 </aside>
 
 1. 用户发起付款请求
-2. 系统生成付款订单，包括订单号，订单标题，金额等信息
+2. 系统生成付款订单，包括订单号，订单标题，金额, 银行卡号等信息
 3. 将订单存入自己系统数据库中，标记订单为未支付
 4. 调用聚合支付 SDK中的支付接口，
 5. 快捷接口返回一个html
@@ -1615,6 +1615,9 @@ anaylsis | Map | 附加数据 | 商户的用户信息，可用户客户信息分
 8. 支付成功，webhook通知商户服务器，商户校验后将自己数据库中的订单标记为支付成功
 <aside class="notice">
 参数bill_no(订单号)8到32位数字字母组合，并且要求全局唯一，已经提交的订单的订单号不论是否支付成功都不能重复使用
+</aside>
+<aside class="notice">
+参数card_no(银行卡号，在各个SDK里有对应的参数)是必填的
 </aside>
 <aside class="success">
 支持的渠道包括：`BC_EXPRESS` 
@@ -1640,6 +1643,7 @@ catch (Exception excption)
 ```java
 BCOrder bcOrder = new BCOrder(渠道code, 金额, 订单编号, 订单标题);//设定订单信息
 try {
+    bcOrder.setBcExpressCardNo("3221620240019686366");
     bcOrder.setReturnUrl(bcGatewayReturnUrl);
     bcOrder = BCPay.startBCPay(bcOrder);
     out.println(bcOrder.getHtml());
@@ -1653,10 +1657,11 @@ try {
 try {
     $data = array(
         'timestamp' => time() * 1000,
-        'channel' => 'BC_GATEWAY', //渠道类型
-        'title' => '网关支付测试',   //订单标题
+        'channel' => 'BC_EXPRESS', //渠道类型
+        'title' => '快捷支付测试',   //订单标题
         'bill_no' => "bcdemo" . time(),    //订单编号
-        'total_fee' => 1 //订单金额(int 类型) ,单位分
+        'total_fee' => 1, //订单金额(int 类型) ,单位分
+        'card_no' => '6222691921993841111'   //银行卡号
     );
     $result = \juhepay\rest\api::bill($data);
     //不使用namespace的用户
@@ -1719,7 +1724,7 @@ app.post('/api/bill', (req, res, next) => { //支付
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
 notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360
-anaylsis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product_list":{},"ip":"value2"}
+analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip
 
 
 ## 1.3. 线下收款
@@ -2518,7 +2523,7 @@ API.getOfflineStatus({
 optional | Map | 附加数据 | 用户自定义的参数，将会在webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} 
 notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 
-anaylsis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product_list":{},"ip":"value2"}
+analysis | Map | 附加数据 | 商户的用户信息，可用户客户信息分析 | {"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip
 
 ## 1.4 移动APP收款
 
@@ -3915,6 +3920,7 @@ PC端如下：
 1. 不能定制UI
 2. 不能在新页面打开支付页，只能从当前页面跳转  
 3. 一些进阶的参数不能在秒支付button使用，比如设置订单的超时时间等
+4. 订单标题不能使用特殊字符包括!@#$%^&*()_+
 
 ## 2.2 使用前准备
 
@@ -4853,6 +4859,9 @@ HTTP Content-type : application/json
   transaction_type | String        | 'PAY' or 'REFUND' or 'TRANSFER'（TRANSFER只代表BC企业打款和支付宝打款；微信打款和红包，没有webhook）
   transaction_id   | String        | '201506101035040000001'
   transaction_fee  | Integer       | 1 表示0.01元 
+  bill\_fee        | Integer       | 2 标示0.02元
+  discount         | Integer       | 1 标示0.01元
+  coupon\_id | String | 卡券ID，没有用到返回null
   trade_success  | Bool       | true
   message_detail   | Map(JSON)     | {orderId:xxxx}
   optional        | Map(JSON)     | {"agent_id":"Alice"}
@@ -4867,7 +4876,10 @@ channel_type| WX/ALI/UN/KUAIQIAN/JD/BD/YEE/PAYPAL   分别代表微信/支付宝
 sub_channel\_type|  代表以上各个渠道的子渠道，参看字段说明
 transaction_type| PAY/REFUND  分别代表支付和退款的结果确认
 transaction_id | 交易单号，对应支付请求的bill\_no或者退款请求的refund\_no,对于秒支付button为传入的out\_trade\_no
-transaction_fee | 交易金额，是以分为单位的整数，对应支付请求的total\_fee或者退款请求的refund\_fee
+transaction_fee | 实付金额，是以分为单位的整数，当不使用优惠券时对应支付请求的total\_fee或者退款请求的refund\_fee，使用优惠券时是total_fee减掉优惠金额的实付金额
+bill\_fee   | 订单金额（原始的订单金额），单位为分
+discount  | 优惠金额，单位为分
+coupon\_id | 卡券ID，没有用到返回null
 trade_success | 交易是否成功，目前收到的消息都是交易成功的消息
 message_detail| {orderId:xxx…..} 从支付渠道方获得的详细结果信息，例如支付的订单号，金额， 商品信息等，详见附录
 optional| 附加参数，为一个JSON格式的Map，客户在发起购买或者退款操作时添加的附加信息
@@ -5512,7 +5524,7 @@ return_url | String | 同步返回页面| 支付渠道处理完请求后,当前�
 limit_credit | Boolean | 禁用信用卡 | 禁用信用卡 | true/false | 否，**微信可用**
 notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 bill_timeout | Integer | 订单失效时间 | 必须为非零正整数，单位为秒，建议最短失效时间间隔必须<mark>大于</mark>360秒 | 360 | 否, **<mark>京东(JD)不支持该参数。</mark>** 
-
+coupon\_id | string | 卡券id | 传入卡券id，下单时会自动扣除优惠金额再发起支付 | 卡券id | 选填
 
 > 注：channel的参数值含义：  
 WX\_APP: 微信手机原生APP支付  
@@ -5715,7 +5727,9 @@ auth_code | String | 用户授权码| 当商户用扫码枪扫用户的条形码
 notify_url | String | 商户自定义回调地址 | 商户可通过此参数设定回调地址，此地址会覆盖用户在控制台设置的回调地址。**<mark>必须以`http://`或`https://`开头</mark>** | http://juhe.cn/notifyUrl.jsp
 buyer_id | String | 消费者ID | 商户为其用户分配的ID.可以是email、手机号、随机字符串等；最长64位；在商户自己系统内必须保证唯一。 | umwxkieI23Um | 否
 optional | Map | 附加数据 | 用户自定义的参数，将会在Webhook通知中原样返回，该字段主要用于商户携带订单的自定义数据 | {"key1":"value1","key2":"value2",...} | 否
+analysis | Map | 分析数据 | 用于统计分析的数据，将会在控制台的统计分析报表中展示，**<mark>用户自愿上传</mark>** | 包括以下基本字段："product","ip", 格式如下：{"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}], "ip":"111.121.1.10"} product A，B是产品名字，2是件数，1000是单价（分）,ip是客户端客户的ip | 否
 store_id | string | 门店号| 门店号 | 卡门店号 | 否
+coupon\_id | string | 卡券id | 传入卡券id，下单时会自动扣除优惠金额再发起支付 | 卡券id | 选填
 
 > 注1：channel的参数值含义：  
 WX\_NATIVE: 微信二维码支付   
@@ -5933,7 +5947,10 @@ bills | List<Map> | 订单列表
 ----          | ----         | ----
 id      | String       | 订单记录的唯一标识，可用于查询单笔记录
 bill\_no      | String       | 订单号
-total\_fee    | Integer         | 订单金额，单位为分
+bill\_fee | Integer         | 订单金额（原始的订单金额），单位为分
+total\_fee    | Integer         | 实付金额（使用优惠券的时候是扣除优惠券优惠金额后客户实际支付的金额），单位为分
+discount | Integer         | 优惠金额，单位为分
+coupon\_id | String | 卡券ID，没有用到返回null
 trade\_no    | String         | 渠道交易号， 当支付成功时有值
 channel       | String       | 渠道类型 WX、ALI、UN、JD、YEE、KUAIQIAN、PAYPAL、BD
 sub_channel         | String       | 子渠道类型 WX_APP、WX_NATIVE、WX_JSAPI、WX_SCAN、ALI_APP、ALI_SCAN、ALI_WEB、ALI_QRCODE、ALI_OFFLINE_QRCODE、ALI_WAP、UN_APP、UN_WEB、UN_WAP、PAYPAL_SANDBOX、PAYPAL_LIVE、JD_WAP、JD_WEB、YEE_WAP、YEE_WEB、YEE_NOBANKCARD、KUAIQIAN_WAP、KUAIQIAN_WEB、BD_APP、BD_WEB、BD_WAP(详见 2. 支付 附注）
@@ -6038,7 +6055,7 @@ refunds | List<Map> | 退款列表
 id      | String       | 退款记录的唯一标识，可用于查询单笔记录
 bill\_no    | String      | 订单号
 refund\_no  | String      | 退款号
-total\_fee  | Integer      | 订单金额，单位为分
+total\_fee  | Integer      | 实付金额，单位为分
 refund\_fee | Integer      | 退款金额，单位为分
 title         | String       | 订单标题
 channel    | String      | 渠道类型 WX、ALI、UN、JD、YEE、KUAIQIAN、BD
@@ -6252,7 +6269,7 @@ result\_msg  | String | 返回信息， OK为正常
 err\_detail  | String | 具体错误信息
 pay_result | Bool | 订单是否成功
 
-## 4.5 用户系统（内测中）
+## 4.5 用户系统
 
 商家的客户在商家平台注册的时候同时调用BeeCloud的用户系统注册接口，可以将客户的信息同步到BeeCloud，这些客户信息可以提供给【BeeCloud商业数据分析平台】使用。没有通过注册接口传入的buyer_id，直接通过订单中传入buyer_id，是没有办法进行统计分析的。
 
@@ -6400,13 +6417,13 @@ failed_bills | Map | 更新失败的订单信息,可能是部分信息。key是b
 
 参数名 | 类型 | 含义 | 
 ---- | ---- | ---- |
-anaylsis | Map | 附加数据 | 
+analysis | Map | 附加数据 | 
 
 - 订单包含的产品列表
 
 key | type | value |
 ---- | ---- | ---- |
-anaylsis | Map | {"product_map":{"product A": 1000,"product B":2000}} 1000是产品金额，单位分
+analysis | Map | {"product":[{"name":"product A", "count": 2, "price": 1000}, {"name": "product B", "count":1, "price": 2000}]} product A，B是产品名字，2是件数，1000是单价（分）
 
 - 订单下单用户的IP地址
 
@@ -6416,4 +6433,190 @@ anaylsis | Map | {"product_map":{"product A": 1000,"product B":2000}} 1000是产
 
 key | type | value |
 ---- | ---- | ---- |
-anaylsis | Map | {"ip":"xxx.xx.xx.xxx"} 
+analysis | Map | {"ip":"xxx.xx.xx.xxx"} 
+
+## 4.6 营销系统
+
+提供商家营销功能，商家通过接口给顾客发券，顾客付款时自动抵扣。
+
+<aside class="notice">
+流程</br>
+1. 商家在【BeeCloud管理中心】创建卡券模板，模板包含卡券优惠规则和数量  </br>
+2. 商家调用发放卡券接口给顾客分发卡券  </br>
+3. 商家下单前，通过卡券查询接口，获取当前用户适用的卡券  </br>
+4. 商家传入未扣减的总额`total_fee` 和 卡券`coupon_id`，调用支付  
+</aside>
+
+### 4.6.1 发放卡券
+
+* URL: https://api.beecloud.cn/2/rest/coupon
+* Method: POST
+* 请求参数类型:JSON
+
+- 请求参数
+
+参数名 | 类型 | 描述 | 必填
+----  | ---- | ---- | ----
+app\_id | String | BeeCloud平台的AppID，必须是优惠券模板或优惠券所属的应用ID | 是
+timestamp   | Long | 签名生成时间, 毫秒数 | 是
+app\_sign | String | 加密签名, 算法: md5(app\_id + timestamp + app\_secret)，32位16进制格式, 不区分大小写 | 是
+template\_id | String | 卡券模板ID  | 是
+user\_id | String | 用户ID | 是
+
+
+- 返回参数
+
+参数名 | 类型 | 描述 
+----  | ---- | ----
+result\_code    | int | 返回码，0为正常
+result\_msg | String | 返回信息， OK为正常 
+err\_detail | String | 具体错误信息   
+coupon | map | 优惠券类，内部字段详见优惠券表
+
+- 优惠券包含的字段  
+
+参数名 | 含义 | 类型 
+---- | ---- | ----
+id | 卡券ID | string
+template | 卡券模板，map字段见模板API | string
+user\_id | 卡券分发的用户ID，用来和下单的buyer\_id匹配 | string 
+app\_id | 卡券所属应用 | string
+status | 0表示未使用，1表示已使用（核销） | int 
+created_at | 分发时间 | long
+updated_at | 更新时间 | long
+start\_time | 有效期开始时间 | long
+end\_time | 有效期结束时间 | long
+use\_time | 使用时间，可能为空 | Long
+
+### 4.6.2 优惠券模板根据ID查询
+
+* URL: https://api.beecloud.cn/2/rest/coupon/template/{id}
+* Method: GET
+* 示例: ?para={"key\_a":1,"key\_b":"value\_b"}
+
+- 请求参数
+
+URL路径参数id为优惠券模板ID
+
+参数名 | 类型 | 描述 | 必填
+----  | ---- | ---- | ----
+app\_id | String | BeeCloud平台的AppID，必须是优惠券模板或优惠券所属的应用ID | 是
+timestamp   | Long | 签名生成时间, 毫秒数 | 是
+app\_sign | String | 加密签名, 算法: md5(app\_id + timestamp + app\_secret)，32位16进制格式, 不区分大小写 | 是
+
+- 返回参数
+
+参数名 | 类型 | 描述 
+----  | ---- | ----
+result\_code    | int | 返回码，0为正常
+result\_msg | String | 返回信息， OK为正常 
+err\_detail | String | 具体错误信息   
+coupon\_template    | map | 优惠券模板类，内部字段如下
+
+- 模板包含的字段  
+
+参数名 | 含义 | 类型 
+---- | ---- | ----
+id | 卡券模板ID | string
+name | 卡券模板名称 | string 
+type | 卡券类型，0表示满减，1表示折扣 | int 
+code | 卡券优惠码 | string
+limit\_fee | 限制满足额度的条件，以分为单位，0表示不限额，比如满100减10元，返回为10000 | int 
+discount | 如果type为0，存储优惠金额，以元为单位，比如10表示减10元；如果type为1，存储折扣比例，例如0.9表示9折 | float 
+total\_count | 卡券总数，0表示不限制 | int 
+max\_count\_per\_user | 每个人最多可以领取的卡券数量，0表示不限制 | int
+deliver\_count | 分发的卡券数量 | int
+use\_count | 使用卡券的数量 | int
+expiry\_type | 卡券有效期类型，1表示根据模板起止时间判断，2表示卡券发放日期后多少天内有效 | int
+start\_time | 卡券开始时间 | long 
+end\_time | 卡券结束时间 | long 
+delivery\_valid\_days | 卡券发放日期后多少天内有效 | int
+status | 0表示未开启，1表示正常使用，-1表示停止使用 | int 
+mch\_account | 卡券所属商家账户 | string
+app\_id | 卡券所属应用 | string
+
+### 4.6.3 优惠券模板根据条件查询
+
+* URL: https://api.beecloud.cn/2/rest/coupon/template
+* Method: GET
+* 示例: ?para={"key\_a":1,"key\_b":"value\_b"}
+
+- 请求参数
+
+参数名 | 类型 | 描述 | 必填
+----  | ---- | ---- | ----
+app\_id | String | BeeCloud平台的AppID，必须是优惠券模板或优惠券所属的应用ID | 是
+timestamp   | Long | 签名生成时间, 毫秒数 | 是
+app\_sign | String | 加密签名, 算法: md5(app\_id + timestamp + app\_secret)，32位16进制格式, 不区分大小写 | 是
+name | String | 如果提供则限制模板名  | 否
+created\_before | Long | 毫秒数时间戳，如果提供则限制创建时间戳>=该时间戳的模板 | 否
+created\_after | Long | 毫秒数时间戳，如果提供则限制创建时间戳<该时间戳的模板 | 否
+skip | Long | 查询起始位置，默认为0，设置为10表示忽略满足条件的前10条数据 | 否
+limit | Long | 查询的条数，默认为10，设置为10 | 否
+
+
+- 返回参数
+
+参数名 | 类型 | 描述 
+----  | ---- | ----
+result\_code    | int | 返回码，0为正常
+result\_msg | String | 返回信息， OK为正常 
+err\_detail | String | 具体错误信息   
+coupon\_templates | list | 优惠券模板类列表，此处返回的列表都是属于app\_id对应的应用下，优惠券模板map包含的字段见上一个API
+
+### 4.6.4 优惠券根据ID查询
+
+* URL: https://api.beecloud.cn/2/rest/coupon/{id}
+* Method: GET
+* 示例: ?para={"key\_a":1,"key\_b":"value\_b"}
+
+- 请求参数
+
+URL路径参数id为优惠券ID
+
+参数名 | 类型 | 描述 | 必填
+----  | ---- | ---- | ----
+app\_id | String | BeeCloud平台的AppID，必须是优惠券模板或优惠券所属的应用ID | 是
+timestamp   | Long | 签名生成时间, 毫秒数 | 是
+app\_sign | String | 加密签名, 算法: md5(app\_id + timestamp + app\_secret)，32位16进制格式, 不区分大小写 | 是
+
+- 返回参数
+
+列名 | 类型 | 描述 
+----  | ---- | ----
+result\_code    | int | 返回码，0为正常
+result\_msg | String | 返回信息， OK为正常 
+err\_detail | String | 具体错误信息 
+coupon | map | 优惠券类，内部字段详见上一个API
+
+### 4.6.5 优惠券根据条件查询
+
+* URL: https://api.beecloud.cn/2/rest/coupon
+* Method: GET
+* 示例: ?para={"key\_a":1,"key\_b":"value\_b"}
+
+- 请求参数
+
+列名 | 类型 | 描述 | 必填
+----  | ---- | ---- | ----
+app\_id | String | BeeCloud平台的AppID，必须是优惠券模板或优惠券所属的应用ID | 是
+timestamp   | Long | 签名生成时间, 毫秒数 | 是
+app\_sign | String | 加密签名, 算法: md5(app\_id + timestamp + app\_secret)，32位16进制格式, 不区分大小写 | 是
+user\_id | String | 如果提供则限制领券的用户ID  | 否
+template\_id | String | 如果提供则限制优惠券的模板ID | 否
+status | Integer | 如果提供则限制优惠券的状态，1表示已经核销的优惠券    | 否
+limit\_fee | Integer | 一般传入订单金额，返回满足限额的优惠券，比如传入11000，返回满100元减10元的优惠券    | 否
+created\_before | Long | 毫秒数时间戳，如果提供则限制创建时间戳>=该时间戳的模板 | 否
+created\_after | Long | 毫秒数时间戳，如果提供则限制创建时间戳<该时间戳的模板 | 否
+skip | Long | 查询起始位置，默认为0，设置为10表示忽略满足条件的前10条数据 | 否
+limit | Long | 查询的条数，默认为10，设置为10 | 否
+
+
+* 返回参数
+
+列名 | 类型 | 描述 
+----  | ---- | ----
+result\_code    | int | 返回码，0为正常
+result\_msg | String | 返回信息， OK为正常 
+err\_detail | String | 具体错误信息 
+coupons | list | 优惠券类列表，此处返回的列表都是属于app\_id对应的应用下，优惠券内部字段见上一个API
