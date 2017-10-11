@@ -21,7 +21,7 @@ language_tabs:
 
 # 1. 概览
 
-秒收款基于BeeCloud SDK，是BeeCloud在SDK基础上专门开发出的一个轻量级版本。它只需要短短一句代码即可使用，并且内嵌了一套风格简约的支付页面和完成页面，同时适用于PC端和移动端。这个功能对于入门级开发者来说，不但降低了开发成本，还能够优化用户在支付流程当中的体验。
+秒收款基于聚合支付 SDK，是聚合支付在SDK基础上专门开发出的一个轻量级版本。它只需要短短一句代码即可使用，并且内嵌了一套风格简约的支付页面和完成页面，同时适用于PC端和移动端。这个功能对于入门级开发者来说，不但降低了开发成本，还能够优化用户在支付流程当中的体验。
 
 ## 1.1 使用效果
 
@@ -52,13 +52,13 @@ PC端如下：
 
 # 2. 使用前准备
 
-1. BeeCloud[注册](http://beecloud.cn/register/)账号, 并完成企业认证
+1. 聚合支付[注册](http://payplatform.juhe.cn/register/)账号, 并完成企业认证
 
-2. BeeCloud中创建应用，填写支付渠道所需参数, 可以参考[官网帮助文档](http://beecloud.cn/doc/payapply)
+2. 聚合支付中创建应用，填写支付渠道所需参数, 可以参考[官网帮助文档](http://payplatform.juhe.cn/doc/payapply)
 
-3. 申请渠道参数，并配置BeeCLoud各个支付渠道的参数，此处请参考官网的[渠道参数帮助页](https://beecloud.cn/doc/payapply/?index=0)
+3. 申请渠道参数，并配置聚合支付各个支付渠道的参数，此处请参考官网的[渠道参数帮助页](https://payplatform.juhe.cn/doc/payapply/?index=0)
 <aside class="notify">
-BeeCloud中配置参数需要完成企业认证后才能填写!
+聚合支付中配置参数需要完成企业认证后才能填写!
 </aside>
 
 4. 激活秒支付button功能，进入APP->设置->秒支付button项，拖拽支付渠道开启该支付渠道，同时还可以调整你需要的渠道菜单的显示顺序，点击”保存“后会生成appid对应的**script标签**。**需要将此script标签放到任何需要使用秒支付Button的网页里**。
@@ -109,12 +109,12 @@ wxJsapiFail | function(res) | 微信jsapi的接口支付非成功都将调用此
 
 Javascript传递的参数中sign比较特殊，用来保证订单的信息的完整性，需要集成者自行在服务器端生成；
 
-生成规则 : 依次将以下字段（注意是UTF8编码）连接BeeCloud appId、 title、 amount、 out\_trade\_no、 BeeCloud appSecret, 然后计算连接后的字符串的MD5, 该签名用于验证价格，title 和订单的一致
+生成规则 : 依次将以下字段（注意是UTF8编码）连接聚合支付 appId、 title、 amount、 out\_trade\_no、 聚合支付 appSecret, 然后计算连接后的字符串的MD5, 该签名用于验证价格，title 和订单的一致
 
 ```java
 <%
     /* *
-     jsp中集成 BeeCloud js button
+     jsp中集成 聚合支付 js button
      * */
 %>
 <%!
@@ -183,7 +183,7 @@ String getMessageDigest(String s) {
             "amount":"<%=amount%>",  //总价（分）
             "out_trade_no":"<%=out_trade_no%>", //自定义订单号
             "sign":"<%=sign%>", //商品信息hash值，含义和生成方式见下文
-            "return_url" : "http://payservice.beecloud.cn/spay/result.php", //支付成功后跳转的商户页面,可选，默认为http://payservice.beecloud.cn/spay/result.php
+            "return_url" : "http://payplatform.juhe.cn", //支付成功后跳转的商户页面,可选
             "optional" : <%=optional%>//可选，自定义webhook的optional回调参数
         });
         /**
@@ -344,7 +344,7 @@ if __name__ == "__main__":
 <button id="test">test online</button>
 </div>
 </body>
-<!--添加控制台活的的script标签-->
+<!--添加控制台的script标签-->
 <script id='spay-script' type='text/javascript' src='https://jspay.beecloud.cn/1/pay/jsbutton/returnscripts?appId=c5d1cba1-5e3f-4ba0-941d-9b0a371fe719'></script>
 
 <script type="text/javascript">
