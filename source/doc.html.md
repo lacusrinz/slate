@@ -20,29 +20,6 @@ language_tabs:
 
 <!-- search: true -->
 ---
-# 0. 开通渠道
-
-聚合支付支持线上线下各种场景的支付解决方案，本文档以场景的形式展示如何使用聚合支付开发，完成支付技术的接入。
-
-
-## 0.1 开通渠道
-
-**官方渠道**申请指导：  
-微信APP的申请： [这里](http://payplatform.juhe.cn/doc/payapply/?index=0)  
-微信公众号的申请： [这里](http://payplatform.juhe.cn/doc/payapply/?index=2)  
-支付宝APP/PC网页/移动网页的申请： [这里](http://payplatform.juhe.cn/doc/payapply/?index=4)
-<aside class="notice">
-聚合支付提供低费率的特惠通道（包括：支付宝/微信/银联），请联系我们商务(15950049812 张经理)了解更多详情
-</aside>
-
-## 0.2 渠道参数配置
-
-微信APP参数配置： [这里](http://payplatform.juhe.cn/doc/payapply/?index=1)  
-微信公众号参数配置： [这里](http://payplatform.juhe.cn/doc/payapply/?index=3)   
-支付宝APP/PC网页/移动网页参数配置： [这里](http://payplatform.juhe.cn/doc/payapply/?index=5)   
-支付宝RSA秘钥配置： [这里](http://payplatform.juhe.cn/doc/payapply/?index=14)   
-
-
 
 # 1. Restful API列表
 
